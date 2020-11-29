@@ -20,7 +20,7 @@ class CreatePostsTable extends Migration
             $table->string('volume')->nullable();
             $table->string('net')->nullable();
             $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->string('end_date');
             $table->integer('priority');
             $table->integer('user_id');
             $table->timestamps();
