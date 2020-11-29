@@ -15,6 +15,10 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->id();
+            $table->integer('post_id');
+            $table->float('distance');
+            $table->string('from');
+            $table->string('to');
             $table->timestamps();
         });
     }
