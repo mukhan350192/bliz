@@ -17,6 +17,8 @@ class CreateCitiesTable extends Migration
             $table->id();
             $table->integer('country_id');
             $table->string('name');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->timestamps();
         });
     }
