@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\Country;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -162,5 +164,16 @@ class UserController extends Controller
             $result['success'] = true;
         }while(false);
         return response()->json($result);
+    }
+
+    public function getCountry(){
+        $result = Country::all();
+        return response()->json($result);
+    }
+
+    public function getCity(Request $request){
+        $countryID = $request->input('countryID');
+        $city = City::where('country_id',$countryID)->get();
+        return response()->json($city);
     }
 }
