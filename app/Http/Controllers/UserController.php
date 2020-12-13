@@ -21,7 +21,6 @@ class UserController extends Controller
         $password = $request->input('password');
         $phone = $request->input('phone');
         $birthDay = $request->input('birthDay');
-        $country = $request->input('country');
         $city = $request->input('city');
         $address = $request->input('address');
         $type = $request->input('type');
@@ -50,10 +49,6 @@ class UserController extends Controller
             }
             if(!$birthDay){
                 $result['message'] = 'Не передан день рождение';
-                break;
-            }
-            if (!$country){
-                $result['message'] = 'Не передан страна';
                 break;
             }
             if (!$city){
@@ -87,7 +82,6 @@ class UserController extends Controller
                 'password' => bcrypt($password),
                 'phone' => $phone,
                 'birthDay' => $birthDay,
-                'country' => $country,
                 'city' => $city,
                 'address' => $address,
                 'status' => '1',
