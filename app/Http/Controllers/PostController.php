@@ -140,9 +140,9 @@ class PostController extends Controller
         $result['success'] = false;
         $skip = 0;
         $take = 0;
-        if (!$page){
-            $skip = 1;
-            $take = 1;
+        if (!$page || $page==1){
+            $skip = 0;
+            $take = 10;
         }else{
             $skip = ($skip-1)*10;
             $take = ($take-1)*10;
