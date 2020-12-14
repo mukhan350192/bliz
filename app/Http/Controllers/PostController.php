@@ -144,8 +144,8 @@ class PostController extends Controller
             $skip = 0;
             $take = 10;
         }else{
-            $skip = ($skip-1)*10;
-            $take = ($take-1)*10;
+            $skip = ($page-1)*10;
+            $take = ($page-1)*10;
         }
         $post = Post::skip($skip)->take($take)->get();
         return response()->json($post);
