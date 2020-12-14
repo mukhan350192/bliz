@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Detail;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,9 +51,9 @@ class PostController extends Controller
         $net = $request->input('net');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
-        $user_id = $request->input('user_id');
         $from = $request->input('from');
         $to = $request->input('to');
+        $token = $request->input('token');
 
         $result['success'] = false;
 
@@ -81,16 +82,22 @@ class PostController extends Controller
                 $result['message'] = 'Не передан дата погрузки';
                 break;
             }
-            if (!$user_id) {
-                $result['message'] = 'Не передан пользователь';
-                break;
-            }
             if (!$from) {
                 $result['message'] = 'Не передан откуда увезти';
                 break;
             }
             if (!$to) {
                 $result['message'] = 'Не передан куда довезти';
+                break;
+            }
+
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
                 break;
             }
             DB::beginTransaction();
@@ -102,7 +109,7 @@ class PostController extends Controller
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'priority' => 1,
-                'user_id' => $user_id,
+                'user_id' => $user->id,
             ]);
             if (!$postID) {
                 DB::rollBack();
@@ -126,6 +133,22 @@ class PostController extends Controller
         } while (false);
 
         return response()->json($result);
+    }
+
+    public function getPost(Request $request){
+        $page = intval($request->input('page'));
+        $result['success'] = false;
+        $skip = 0;
+        $take = 0;
+        if (!$page){
+            $skip = 1;
+            $take = 1;
+        }else{
+            $skip = ($skip-1)*10;
+            $take = ($take-1)*10;
+        }
+        $post = Post::skip($skip)->take($take)->get();
+        return response()->json($post);
     }
 
 }
