@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\City;
 use App\Models\Detail;
 use App\Models\Post;
+use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -166,4 +167,8 @@ class PostController extends Controller
         return response()->json($data);
     }
 
+    public function getSubCategories(){
+        $subCategory = SubCategory::all();
+        return response()->json($subCategory);
+    }
 }
