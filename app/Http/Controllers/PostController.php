@@ -152,7 +152,7 @@ class PostController extends Controller
         $data = [];
 
         $post = Post::skip($skip)->take($take)->get();
-        $data[] .= [
+        $data[] = [
             'per_page' => 10,
             'page' => $page,
             'total' => $count,
