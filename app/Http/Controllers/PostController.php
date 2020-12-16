@@ -154,11 +154,14 @@ class PostController extends Controller
 
         $post = Post::skip($skip)->take($take)->get();
         $data[] = [
-            'per_page' => 10,
-            'page' => $page,
-            'total' => $count,
-            'max_page' => floor($count/10),
-            'posts' => $post,
+            'success' => true,
+            'pagination' => [
+                'page' => $page,
+                'per_page' => 10,
+                'total' => $count,
+                'max_page' => ceil($count/10),
+            ],
+            'data' => $post,
         ];
         return response()->json($data);
     }
