@@ -147,8 +147,19 @@ class PostController extends Controller
             $skip = ($page-1)*10;
             $take = ($page-1)*10;
         }
+        $count = Post::all();
+        $count = $count->count();
+        $data = [];
+
         $post = Post::skip($skip)->take($take)->get();
-        return response()->json($post);
+        $data[] .= [
+            'per_page' => 10,
+            'page' => $page,
+            'total' => $count,
+            'max_page' => floor($count/10),
+            'posts' => $post,
+        ];
+        return response()->json($data);
     }
 
 }
