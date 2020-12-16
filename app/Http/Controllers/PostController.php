@@ -141,6 +141,7 @@ class PostController extends Controller
         $skip = 0;
         $take = 0;
         if (!$page || $page==1){
+            $page = 1;
             $skip = 0;
             $take = 10;
         }else{
