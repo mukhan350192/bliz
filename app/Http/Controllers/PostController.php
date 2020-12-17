@@ -151,10 +151,9 @@ class PostController extends Controller
         }
         $count = Post::all();
         $count = $count->count();
-        $data = [];
 
         $post = Post::skip($skip)->take($take)->get();
-        $data[] = [
+        $data = [
             'success' => true,
             'pagination' => [
                 'page' => $page,
@@ -162,7 +161,7 @@ class PostController extends Controller
                 'total' => $count,
                 'max_page' => ceil($count/10),
             ],
-            'data' => $post,
+            'post' => $post,
         ];
         return response()->json($data);
     }
