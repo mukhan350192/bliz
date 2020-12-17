@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    public function getSub(){
+        $this->hasOne(SubCategory::class,'id','sub_id');
+    }
 }

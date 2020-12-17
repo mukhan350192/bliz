@@ -25,6 +25,7 @@ class UserController extends Controller
         $address = $request->input('address');
         $type = $request->input('type');
         $image = $request->input('image');
+        $user_type = $request->input('user_type');
         $result['success'] = false;
         do{
             if (!$name){
@@ -63,6 +64,16 @@ class UserController extends Controller
                 $result['message'] = 'Не передан тип пользователья';
                 break;
             }
+            if (!$user_type){
+                $result['message'] = 'Не передан юридический тип пользователья';
+                break;
+            }
+            if ($user_type == 1){
+                $user_type = 'Физическое лицо';
+            }
+            if ($user_type == 2){
+                $user_type = 'Юридическое лицо';
+            }
 
             $user = User::where('email',$email)->first();
             if ($user){
@@ -87,6 +98,7 @@ class UserController extends Controller
                 'status' => '1',
                 'token' => $token,
                 'type' => $type,
+                'user_type' => $user_type,
             ]);
             if(!$user){
                 DB::rollBack();

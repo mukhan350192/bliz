@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->string('end_date');
             $table->integer('priority');
             $table->integer('user_id');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

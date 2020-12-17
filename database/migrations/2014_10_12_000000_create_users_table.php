@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('image')->nullable();
             $table->string('token')->nullable();
             $table->integer('type');
+            $table->string('user_type');
             $table->rememberToken();
             $table->timestamps();
         });

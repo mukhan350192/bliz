@@ -137,7 +137,10 @@ class PostController extends Controller
     }
 
     public function getPost(Request $request){
+
         $page = intval($request->input('page'));
+        $sub_id = $request->input('sub_id');
+
         $result['success'] = false;
         $skip = 0;
         $take = 0;
@@ -151,12 +154,44 @@ class PostController extends Controller
         }
         $count = Post::all();
         $count = $count->count();
+        $city = City::all();
 
-        $post = Post::skip($skip)->take($take)->get();
-        $all = [];
-        foreach ($post as $posts){
-
+        if (!$sub_id){
+            $post = DB::table('posts')
+                ->join('users','posts.user_id','=','users.id')
+                ->join('details','posts.id','=','details.post_id')
+                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.name','users.phone','users.email','details.from','details.to','users.user_type')
+                ->skip($skip)
+                ->take($take)
+                ->get();
+        }else{
+            $post = DB::table('posts')
+                ->join('users','posts.user_id','=','users.id')
+                ->join('details','posts.id','=','details.post_id')
+                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.name','users.phone','users.email','details.from','details.to','users.user_type')
+                ->where('posts.sub_id','=',$sub_id)
+                ->skip($skip)
+                ->take($take)
+                ->get();
         }
+
+        $sub = SubCategory::all();
+        foreach ($post as $posts){
+            foreach ($city as $c){
+                if ($c->id == $posts->from){
+                    $posts->from = $c->name;
+                }
+                if ($c->id == $posts->to){
+                    $posts->to = $c->name;
+                }
+            }
+            foreach ($sub as $s){
+                if ($s->id == $posts->sub_id){
+                    $posts->sub_id = $s->name;
+                }
+            }
+        }
+
         $data = [
             'success' => true,
             'pagination' => [
@@ -167,11 +202,49 @@ class PostController extends Controller
             ],
             'data' => $post,
         ];
+
         return response()->json($data);
     }
 
     public function getSubCategories(){
         $subCategory = SubCategory::all();
         return response()->json($subCategory);
+    }
+
+    public function sendRequest(Request $request){
+        $token = $request->input('token');
+        $postID = $request->input('post_id');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            if (!$postID){
+                $result['message'] = 'Не передан номер заявки';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $post = Post::find($postID);
+            if (!$post){
+                $result['message'] = 'Не найден такое объявление';
+                break;
+            }
+            if (isset($post) && $post->status == 2){
+                $result['message'] = 'К сожалению этот объяление уже неактивна';
+                break;
+            }
+            $result['message'] = 'Ваша заявка отправлена';
+        }while(false);
+
+        return response()->json($result);
     }
 }
