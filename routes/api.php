@@ -27,3 +27,5 @@ Route::get('/city',[UserController::class,'getCity']);
 Route::post('/addPost',[PostController::class,'addPost']);
 Route::get('/getPost',[PostController::class,'getPost']);
 Route::get('/getSubcategories',[PostController::class,'getSubCategories']);
+Route::post('/setImage',[UserController::class,'setImage']);
+Route::get('/getImage',[UserController::class,'displayImage']);
