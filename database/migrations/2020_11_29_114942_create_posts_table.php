@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title');
             $table->integer('sub_id');
+            $table->integer('category_id');
             $table->string('volume')->nullable();
             $table->string('net')->nullable();
             $table->timestamp('start_date');

@@ -151,6 +151,10 @@ class UserController extends Controller
             $user->token = $token;
             $user->save();
             $result['success'] = true;
+            $result['image'] = $user->image;
+            $result['name'] = $user->name;
+            $result['phone'] = $user->phone;
+            $result['url'] = 'http://test.money-men.kz/public/images/avatars';
             $result['token'] = $token;
         } while (false);
         return response()->json($result);
@@ -229,4 +233,6 @@ class UserController extends Controller
         return $path;
 
     }
+
+
 }

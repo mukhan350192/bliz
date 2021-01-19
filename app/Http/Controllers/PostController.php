@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Detail;
+use App\Models\Order;
 use App\Models\Post;
 use App\Models\SubCategory;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -101,6 +104,7 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
+            $categoryID = SubCategory::find($sub_id);
             DB::beginTransaction();
             $postID = Post::insertGetId([
                 'title' => $title,
@@ -111,6 +115,7 @@ class PostController extends Controller
                 'end_date' => $end_date,
                 'priority' => 1,
                 'user_id' => $user->id,
+                'category_id' => $categoryID->category_id,
             ]);
             if (!$postID) {
                 DB::rollBack();
@@ -238,13 +243,110 @@ class PostController extends Controller
                 $result['message'] = 'Не найден такое объявление';
                 break;
             }
+
             if (isset($post) && $post->status == 2){
                 $result['message'] = 'К сожалению этот объяление уже неактивна';
                 break;
             }
+            $orders = Order::where('post_id',$postID)->where('user_id',$user->id)->first();
+            if ($orders){
+                $result['message'] = 'Вы уже отправили заявку';
+                break;
+            }
+
+            DB::beginTransaction();
+            $orders = Order::insertGetId([
+                'post_id' => $postID,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$orders){
+                DB::rollBack();
+                $result['message'] = 'Что то пошло не так';
+                break;
+            }
+            DB::commit();
+
             $result['message'] = 'Ваша заявка отправлена';
         }while(false);
 
+        return response()->json($result);
+    }
+
+    public function getOwnPosts(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $posts = Post::where('user_id',$user->id)->get();
+            if (!$posts){
+                $result['message'] = 'У вас пока нету объявлений';
+                break;
+            }
+            $sub = SubCategory::all();
+
+            foreach ($posts as $post){
+                $post->start_date = strtotime($post->start_date);
+                $post->start_date = date('d.m.Y',$post->start_date);
+                $post->end_date = strtotime($post->end_date);
+                $post->end_date = date('d.m.Y',$post->end_date);
+                foreach ($sub as $s){
+                    if ($s->id == $post->sub_id){
+                        $post->transport_type = $s->name;
+                        $category = Category::find($s->category_id);
+                        $post->category_name = $category->name;
+                    }
+                }
+                if ($post->status == 1){
+                    $post->status = 'Активная объявление';
+                }
+                if ($post->status == 2){
+                    $post->status = 'Завершенная объявление';
+                }
+            }
+            $result['data'] = $posts;
+        }while(false);
+
+        return response()->json($result);
+    }
+
+    public function getAllPostsByCategory(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $category = DB::table('categories')->limit(3)->get();
+            foreach ($category as $cat){
+                $data = Post::where('category_id',$cat->id)->where('status',1)->where('user_id',$user->id)->count();
+                $all[] = [
+                    'name' => $cat->name,
+                    'count' => $data,
+                ];
+                
+            }
+//            print_r($all);
+            $result['data'] = $all;
+        }while(false);
         return response()->json($result);
     }
 }
