@@ -28,7 +28,7 @@ Route::post('/addPost',[PostController::class,'addPost']);
 Route::get('/getPost',[PostController::class,'getPost']);
 Route::get('/getSubcategories',[PostController::class,'getSubCategories']);
 Route::post('/setImage',[UserController::class,'setImage']);
-Route::get('/getImage',[UserController::class,'displayImage']);
+//Route::get('/getImage',[UserController::class,'displayImage']);
 Route::post('/sendRequest',[PostController::class,'sendRequest']);
 Route::post('/getOwnPosts',[PostController::class,'getOwnPosts']);
 Route::post('/getAllPostsByCategory',[PostController::class,'getAllPostsByCategory']);
