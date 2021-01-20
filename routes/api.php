@@ -33,3 +33,6 @@ Route::post('/sendRequest',[PostController::class,'sendRequest']);
 Route::post('/getOwnPosts',[PostController::class,'getOwnPosts']);
 Route::post('/getAllPostsByCategory',[PostController::class,'getAllPostsByCategory']);
 Route::get('/getCategory',[PostController::class,'getCategory']);
+Route::get('/getProfile',[UserController::class,'getProfile']);
+Route::get('/updateProfile',[UserController::class,'updateProfile']);
+Route::get('/deleteAvatar',[UserController::class,'deleteAvatar']);
