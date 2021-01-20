@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/registration',[UserController::class,'registration']);
 Route::post('/login',[UserController::class,'login']);
+Route::post('/logout',[UserController::class,'logout']);
 Route::get('/country',[UserController::class,'getCountry']);
 Route::get('/city',[UserController::class,'getCity']);
 Route::post('/addPost',[PostController::class,'addPost']);
