@@ -32,3 +32,4 @@ Route::post('/setImage',[UserController::class,'setImage']);
 Route::post('/sendRequest',[PostController::class,'sendRequest']);
 Route::post('/getOwnPosts',[PostController::class,'getOwnPosts']);
 Route::post('/getAllPostsByCategory',[PostController::class,'getAllPostsByCategory']);
+Route::get('/getCategory',[PostController::class,'getCategory']);

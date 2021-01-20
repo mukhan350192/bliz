@@ -58,7 +58,7 @@ class PostController extends Controller
         $from = $request->input('from');
         $to = $request->input('to');
         $token = $request->input('token');
-
+        $categoryID = $request->input('category_id');
         $result['success'] = false;
 
         do {
@@ -104,7 +104,7 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $categoryID = SubCategory::find($sub_id);
+
             DB::beginTransaction();
             $postID = Post::insertGetId([
                 'title' => $title,
@@ -115,7 +115,7 @@ class PostController extends Controller
                 'end_date' => $end_date,
                 'priority' => 1,
                 'user_id' => $user->id,
-                'category_id' => $categoryID->category_id,
+                'category_id' => $categoryID,
             ]);
             if (!$postID) {
                 DB::rollBack();
@@ -214,6 +214,11 @@ class PostController extends Controller
     public function getSubCategories(){
         $subCategory = SubCategory::all();
         return response()->json($subCategory);
+    }
+
+    public function getCategory(){
+        $category = Category::all();
+        return response()->json($category);
     }
 
     public function sendRequest(Request $request){
@@ -342,7 +347,7 @@ class PostController extends Controller
                     'name' => $cat->name,
                     'count' => $data,
                 ];
-                
+
             }
 //            print_r($all);
             $result['data'] = $all;
