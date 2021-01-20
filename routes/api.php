@@ -37,3 +37,7 @@ Route::get('/getCategory',[PostController::class,'getCategory']);
 Route::get('/getProfile',[UserController::class,'getProfile']);
 Route::get('/updateProfile',[UserController::class,'updateProfile']);
 Route::get('/deleteAvatar',[UserController::class,'deleteAvatar']);
+//TODO
+Route::get('/addFavourites',[UserController::class,'addFavourites']);
+Route::get('/deleteFavourites',[UserController::class,'deleteFavourites']);
+Route::get('/getFavourites',[UserController::class,'getFavourites']);

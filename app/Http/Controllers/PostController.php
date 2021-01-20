@@ -271,6 +271,7 @@ class PostController extends Controller
                 $result['message'] = 'Что то пошло не так';
                 break;
             }
+            $result['success'] = true;
             DB::commit();
 
             $result['message'] = 'Ваша заявка отправлена';
@@ -307,9 +308,9 @@ class PostController extends Controller
                 $post->end_date = date('d.m.Y',$post->end_date);
                 foreach ($sub as $s){
                     if ($s->id == $post->sub_id){
-                        $post->transport_type = $s->name;
+                        $post->sub_id = $s->name;
                         $category = Category::find($s->category_id);
-                        $post->category_name = $category->name;
+                        $post->category_id = $category->name;
                     }
                 }
                 if ($post->status == 1){
