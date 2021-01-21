@@ -28,7 +28,7 @@ class CitiesSeeder extends Seeder
             'latitude' => '51.1801',
             'longitude' => '71.44598',
         ]);
-        
+
         City::create([
             'name' => 'Кызылорда',
             'country_id' => 1,
@@ -97,13 +97,6 @@ class CitiesSeeder extends Seeder
             'country_id' => 1,
             'latitude' => '52.29919102717299',
             'longitude' => '76.9868933820466',
-        ]);
-
-        City::create([
-            'name' => 'Павлодар',
-            'country_id' => 1,
-            'latitude' => '',
-            'longitude' => '',
         ]);
 
         City::create([
