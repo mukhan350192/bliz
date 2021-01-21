@@ -7,11 +7,7 @@ use App\Models\Country;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -205,18 +201,18 @@ class UserController extends Controller
                 $result['message'] = 'Не передан изображение';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден токен';
                 break;
             }
 
             $name = $image->getClientOriginalName();
-            $name = sha1(time().$name).'.'.$request->file('image')->extension();;
+            $name = sha1(time() . $name) . '.' . $request->file('image')->extension();;
 
             $destinationPath = public_path('/images/avatars');
             $image->move($destinationPath, $name);
@@ -234,47 +230,52 @@ class UserController extends Controller
 
     }
 
-    public function getProfile(Request $request){
+    public function getProfile(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
         do {
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
             $result['name'] = $user->name;
             $result['secondName'] = $user->secondName;
-            if (isset($user->lastName)){
+            if (isset($user->lastName)) {
                 $result['lastName'] = $user->lastName;
             }
             $result['email'] = $user->email;
             $result['phone'] = $user->phone;
             $result['birthDay'] = $user->birthDay;
             $cityName = City::find($user->city);
-            $result['cityId'] = $cityName->id;
-            $result['cityName'] = $cityName->name;
-            $country = Country::find($cityName->country_id);
-            $result['country'] = $country->name;
-            if (isset($user->image)){
-                $result['image'] = 'http://test.money-men.kz/public/images/avatars/'.$user->image;
+            if (isset($cityName)){
+                $result['cityId'] = $cityName->id;
+                $result['cityName'] = $cityName->name;
+                $country = Country::find($cityName->country_id);
+                $result['country'] = $country->name;
+            }
+
+            if (isset($user->image)) {
+                $result['image'] = 'http://test.money-men.kz/public/images/avatars/' . $user->image;
             }
 
             $result['type'] = $user->type;
             $result['userType'] = $user->user_type;
             $result['success'] = true;
-        } while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
         $name = $request->input('name');
         $secondName = $request->input('secondName');
         $lastName = $request->input('lastName');
@@ -288,12 +289,12 @@ class UserController extends Controller
         $result['success'] = false;
 
         do {
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
@@ -308,28 +309,99 @@ class UserController extends Controller
             $user->phone = $phone;
             $user->save();
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function deleteAvatar(Request $request){
+    public function deleteAvatar(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = true;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $user = User::where('token',$token)->update(['image' => '']);
+            $user = User::where('token', $token)->update(['image' => '']);
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
+    public function addFavourites(Request $request)
+    {
+        $token = $request->input('token');
+        $post_id = $request->input('post_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$post_id) {
+                $result['message'] = 'Не передан номер объявление';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            DB::beginTransaction();
+            $favourites = DB::table('favourites')->insert([
+                'user_id' => $user->id,
+                'post_id' => $post_id,
+            ]);
+            if (!$favourites) {
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            DB::commit();
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function deleteFavourites(Request $request)
+    {
+        $token = $request->input('token');
+        $id = $request->input('id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$id) {
+                $result['message'] = 'Не передан номер избранного объявление';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            DB::beginTransaction();
+            $favourites = DB::table('favourites')->where('id', $id)->delete();
+            if (!$favourites) {
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            DB::commit();
+        } while (false);
+        return response()->json($result);
+    }
 }
