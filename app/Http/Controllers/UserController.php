@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -353,6 +354,11 @@ class UserController extends Controller
             $user = User::where('token', $token)->first();
             if (!$user) {
                 $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = Post::find($post_id);
+            if (!$post){
+                $result['message'] = 'Не найден объявление';
                 break;
             }
             DB::beginTransaction();
