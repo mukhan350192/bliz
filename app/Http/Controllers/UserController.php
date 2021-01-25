@@ -20,6 +20,7 @@ class UserController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
         $phone = $request->input('phone');
+        var_dump($fullName);
         $result['success'] = false;
         do {
             if (!$fullName){
