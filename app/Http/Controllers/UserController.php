@@ -449,4 +449,32 @@ class UserController extends Controller
         $company = DB::table('company_types')->get();
         return response()->json($company);
     }
+
+    public function updateBin(Request $request){
+        $token = $request->input('token');
+        $bin = $request->input('bin');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$bin){
+                $result['message'] = 'Не передан бин';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $user->bin = $bin;
+            $user->save();
+            $result['success'] = true;
+        }while(false);
+
+        return response()->json($result);
+    }
 }
