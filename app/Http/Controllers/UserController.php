@@ -20,8 +20,9 @@ class UserController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
         $phone = $request->input('phone');
-        var_dump($fullName);
+
         $result['success'] = false;
+
         do {
             if (!$fullName){
                 $result['message'] = 'Не передан ФИО';
@@ -48,7 +49,13 @@ class UserController extends Controller
 
             $token = Str::random(60);
             $token = sha1($token.time());
-
+            $types = DB::table('user_types')->get();
+            $typesData = [];
+            foreach ($types as $type){
+                $typesData[] = [
+                    $type->id => $type->name,
+                ];
+            }
             DB::beginTransaction();
             $user = User::create([
                 'fullName' => $fullName,
@@ -66,9 +73,15 @@ class UserController extends Controller
                 ]);
             } else {
                 DB::commit();
+                $userType = $typesData[1];
                 return response()->json([
                     'success' => true,
                     'token' => $token,
+                    'fullName' => $fullName,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'user_type' => $userType,
+                    'user_type_id' => 1,
                 ]);
             }
         } while (false);
@@ -144,7 +157,6 @@ class UserController extends Controller
             ]);
             var_dump($company);
             if (!$company){
-                echo "ues";
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
                 break;
@@ -152,6 +164,13 @@ class UserController extends Controller
             DB::commit();
             $result['success'] = true;
             $result['token'] = $token;
+            $result['email'] = $email;
+            $result['phone'] = $phone;
+            $result['companyName'] = $companyName;
+            $result['companyType'] = $companyType;
+            if (isset($bin)){
+                $result['bin'] = $bin;
+            }
         }while(false);
 
         return response()->json($result);
