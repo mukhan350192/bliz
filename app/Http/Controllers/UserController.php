@@ -128,6 +128,7 @@ class UserController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
+            var_dump($user);
             if (!$user){
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
@@ -136,16 +137,19 @@ class UserController extends Controller
             $company = DB::table('company_details')->insertGetId([
                 'name' => $companyName,
                 'types' => $companyType,
+                'user_id' => $user,
                 'bin' => $bin,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'user_id' => $user,
             ]);
+            var_dump($company);
             if (!$company){
+                echo "ues";
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
                 break;
             }
+            DB::commit();
             $result['success'] = true;
             $result['token'] = $token;
         }while(false);
