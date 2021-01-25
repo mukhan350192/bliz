@@ -15,26 +15,15 @@ class UserController extends Controller
 {
     public function registration(Request $request)
     {
-        $name = $request->input('name');
-        $secondName = $request->input('secondName');
-        $lastName = $request->input('lastName');
+        $fullName = $request->input('fullName');
         $email = $request->input('email');
         $password = $request->input('password');
         $phone = $request->input('phone');
-        $birthDay = $request->input('birthDay');
-        $city = $request->input('city');
-        $address = $request->input('address');
-        $type = $request->input('type');
-        $image = $request->input('image');
         $user_type = $request->input('user_type');
         $result['success'] = false;
         do {
-            if (!$name) {
-                $result['message'] = 'Не передан имя';
-                break;
-            }
-            if (!$secondName) {
-                $result['message'] = 'Не передан фамилия';
+            if (!$fullName){
+                $result['message'] = 'Не передан ФИО';
                 break;
             }
             if (!$email) {
@@ -49,31 +38,9 @@ class UserController extends Controller
                 $result['message'] = 'Не передан телефон';
                 break;
             }
-            if (!$birthDay) {
-                $result['message'] = 'Не передан день рождение';
-                break;
-            }
-            if (!$city) {
-                $result['message'] = 'Не передан город';
-                break;
-            }
-            if (!$address) {
-                $result['message'] = 'Не передан адрес';
-                break;
-            }
-            if (!$type) {
-                $result['message'] = 'Не передан тип пользователья';
-                break;
-            }
             if (!$user_type) {
                 $result['message'] = 'Не передан юридический тип пользователья';
                 break;
-            }
-            if ($user_type == 1) {
-                $user_type = 'Физическое лицо';
-            }
-            if ($user_type == 2) {
-                $user_type = 'Юридическое лицо';
             }
 
             $user = User::where('email', $email)->first();
@@ -87,18 +54,11 @@ class UserController extends Controller
 
             DB::beginTransaction();
             $user = User::create([
-                'name' => $name,
-                'secondName' => $secondName,
-                'lastName' => $lastName,
+                'fullName' => $fullName,
                 'email' => $email,
                 'password' => bcrypt($password),
                 'phone' => $phone,
-                'birthDay' => $birthDay,
-                'city' => $city,
-                'address' => $address,
-                'status' => '1',
                 'token' => $token,
-                'type' => $type,
                 'user_type' => $user_type,
             ]);
             if (!$user) {
