@@ -281,7 +281,7 @@ class UserController extends Controller
         $secondName = $request->input('secondName');
         $lastName = $request->input('lastName');
         $birthDay = $request->input('birthDay');
-        $country = $request->input('country');
+       // $country = $request->input('country');
         $city = $request->input('city');
         $address = $request->input('address');
         $email = $request->input('email');
@@ -303,7 +303,7 @@ class UserController extends Controller
             $user->secondName = $secondName;
             $user->lastName = $lastName;
             $user->birthDay = $birthDay;
-            $user->country = $country;
+          //  $user->country = $country;
             $user->city = $city;
             $user->address = $address;
             $user->email = $email;
