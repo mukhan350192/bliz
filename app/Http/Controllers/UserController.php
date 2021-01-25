@@ -469,9 +469,9 @@ class UserController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-
-            $user->bin = $bin;
-            $user->save();
+            $update = DB::table('company_details')
+                ->where('user_id',$user->id)
+                ->update(['bin' => $bin]);
             $result['success'] = true;
         }while(false);
 
