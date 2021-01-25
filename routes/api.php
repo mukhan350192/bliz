@@ -28,6 +28,7 @@ Route::get('/getCompanyTypes',[UserController::class,'getCompanyTypes']);
 Route::get('/country',[UserController::class,'getCountry']);
 Route::get('/city',[UserController::class,'getCity']);
 Route::get('/updateBin',[UserController::class,'updateBin']);
+Route::post('/updateRegistration',[UserController::class,'updateRegistration']);
 Route::post('/addPost',[PostController::class,'addPost']);
 Route::get('/getPost',[PostController::class,'getPost']);
 Route::get('/getSubcategories',[PostController::class,'getSubCategories']);
