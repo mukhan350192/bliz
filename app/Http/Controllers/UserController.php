@@ -451,7 +451,7 @@ class UserController extends Controller
     }
 
     public function getCompanyTypes(){
-        $company = DB::table('company_details')->get();
+        $company = DB::table('company_types')->get();
         return response()->json($company);
     }
 }
