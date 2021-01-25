@@ -502,8 +502,37 @@ class UserController extends Controller
 
             $destinationPath = public_path('/images/company/');
             $register->move($destinationPath, $name);
-            $user->image = $name;
-            $user->save();
+            DB::table('company_details')->where('user_id',$user->id)->update(['registration' => $name]);
+            $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function updateLicense(Request $request){
+        $token = $request->input('token');
+        $license = $request->file('license');
+        $result['success'] = false;
+        do {
+            if (!$license) {
+                $result['message'] = 'Не передан изображение';
+                break;
+            }
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден токен';
+                break;
+            }
+
+            $name = $license->getClientOriginalName();
+            $name = sha1(time() . $name) . '.' . $request->file('license')->extension();;
+
+            $destinationPath = public_path('/images/company/');
+            $license->move($destinationPath, $name);
+            DB::table('company_details')->where('user_id',$user->id)->update(['license' => $name]);
             $result['success'] = true;
         } while (false);
         return response()->json($result);
