@@ -116,7 +116,7 @@ class UserController extends Controller
             }
             $token = str::random(60);
             DB::beginTransaction();
-            $user = User::create([
+            $user = User::insertGetId([
                 'phone' => $phone,
                 'email' => $email,
                 'fullName' => $fullName,
@@ -137,6 +137,7 @@ class UserController extends Controller
                 'bin' => $bin,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'user_id' => $user,
             ]);
             if (!$company){
                 DB::rollBack();
