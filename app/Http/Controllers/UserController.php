@@ -83,6 +83,7 @@ class UserController extends Controller
         $phone = $request->input('phone');
         $email = $request->input('email');
         $password = $request->input('password');
+
         $result['success'] = false;
 
         do{
