@@ -316,11 +316,8 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $name = $request->input('name');
-        $secondName = $request->input('secondName');
-        $lastName = $request->input('lastName');
-        $birthDay = $request->input('birthDay');
        // $country = $request->input('country');
+        $fullName = $request->input('fullName');
         $city = $request->input('city');
         $address = $request->input('address');
         $email = $request->input('email');
@@ -333,15 +330,13 @@ class UserController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
+
             $user = User::where('token', $token)->first();
             if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $user->name = $name;
-            $user->secondName = $secondName;
-            $user->lastName = $lastName;
-            $user->birthDay = $birthDay;
+            $user->fullName = $fullName;
           //  $user->country = $country;
             $user->city = $city;
             $user->address = $address;
