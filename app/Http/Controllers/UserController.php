@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Post;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,6 @@ class UserController extends Controller
         $email = $request->input('email');
         $password = $request->input('password');
         $phone = $request->input('phone');
-        $user_type = $request->input('user_type');
         $result['success'] = false;
         do {
             if (!$fullName){
@@ -38,10 +38,6 @@ class UserController extends Controller
                 $result['message'] = 'Не передан телефон';
                 break;
             }
-            if (!$user_type) {
-                $result['message'] = 'Не передан юридический тип пользователья';
-                break;
-            }
 
             $user = User::where('email', $email)->first();
             if ($user) {
@@ -50,7 +46,7 @@ class UserController extends Controller
             }
 
             $token = Str::random(60);
-            $token = sha1($token);
+            $token = sha1($token.time());
 
             DB::beginTransaction();
             $user = User::create([
@@ -59,7 +55,7 @@ class UserController extends Controller
                 'password' => bcrypt($password),
                 'phone' => $phone,
                 'token' => $token,
-                'user_type' => $user_type,
+                'user_type' => 1,
             ]);
             if (!$user) {
                 DB::rollBack();
@@ -75,6 +71,82 @@ class UserController extends Controller
                 ]);
             }
         } while (false);
+        return response()->json($result);
+    }
+
+    public function entityRegistration(Request $request){
+        $companyType = $request->input('companyType');
+        $companyName = $request->input('companyName');
+        $bin = $request->input('bin');
+        $fullName = $request->input('fullName');
+        $phone = $request->input('phone');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $result['success'] = false;
+
+        do{
+            if (!$companyType){
+                $result['message'] = 'Не передан тип компании';
+                break;
+            }
+            if (!$companyName){
+                $result['message'] = 'Не передан название компании';
+                break;
+            }
+            if (!$fullName){
+                $result['message'] = 'Не передан фио контактный лицо';
+                break;
+            }
+            if (!$phone){
+                $result['message'] = 'Не передан телефон';
+                break;
+            }
+            if (!$email){
+                $result['message'] = 'Не передан почта';
+                break;
+            }
+            if (!$password){
+                $result['message'] = 'Не передан пароль';
+                break;
+            }
+            $user = User::where('email',$email)->first();
+            if(isset($user)) {
+                $result['message'] = 'Этот email уже зарегистрирован!';
+                break;
+            }
+            $token = str::random(60);
+            DB::beginTransaction();
+            $user = User::create([
+                'phone' => $phone,
+                'email' => $email,
+                'fullName' => $fullName,
+                'password' => bcrypt('password'),
+                'user_type' => 2,
+                'token' => sha1($token.time()),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$user){
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так. Попробуйте позже';
+                break;
+            }
+            $company = DB::table('company_details')->insertGetId([
+                'name' => $companyName,
+                'types' => $companyType,
+                'bin' => $bin,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$company){
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так. Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            $result['token'] = $token;
+        }while(false);
+
         return response()->json($result);
     }
 

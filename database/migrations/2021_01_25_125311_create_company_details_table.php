@@ -15,6 +15,7 @@ class CreateCompanyDetailsTable extends Migration
     {
         Schema::create('company_details', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('name');
             $table->integer('types');
             $table->bigInteger('bin')->nullable();
