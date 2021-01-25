@@ -206,10 +206,33 @@ class UserController extends Controller
             $user->token = $token;
             $user->save();
             $result['success'] = true;
-            $result['image'] = $user->image;
-            $result['name'] = $user->name;
+            if (isset($user->image)){
+                $result['image'] = $user->image;
+            }
+            $result['fullName'] = $user->fullName;
             $result['phone'] = $user->phone;
-            $result['url'] = 'http://test.money-men.kz/public/images/avatars';
+            if ($user->type == 1){
+                $result['url'] = 'http://test.money-men.kz/public/images/avatars/';
+            }else if ($user->type == 2){
+                $company = DB::table('company_details')->where('user_id',$user->id)->first();
+                if (isset($company)){
+                    $companyType = DB::table('company_types')->where('id',$company->types)->first();
+                    $result['companyName'] = $company->name;
+                    $result['companyType'] = $companyType->name;
+                    if (isset($company->bin)){
+                        $result['bin'] = $company->bin;
+                    }
+                    if (isset($company->registration)){
+                        $result['registration'] = $company->registration;
+                    }
+                    if (isset($company->license)){
+                        $result['license'] = $company->license;
+                    }
+                }
+                $result['url'] = 'http://test.money-men.kz/public/images/company/';
+
+            }
+            $result['email'] = $user->email;
             $result['token'] = $token;
         } while (false);
         return response()->json($result);
