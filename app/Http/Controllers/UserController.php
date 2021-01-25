@@ -498,7 +498,7 @@ class UserController extends Controller
             }
 
             $name = $register->getClientOriginalName();
-            $name = sha1(time() . $name) . '.' . $request->file('image')->extension();;
+            $name = sha1(time() . $name) . '.' . $request->file('register')->extension();;
 
             $destinationPath = public_path('/images/company/');
             $register->move($destinationPath, $name);
