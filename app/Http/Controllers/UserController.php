@@ -477,4 +477,35 @@ class UserController extends Controller
 
         return response()->json($result);
     }
+
+    public function updateRegistration(Request $request){
+        $token = $request->input('token');
+        $register = $request->file('register');
+        $result['success'] = false;
+        do {
+            if (!$register) {
+                $result['message'] = 'Не передан изображение';
+                break;
+            }
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден токен';
+                break;
+            }
+
+            $name = $register->getClientOriginalName();
+            $name = sha1(time() . $name) . '.' . $request->file('image')->extension();;
+
+            $destinationPath = public_path('/images/company/');
+            $register->move($destinationPath, $name);
+            $user->image = $name;
+            $user->save();
+            $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
 }
