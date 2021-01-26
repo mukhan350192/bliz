@@ -178,11 +178,11 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $email = $request->input('email');
+        $phone = $request->input('phone');
         $password = $request->input('password');
         $result['success'] = false;
         do {
-            if (!$email) {
+            if (!$phone) {
                 $result['message'] = 'Не передан почта';
                 break;
             }
@@ -190,7 +190,7 @@ class UserController extends Controller
                 $result['message'] = 'Не передан пароль';
                 break;
             }
-            $user = User::where('email', $email)->first();
+            $user = User::where('email', $phone)->first();
             if (!$user) {
                 $result['message'] = 'Такой пользователь не существует';
                 break;
