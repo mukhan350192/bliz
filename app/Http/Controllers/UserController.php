@@ -130,6 +130,8 @@ class UserController extends Controller
                 break;
             }
             $token = str::random(60);
+            $token = sha1($token.time());
+
             DB::beginTransaction();
             $user = User::insertGetId([
                 'phone' => $phone,
@@ -137,7 +139,7 @@ class UserController extends Controller
                 'fullName' => $fullName,
                 'password' => bcrypt('password'),
                 'user_type' => 2,
-                'token' => sha1($token.time()),
+                'token' => $token,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -328,14 +330,9 @@ class UserController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $result['name'] = $user->name;
-            $result['secondName'] = $user->secondName;
-            if (isset($user->lastName)) {
-                $result['lastName'] = $user->lastName;
-            }
+            $result['fullName'] = $user->fullName;
             $result['email'] = $user->email;
             $result['phone'] = $user->phone;
-            $result['birthDay'] = $user->birthDay;
             $cityName = City::find($user->city);
             if (isset($cityName)){
                 $result['cityId'] = $cityName->id;
