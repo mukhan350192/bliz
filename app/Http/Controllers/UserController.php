@@ -353,7 +353,7 @@ class UserController extends Controller
             }
 
             if (isset($user->image)) {
-                $result['image'] = 'http://test.money-men.kz/public/images/avatars/' . $user->image;
+                $result['image'] = 'http://test.money-men.kz/images/avatars/' . $user->image;
             }
             if($user->user_type == 2){
                 $companyDetails = DB::table('company_details')->where('user_id',$user->id)->first();
