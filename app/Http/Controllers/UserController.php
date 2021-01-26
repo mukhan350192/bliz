@@ -339,14 +339,27 @@ class UserController extends Controller
                 $result['cityName'] = $cityName->name;
                 $country = Country::find($cityName->country_id);
                 $result['country'] = $country->name;
+                $result['address'] = $user->address;
             }
 
             if (isset($user->image)) {
                 $result['image'] = 'http://test.money-men.kz/public/images/avatars/' . $user->image;
             }
-
-            $result['type'] = $user->type;
-            $result['userType'] = $user->user_type;
+            if($user->user_type == 2){
+                $companyDetails = DB::table('company_details')->where('user_id',$user->id)->first();
+                $result['companyName'] = $companyDetails->name;
+                if (isset($companyDetails->bin)){
+                    $result['bin'] = $companyDetails->bin;
+                }
+                if (isset($companyDetails->license)){
+                    $result['license'] = "https://test.money-men.kz/images/company/$companyDetails->license";
+                }
+                if (isset($companyDetails->registration)){
+                    $result['registration'] = "https://test.money-men.kz/images/company/$companyDetails->registration";
+                }
+                $type = DB::table('company_types')->where('id',$companyDetails->types)->first();
+                $result['companyType'] = $type->name;
+            }
             $result['success'] = true;
         } while (false);
 
