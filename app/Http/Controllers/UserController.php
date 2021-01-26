@@ -141,7 +141,7 @@ class UserController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            var_dump($user);
+
             if (!$user){
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
@@ -155,7 +155,7 @@ class UserController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            var_dump($company);
+
             if (!$company){
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
