@@ -658,9 +658,12 @@ class UserController extends Controller
             if ($posts){
                 $posts->delete();
             }
-            $
+            $favourites = DB::table('favourites')->where('user_id',$user->id)->delete();
+            if ($favourites){
+                $favourites->delete();
+            }
             DB::commit();
-
+            $result['success'] = true;
         }while(false);
         return response()->json($result);
     }
