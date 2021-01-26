@@ -645,7 +645,7 @@ class UserController extends Controller
                 break;
             }
 
-            if (bcrypt($password) != $user->password){
+            if (!Hash::check($password,$user->password)){
                 $result['message'] = 'Не совпадают пароль';
                 break;
             }
