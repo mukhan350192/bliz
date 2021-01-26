@@ -579,4 +579,37 @@ class UserController extends Controller
         } while (false);
         return response()->json($result);
     }
+
+    public function changePassword(Request $request){
+        $password = $request->input('password');
+        $repeat = $request->input('password');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$password){
+                $result['message'] = 'Не передан пароль';
+                break;
+            }
+            if (!$repeat){
+                $result['message'] = 'Не передан подтверждение пароля';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден токен';
+                break;
+            }
+            $user->password = bcrypt($password);
+            $user->save();
+            $result['success'] = true;
+        }while(false);
+
+        return response()->json($result);
+    }
 }
