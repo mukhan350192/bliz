@@ -193,7 +193,7 @@ class UserController extends Controller
                 $result['message'] = 'Не передан пароль';
                 break;
             }
-            $user = User::where('email', $phone)->first();
+            $user = User::where('phone', $phone)->first();
             if (!$user) {
                 $result['message'] = 'Такой пользователь не существует';
                 break;
@@ -621,6 +621,47 @@ class UserController extends Controller
             $result['success'] = true;
         }while(false);
 
+        return response()->json($result);
+    }
+
+    public function deleteAccount(Request $request){
+        $token = $request->input('token');
+        $password = $request->input('password');
+        $result['success'] = false;
+
+        do {
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$password){
+                $result['message'] = 'Не передан пароль';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            if (bcrypt($password) != $user->password){
+                $result['message'] = 'Не совпадают пароль';
+                break;
+            }
+
+            DB::beginTransaction();
+            if ($user->type == 2){
+                $company = DB::table('company_details')->where('user_id',$user->id)->delete();
+            }
+            $posts = Post::where('user_id',$user->id)->first();
+            if ($posts){
+                $posts->delete();
+            }
+            $
+            DB::commit();
+
+        }while(false);
         return response()->json($result);
     }
 }

@@ -35,6 +35,7 @@ Route::get('/getPost',[PostController::class,'getPost']);
 Route::get('/getSubcategories',[PostController::class,'getSubCategories']);
 Route::post('/setImage',[UserController::class,'setImage']);
 Route::get('/changePassword',[UserController::class,'changePassword']);
+Route::get('/deleteAccount',[UserController::class,'deleteAccount']);
 //Route::get('/getImage',[UserController::class,'displayImage']);
 Route::post('/sendRequest',[PostController::class,'sendRequest']);
 Route::post('/getOwnPosts',[PostController::class,'getOwnPosts']);
