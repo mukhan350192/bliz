@@ -170,6 +170,7 @@ class UserController extends Controller
             $result['phone'] = $phone;
             $result['companyName'] = $companyName;
             $result['companyType'] = $companyType;
+            $result['fullName'] = $fullName;
             if (isset($bin)){
                 $result['bin'] = $bin;
             }
