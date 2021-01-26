@@ -137,7 +137,7 @@ class UserController extends Controller
                 'phone' => $phone,
                 'email' => $email,
                 'fullName' => $fullName,
-                'password' => bcrypt('password'),
+                'password' => bcrypt($password),
                 'user_type' => 2,
                 'token' => $token,
                 'created_at' => Carbon::now(),
