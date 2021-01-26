@@ -657,12 +657,8 @@ class UserController extends Controller
             $posts = Post::where('user_id',$user->id)->delete();
 
             $favourites = DB::table('favourites')->where('user_id',$user->id)->delete();
-            var_dump($posts);
-            var_dump($favourites);
-            if (!$favourites || !$posts){
-               $result['message'] = 'Упс что то произошло. Попробуйте позже';
-               break;
-            }
+
+
             User::find($user->id)->delete();
             DB::commit();
             $result['success'] = true;
