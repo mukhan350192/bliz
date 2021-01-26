@@ -654,14 +654,14 @@ class UserController extends Controller
             if ($user->type == 2){
                 $company = DB::table('company_details')->where('user_id',$user->id)->delete();
             }
-            $posts = Post::where('user_id',$user->id)->first();
-            if ($posts){
-                $posts->delete();
-            }
+            $posts = Post::where('user_id',$user->id)->delete();
+
             $favourites = DB::table('favourites')->where('user_id',$user->id)->delete();
-            if ($favourites){
-                $favourites->delete();
+            if (!$favourites || !$posts){
+               $result['message'] = 'Упс что то произошло. Попробуйте позже';
+               break;
             }
+            User::find($user->id)->delete();
             DB::commit();
             $result['success'] = true;
         }while(false);
