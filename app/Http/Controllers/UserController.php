@@ -46,7 +46,11 @@ class UserController extends Controller
                 $result['message'] = 'Этот емейл уже регистирован';
                 break;
             }
-
+            $userPhone = User::where('phone',$phone)->first();
+            if ($userPhone){
+                $result['message'] = 'Этот телефон уже регистирован';
+                break;
+            }
             $token = Str::random(60);
             $token = sha1($token.time());
             $types = DB::table('user_types')->get();
@@ -127,6 +131,11 @@ class UserController extends Controller
             $user = User::where('email',$email)->first();
             if(isset($user)) {
                 $result['message'] = 'Этот email уже зарегистрирован!';
+                break;
+            }
+            $userPhone = User::where('phone',$phone)->first();
+            if ($userPhone){
+                $result['message'] = 'Этот телефон уже регистирован';
                 break;
             }
             $token = str::random(60);
@@ -651,7 +660,7 @@ class UserController extends Controller
             }
 
             DB::beginTransaction();
-            if ($user->type == 2){
+            if ($user->user_type == 2){
                 $company = DB::table('company_details')->where('user_id',$user->id)->delete();
             }
             $posts = Post::where('user_id',$user->id)->delete();
