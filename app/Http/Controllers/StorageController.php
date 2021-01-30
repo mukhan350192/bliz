@@ -135,6 +135,8 @@ class StorageController extends Controller
         $warning = $request->input('warning');
         $warning_area = $request->input('warning_area');
         $storage_id = $request->input('storage_id');
+        $price = $request->input('price');
+        $rentTypeID = $request->input('rentTypeID');
         $token = $request->input('token');
         $result['success'] = true;
 
@@ -188,6 +190,8 @@ class StorageController extends Controller
                     'floor_type' => $floor_type,
                     'warning' => $warning,
                     'warning_area' => $warning_area,
+                    'price' => $price,
+                    'rentTypeID' => $rentTypeID,
                     'updated_at' => Carbon::now(),
                 ]);
             if (!$update){
