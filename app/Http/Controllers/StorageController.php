@@ -248,7 +248,7 @@ class StorageController extends Controller
                 $storageID[] = [$storage->id];
                 $data[] = [
                     'name' => $storage->name,
-                    'city' => $cities[$storage->city],
+                    'city' => $cities[$storage->city_id],
                     'address' => $storage->address,
                 ];
                 if (isset($storage->area)){
