@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Storage;
 use App\Models\User;
 use Carbon\Carbon;
@@ -222,6 +224,62 @@ class StorageController extends Controller
                 break;
             }
 
+            $storages = DB::table('storage')
+                        ->join('storage_properties','storage.property_id','=','storage_properties.id')
+                        ->where('user_id',$user->id)
+                        ->get();
+            $data = [];
+            $cities = [];
+            $city = City::all();
+            foreach ($city as $c){
+                $cities .[] = [
+                    $city->id => $c->name,
+                ];
+            }
+            $typeRent = DB::table('type_rent')->get();
+            $rentCollection = [];
+            foreach ($typeRent as $ty){
+                $rentCollection .= [
+                    $ty->id => $ty->name,
+                ];
+            }
+            $storageID = [];
+            foreach ($storages as $storage){
+                $storageID .= [$storage->id];
+                $data .= [
+                    'name' => $storage->name,
+                    'city' => $cities[$storage->city],
+                    'address' => $storage->address,
+                ];
+                if (isset($storage->area)){
+                    $data .= ['area' => $storage->area];
+                }
+                if (isset($storage->total_area)){
+                    $data .= ['area' => $storage->area];
+                }
+                if (isset($storage->class)){
+                    $data .= ['class' => $storage->class];
+                }
+                if (isset($storage->type_storage)){
+                    $data .= ['type_storage' => $storage->type_storage];
+                }
+                if (isset($storage->year)){
+                    $data .= ['year' => $storage->year];
+                }
+                if (isset($storage->floor)){
+                    $data .= ['floor' => $storage->floor];
+                }
+                if (isset($storage->floor_type)){
+                    $data .= ['floor_type' => $storage->floor_type];
+                }
+                if (isset($storage->warning)){
+                    $data .= ['warning' => $storage->warning];
+                }
+                if (isset($storage->warning_area)){
+                    $data .= ['warning_area' => $storage->warning_area];
+                }
+            }
+            $result = $data;
         }while(false);
         return response()->json($result);
     }
