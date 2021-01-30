@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Storage;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class StorageController extends Controller
                 break;
             }
 
-            $storageID = StorageController::create([
+            $storageID = Storage::create([
                 'name' => $name,
                 'user_id' => $user->id,
                 'property_id' => $propertyID,
