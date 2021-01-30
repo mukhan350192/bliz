@@ -232,54 +232,50 @@ class StorageController extends Controller
             $cities = [];
             $city = City::all();
             foreach ($city as $c){
-                $cities[] = [
-                    $c->id => $c->name,
-                ];
+               $cities[$c->id] = $c->name;
             }
+
+
             $typeRent = DB::table('type_rent')->get();
             $rentCollection = [];
             foreach ($typeRent as $ty){
-                $rentCollection[] = [
-                    $ty->id => $ty->name,
-                ];
+                $rentCollection[$ty->id]= $ty->name;
             }
+
+
             $storageID = [];
+            $index = 0;
             foreach ($storages as $storage){
-                $storageID[] = [$storage->id];
-                $data[] = [
-                    'name' => $storage->name,
-                    'city' => $cities[$storage->city_id],
-                    'address' => $storage->address,
-                ];
-                if (isset($storage->area)){
-                    $data[] = ['area' => $storage->area];
-                }
-                if (isset($storage->total_area)){
-                    $data[] = ['area' => $storage->area];
+
+                $data[$index]['city'] = $cities[$storage->city_id];
+                $data[$index]['address'] = $storage->address;
+                $data[$index]['price'] = $storage->price .'тг / '.$rentCollection[$storage->rentTypeID];
+                $data[$index]['area'] = $storage->area;
+                $data[$index]['total_area'] = $storage->total_area;
+                if (isset($storage->year)){
+                    $data[$index]['year'] = $storage->year .' г.';
                 }
                 if (isset($storage->class)){
-                    $data[] = ['class' => $storage->class];
+                    $data[$index]['class'] = $storage->class;
                 }
                 if (isset($storage->type_storage)){
-                    $data[] = ['type_storage' => $storage->type_storage];
-                }
-                if (isset($storage->year)){
-                    $data[] = ['year' => $storage->year];
+                    $data[$index]['type_storage'] = $storage->type_storage;
                 }
                 if (isset($storage->floor)){
-                    $data[] = ['floor' => $storage->floor];
+                    $data[$index]['floor'] = $storage->floor.' этаж';
                 }
                 if (isset($storage->floor_type)){
-                    $data[] = ['floor_type' => $storage->floor_type];
+                    $data[$index]['floor_type'] = $storage->floor_type.' мест';
                 }
                 if (isset($storage->warning)){
-                    $data[] = ['warning' => $storage->warning];
+                    $data[$index]['warning'] = $storage->warning.' мест';
                 }
                 if (isset($storage->warning_area)){
-                    $data[] = ['warning_area' => $storage->warning_area];
+                    $data[$index]['warning_area'] = $storage->warning_area.' м';
                 }
+                $index = $index+1;
             }
-            $result = $data;
+            $result['data'] = $data;
         }while(false);
         return response()->json($result);
     }
