@@ -9,4 +9,9 @@ class Storage extends Model
 {
     use HasFactory;
     protected $table = 'storage';
+    protected $fillable = [
+        'name',
+        'property_id',
+        'user_id',
+    ];
 }
