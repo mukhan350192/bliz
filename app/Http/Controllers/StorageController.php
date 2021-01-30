@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class StorageController extends Controller
 {
     public function createStorage(Request $request){
-        $name = $request->input('storage');
+        $name = $request->input('name');
         $area = $request->input('area');
         $total_area = $request->input('total_area');
         $class = $request->input('class');
