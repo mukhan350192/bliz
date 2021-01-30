@@ -246,7 +246,7 @@ class StorageController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::find($token);
+            $user = User::where('token',$token)->first();
             if (!$user){
                 $result['message'] = 'Не найден пользователь';
                 break;
