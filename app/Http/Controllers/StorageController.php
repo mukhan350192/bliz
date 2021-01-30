@@ -65,7 +65,7 @@ class StorageController extends Controller
                 break;
             }
 
-            $storageID = StorageController::insertGetId([
+            $storageID = StorageController::create([
                 'name' => $name,
                 'user_id' => $user->id,
                 'property_id' => $propertyID,
@@ -84,7 +84,7 @@ class StorageController extends Controller
             $image->move($destinationPath, $storageImage);
             $imageID = DB::table('storage_images')->insertGetId([
                 'name' => $storageImage,
-                'storage_id' => $storageID,
+                'storage_id' => $storageID->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
