@@ -56,3 +56,4 @@ Route::post('/addStorage',[StorageController::class,'createStorage']);
 Route::get('/editStorage',[StorageController::class,'updateStorage']);
 Route::get('/getAllOwnStorage',[StorageController::class,'getAllOwnStorage']);
 Route::get('/getRentType',[StorageController::class,'getRentType']);
+Route::post('/addImageToStorage',[StorageController::class,'addImageToStorage']);

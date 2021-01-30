@@ -230,4 +230,54 @@ class StorageController extends Controller
         $rent = DB::table('type_rent')->select('id','name')->get();
         return response()->json($rent);
     }
+
+    public function addImageToStorage(Request $request){
+        $image = $request->file('image');
+        $storageID =$request->input('storage_id');
+        $token = $request->input('token');
+        $result['success'] = true;
+
+        do{
+            if (!$image){
+                $result['message'] = 'Не передан файл';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::find($token);
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $storage = Storage::find($storageID);
+            if (!$storage){
+                $result['message'] = 'Не найден склад';
+                break;
+            }
+
+            DB::beginTransaction();
+            $storageImage = $image->getClientOriginalName();
+            $storageImage = sha1(time() . $storageImage) . '.' . $request->file('image')->extension();
+
+            $destinationPath = public_path('/images/storage/');
+            $image->move($destinationPath, $storageImage);
+            $imageID = DB::table('storage_images')->insertGetId([
+                'name' => $storageImage,
+                'storage_id' => $storageID,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$imageID){
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            DB::commit();
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
 }
