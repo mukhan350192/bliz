@@ -233,7 +233,7 @@ class StorageController extends Controller
             $city = City::all();
             foreach ($city as $c){
                 $cities .[] = [
-                    $city->id => $c->name,
+                    $c->id => $c->name,
                 ];
             }
             $typeRent = DB::table('type_rent')->get();
