@@ -17,7 +17,8 @@ class StorageController extends Controller
         $type = $request->input('type_storage');
         $year = $request->input('year');
         $city_id = $request->input('city_id');
-        $address = $request->input('year');
+        $address = $request->input('address');
+
         $floor = $request->input('floor');
         $floor_type = $request->input('floor_type');
         $warning = $request->input('warning');
