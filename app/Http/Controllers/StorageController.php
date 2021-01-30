@@ -241,8 +241,11 @@ class StorageController extends Controller
             foreach ($typeRent as $ty){
                 $rentCollection[$ty->id]= $ty->name;
             }
-
-
+            $imagesList = [];
+            $images = DB::table('storage_images')->select('storage_id','name')->get()->unique('storage_id');
+            foreach ($images as $image){
+                $imagesList[$image->storage_id] = $image->name;
+            }
             $storageID = [];
             $index = 0;
             foreach ($storages as $storage){
@@ -273,6 +276,10 @@ class StorageController extends Controller
                 if (isset($storage->warning_area)){
                     $data[$index]['warning_area'] = $storage->warning_area.' м';
                 }
+                if (isset($imagesList[$storage->id])){
+                    $data[$index]['image'] = 'https://test.money-men.kz/images/storage/'.$imagesList[$storage->id];
+                }
+
                 $index = $index+1;
             }
             $result['data'] = $data;
