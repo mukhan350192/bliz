@@ -343,7 +343,10 @@ class UserController extends Controller
             $result['fullName'] = $user->fullName;
             $result['email'] = $user->email;
             $result['phone'] = $user->phone;
-            $cityName = City::find($user->city);
+            if (isset($user->city)){
+                $cityName = City::find($user->city);
+            }
+
             if (isset($cityName)){
                 $result['cityId'] = $cityName->id;
                 $result['cityName'] = $cityName->name;
