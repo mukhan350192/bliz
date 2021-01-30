@@ -232,7 +232,7 @@ class StorageController extends Controller
             $cities = [];
             $city = City::all();
             foreach ($city as $c){
-                $cities .= [
+                $cities[] = [
                     $c->id => $c->name,
                 ];
             }
