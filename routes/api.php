@@ -53,3 +53,4 @@ Route::get('/getFavourites',[UserController::class,'getFavourites']);
 
 // storage
 Route::post('/addStorage',[StorageController::class,'createStorage']);
+Route::get('/editStorage',[StorageController::class,'updateStorage']);
