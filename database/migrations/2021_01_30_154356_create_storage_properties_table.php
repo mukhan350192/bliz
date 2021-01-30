@@ -15,6 +15,8 @@ class CreateStoragePropertiesTable extends Migration
     {
         Schema::create('storage_properties', function (Blueprint $table) {
             $table->id();
+            $table->integer('price');
+            $table->integer('rentTypeID');
             $table->double('area')->nullable();
             $table->double('total_area')->nullable();
             $table->string('class')->nullable();

@@ -25,6 +25,8 @@ class StorageController extends Controller
         $warning = $request->input('warning');
         $warning_area = $request->input('warning_area');
         $image = $request->file('image');
+        $price = $request->input('price');
+        $rentTypeID = $request->input('rentTypeID');
         $token = $request->input('token');
         $result['success'] = true;
 
@@ -49,6 +51,11 @@ class StorageController extends Controller
                 break;
             }
 
+            if (!$price){
+                $result['message'] = 'Не передан стоимость';
+                break;
+            }
+
             $user = User::where('token',$token)->first();
             if (!$user){
                 $result['message'] = 'Не найден пользователь';
@@ -68,6 +75,8 @@ class StorageController extends Controller
                 'floor_type' => $floor_type,
                 'warning' => $warning,
                 'warning_area' => $warning_area,
+                'price' => $price,
+                'rentTypeID' => $rentTypeID,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -193,7 +202,28 @@ class StorageController extends Controller
         return response()->json($result);
     }
 
-    public function getAllStorage(){
+    public function getAllOwnStorage(Request $request){
+        $token = $request->input('token');
 
+        $result['success'] = true;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function getRentType(Request $request){
+        $rent = DB::table('type_rent')->select('id','name')->get();
+        return response()->json($rent);
     }
 }
