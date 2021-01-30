@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StorageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +49,7 @@ Route::get('/addFavourites',[UserController::class,'addFavourites']);
 Route::get('/deleteFavourites',[UserController::class,'deleteFavourites']);
 //TODO
 Route::get('/getFavourites',[UserController::class,'getFavourites']);
+
+
+// storage
+Route::post('/addStorage',[StorageController::class,'createStorage']);

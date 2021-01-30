@@ -674,4 +674,6 @@ class UserController extends Controller
         }while(false);
         return response()->json($result);
     }
+
+
 }
