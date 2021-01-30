@@ -239,44 +239,44 @@ class StorageController extends Controller
             $typeRent = DB::table('type_rent')->get();
             $rentCollection = [];
             foreach ($typeRent as $ty){
-                $rentCollection .= [
+                $rentCollection[] = [
                     $ty->id => $ty->name,
                 ];
             }
             $storageID = [];
             foreach ($storages as $storage){
-                $storageID .= [$storage->id];
-                $data .= [
+                $storageID[] = [$storage->id];
+                $data[] = [
                     'name' => $storage->name,
                     'city' => $cities[$storage->city],
                     'address' => $storage->address,
                 ];
                 if (isset($storage->area)){
-                    $data .= ['area' => $storage->area];
+                    $data[] = ['area' => $storage->area];
                 }
                 if (isset($storage->total_area)){
-                    $data .= ['area' => $storage->area];
+                    $data[] = ['area' => $storage->area];
                 }
                 if (isset($storage->class)){
-                    $data .= ['class' => $storage->class];
+                    $data[] = ['class' => $storage->class];
                 }
                 if (isset($storage->type_storage)){
-                    $data .= ['type_storage' => $storage->type_storage];
+                    $data[] = ['type_storage' => $storage->type_storage];
                 }
                 if (isset($storage->year)){
-                    $data .= ['year' => $storage->year];
+                    $data[] = ['year' => $storage->year];
                 }
                 if (isset($storage->floor)){
-                    $data .= ['floor' => $storage->floor];
+                    $data[] = ['floor' => $storage->floor];
                 }
                 if (isset($storage->floor_type)){
-                    $data .= ['floor_type' => $storage->floor_type];
+                    $data[] = ['floor_type' => $storage->floor_type];
                 }
                 if (isset($storage->warning)){
-                    $data .= ['warning' => $storage->warning];
+                    $data[] = ['warning' => $storage->warning];
                 }
                 if (isset($storage->warning_area)){
-                    $data .= ['warning_area' => $storage->warning_area];
+                    $data[] = ['warning_area' => $storage->warning_area];
                 }
             }
             $result = $data;
