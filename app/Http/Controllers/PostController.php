@@ -165,7 +165,7 @@ class PostController extends Controller
             $post = DB::table('posts')
                 ->join('users','posts.user_id','=','users.id')
                 ->join('details','posts.id','=','details.post_id')
-                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.name','users.phone','users.email','details.from','details.to','users.user_type')
+                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.fullName','users.phone','users.email','details.from','details.to','users.user_type')
                 ->skip($skip)
                 ->take($take)
                 ->get();
