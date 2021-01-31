@@ -145,7 +145,7 @@ class PostController extends Controller
 
         $page = intval($request->input('page'));
         $sub_id = $request->input('sub_id');
-
+        $category_id = $request->input('category_id');
         $result['success'] = false;
         $skip = 0;
         $take = 0;
@@ -160,12 +160,15 @@ class PostController extends Controller
         $count = Post::all();
         $count = $count->count();
         $city = City::all();
-
+        if (!$category_id){
+            die('Не передан категория айди');
+        }
         if (!$sub_id){
             $post = DB::table('posts')
                 ->join('users','posts.user_id','=','users.id')
                 ->join('details','posts.id','=','details.post_id')
                 ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.fullName','users.phone','users.email','details.from','details.to','users.user_type')
+                ->where('posts.category_id',$category_id)
                 ->skip($skip)
                 ->take($take)
                 ->get();
@@ -175,6 +178,7 @@ class PostController extends Controller
                 ->join('details','posts.id','=','details.post_id')
                 ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.name','users.phone','users.email','details.from','details.to','users.user_type')
                 ->where('posts.sub_id','=',$sub_id)
+                ->where('posts.category_id','=',$category_id)
                 ->skip($skip)
                 ->take($take)
                 ->get();
@@ -354,6 +358,30 @@ class PostController extends Controller
             }
 //            print_r($all);
             $result['data'] = $all;
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function acceptPost(Request $request){
+        $token = $request->input('token');
+        $orderID = $request->input('order_id');
+        $result['success'] = true;
+
+        do {
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$orderID){
+                $result['message'] = 'Не передан номер заказа';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
         }while(false);
         return response()->json($result);
     }
