@@ -59,6 +59,7 @@ class PostController extends Controller
         $to = $request->input('to');
         $token = $request->input('token');
         $categoryID = $request->input('category_id');
+        $price = $request->input('price');
         $result['success'] = false;
 
         do {
@@ -99,6 +100,12 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
+            if (!$price){
+                $result['message'] = 'Не передан цена';
+                break;
+            }
+
+
             $user = User::where('token',$token)->first();
             if (!$user){
                 $result['message'] = 'Не найден пользователь';
@@ -116,6 +123,7 @@ class PostController extends Controller
                 'priority' => 1,
                 'user_id' => $user->id,
                 'category_id' => $categoryID,
+                'price' => $price,
             ]);
             if (!$postID) {
                 DB::rollBack();
