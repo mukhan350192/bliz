@@ -262,7 +262,9 @@ class PostController extends Controller
             DB::beginTransaction();
             $orders = Order::insertGetId([
                 'post_id' => $postID,
-                'user_id' => $user->id,
+                'from_id' => $post->user_id,
+                'to_id' => $user->id,
+                'status' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
