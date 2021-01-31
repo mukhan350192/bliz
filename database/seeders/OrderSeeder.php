@@ -15,23 +15,23 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('post_status')->insert([
-            'name' => 'Активная',
+        DB::table('order_status')->insert([
+            'name' => 'Ожидает',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
-        DB::table('post_status')->insert([
-            'name' => 'Архив',
+        DB::table('order_status')->insert([
+            'name' => 'Ждет погрузку',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
-        DB::table('post_status')->insert([
-            'name' => 'Завершенная',
+        DB::table('order_status')->insert([
+            'name' => 'Откленено',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
-        DB::table('post_status')->insert([
-            'name' => 'В процессе',
+        DB::table('order_status')->insert([
+            'name' => 'Завершен',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
