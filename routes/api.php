@@ -57,3 +57,6 @@ Route::get('/editStorage',[StorageController::class,'updateStorage']);
 Route::get('/getAllOwnStorage',[StorageController::class,'getAllOwnStorage']);
 Route::get('/getRentType',[StorageController::class,'getRentType']);
 Route::post('/addImageToStorage',[StorageController::class,'addImageToStorage']);
+
+//lk orders
+Route::get('/getPerformerOrders',[PostController::class,'getPerformerOrders']);

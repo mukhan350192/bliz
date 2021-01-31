@@ -96,18 +96,18 @@ class PostController extends Controller
                 break;
             }
 
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$price){
+            if (!$price) {
                 $result['message'] = 'Не передан цена';
                 break;
             }
 
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
@@ -149,7 +149,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getPost(Request $request){
+    public function getPost(Request $request)
+    {
 
         $page = intval($request->input('page'));
         $sub_id = $request->input('sub_id');
@@ -157,53 +158,53 @@ class PostController extends Controller
         $result['success'] = false;
         $skip = 0;
         $take = 0;
-        if (!$page || $page==1){
+        if (!$page || $page == 1) {
             $page = 1;
             $skip = 0;
             $take = 10;
-        }else{
-            $skip = ($page-1)*10;
-            $take = ($page-1)*10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
         }
         $count = Post::all();
         $count = $count->count();
         $city = City::all();
-        if (!$category_id){
+        if (!$category_id) {
             die('Не передан категория айди');
         }
-        if (!$sub_id){
+        if (!$sub_id) {
             $post = DB::table('posts')
-                ->join('users','posts.user_id','=','users.id')
-                ->join('details','posts.id','=','details.post_id')
-                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.fullName','users.phone','users.email','details.from','details.to','users.user_type','posts.price')
-                ->where('posts.category_id',$category_id)
+                ->join('users', 'posts.user_id', '=', 'users.id')
+                ->join('details', 'posts.id', '=', 'details.post_id')
+                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net', 'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email', 'details.from', 'details.to', 'users.user_type', 'posts.price')
+                ->where('posts.category_id', $category_id)
                 ->skip($skip)
                 ->take($take)
                 ->get();
-        }else{
+        } else {
             $post = DB::table('posts')
-                ->join('users','posts.user_id','=','users.id')
-                ->join('details','posts.id','=','details.post_id')
-                ->select('posts.id','posts.sub_id','posts.title','posts.volume','posts.net','posts.start_date','posts.end_date','users.fullName','users.phone','users.email','details.from','details.to','users.user_type','posts.price')
-                ->where('posts.sub_id','=',$sub_id)
-                ->where('posts.category_id','=',$category_id)
+                ->join('users', 'posts.user_id', '=', 'users.id')
+                ->join('details', 'posts.id', '=', 'details.post_id')
+                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net', 'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email', 'details.from', 'details.to', 'users.user_type', 'posts.price')
+                ->where('posts.sub_id', '=', $sub_id)
+                ->where('posts.category_id', '=', $category_id)
                 ->skip($skip)
                 ->take($take)
                 ->get();
         }
 
         $sub = SubCategory::all();
-        foreach ($post as $posts){
-            foreach ($city as $c){
-                if ($c->id == $posts->from){
+        foreach ($post as $posts) {
+            foreach ($city as $c) {
+                if ($c->id == $posts->from) {
                     $posts->from = $c->name;
                 }
-                if ($c->id == $posts->to){
+                if ($c->id == $posts->to) {
                     $posts->to = $c->name;
                 }
             }
-            foreach ($sub as $s){
-                if ($s->id == $posts->sub_id){
+            foreach ($sub as $s) {
+                if ($s->id == $posts->sub_id) {
                     $posts->sub_id = $s->name;
                 }
             }
@@ -215,7 +216,7 @@ class PostController extends Controller
                 'page' => $page,
                 'per_page' => 10,
                 'total' => $count,
-                'max_page' => ceil($count/10),
+                'max_page' => ceil($count / 10),
             ],
             'data' => $post,
         ];
@@ -223,50 +224,53 @@ class PostController extends Controller
         return response()->json($data);
     }
 
-    public function getSubCategories(){
+    public function getSubCategories()
+    {
         $subCategory = SubCategory::all();
         return response()->json($subCategory);
     }
 
-    public function getCategory(){
+    public function getCategory()
+    {
         $category = Category::all();
         return response()->json($category);
     }
 
-    public function sendRequest(Request $request){
+    public function sendRequest(Request $request)
+    {
         $token = $request->input('token');
         $postID = $request->input('post_id');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            if (!$postID){
+            if (!$postID) {
                 $result['message'] = 'Не передан номер заявки';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
 
             $post = Post::find($postID);
-            if (!$post){
+            if (!$post) {
                 $result['message'] = 'Не найден такое объявление';
                 break;
             }
 
-            if (isset($post) && $post->status == 2){
+            if (isset($post) && $post->status == 2) {
                 $result['message'] = 'К сожалению этот объяление уже неактивна';
                 break;
             }
-            $orders = Order::where('post_id',$postID)->where('user_id',$user->id)->first();
-            if ($orders){
+            $orders = Order::where('post_id', $postID)->where('user_id', $user->id)->first();
+            if ($orders) {
                 $result['message'] = 'Вы уже отправили заявку';
                 break;
             }
@@ -280,7 +284,7 @@ class PostController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            if (!$orders){
+            if (!$orders) {
                 DB::rollBack();
                 $result['message'] = 'Что то пошло не так';
                 break;
@@ -289,75 +293,77 @@ class PostController extends Controller
             DB::commit();
 
             $result['message'] = 'Ваша заявка отправлена';
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getOwnPosts(Request $request){
+    public function getOwnPosts(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $posts = Post::where('user_id',$user->id)->get();
-            if (!$posts){
+            $posts = Post::where('user_id', $user->id)->get();
+            if (!$posts) {
                 $result['message'] = 'У вас пока нету объявлений';
                 break;
             }
             $sub = SubCategory::all();
 
-            foreach ($posts as $post){
+            foreach ($posts as $post) {
                 $post->start_date = strtotime($post->start_date);
-                $post->start_date = date('d.m.Y',$post->start_date);
+                $post->start_date = date('d.m.Y', $post->start_date);
                 $post->end_date = strtotime($post->end_date);
-                $post->end_date = date('d.m.Y',$post->end_date);
-                foreach ($sub as $s){
-                    if ($s->id == $post->sub_id){
+                $post->end_date = date('d.m.Y', $post->end_date);
+                foreach ($sub as $s) {
+                    if ($s->id == $post->sub_id) {
                         $post->sub_id = $s->name;
                         $category = Category::find($s->category_id);
                         $post->category_id = $category->name;
                     }
                 }
-                if ($post->status == 1){
+                if ($post->status == 1) {
                     $post->status = 'Активная объявление';
                 }
-                if ($post->status == 2){
+                if ($post->status == 2) {
                     $post->status = 'Завершенная объявление';
                 }
             }
             $result['data'] = $posts;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getAllPostsByCategory(Request $request){
+    public function getAllPostsByCategory(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
             $category = DB::table('categories')->limit(3)->get();
-            foreach ($category as $cat){
-                $data = Post::where('category_id',$cat->id)->where('status',1)->where('user_id',$user->id)->count();
+            foreach ($category as $cat) {
+                $data = Post::where('category_id', $cat->id)->where('status', 1)->where('user_id', $user->id)->count();
                 $all[] = [
                     'name' => $cat->name,
                     'count' => $data,
@@ -366,35 +372,98 @@ class PostController extends Controller
             }
 //            print_r($all);
             $result['data'] = $all;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function acceptPost(Request $request){
+    public function acceptPost(Request $request)
+    {
         $token = $request->input('token');
         $orderID = $request->input('order_id');
         $result['success'] = true;
 
         do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$orderID) {
+                $result['message'] = 'Не передан номер заказа';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $order = Order::find($orderID);
+            if (!$order) {
+                $result['message'] = 'Не найден заказ';
+                break;
+            }
+            $order->status = 2;
+            $order->save();
+            $post = Post::find($order->post_id);
+
+
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function getPerformerOrders(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        $statuses = [
+            1 => 'Ждет погрузку',
+            2 => 'Доставлен',
+            3 => 'В пути',
+            4 => 'Завершен',
+        ];
+        do {
             if (!$token){
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$orderID){
-                $result['message'] = 'Не передан номер заказа';
-                break;
-            }
+
             $user = User::where('token',$token)->first();
             if (!$user){
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-
-        }while(false);
+            $orders = DB::table('orders')
+                        ->join('posts','posts.id','=','orders.post_id')
+                        ->join('details','details.post_id','=','posts.id')
+                        ->where('orders.status','!=',4)
+                        ->get();
+            $data = [];
+            $index = 0;
+            $cities = City::all();
+            $city = [];
+            foreach ($cities as $c){
+                $city[$c->id] = $c->name;
+            }
+            foreach ($orders as $order){
+                $data[$index]['status'] = $statuses[$order->status];
+                if (isset($city[$order->from])){
+                    $data[$index]['from'] = $city[$order->from];
+                }
+                if (isset($city[$order->to])){
+                    $data[$index]['to'] = $city[$order->to];
+                }
+                $data[$index]['price'] = $order->price;
+                $data[$index]['volume'] = $order->volume;
+                $data[$index]['net'] = $order->net;
+                $data[$index]['title'] = $order->title;
+                $data[$index]['start_date'] = $order->start_date;
+                $data[$index]['end_date'] = $order->end_date;
+                $index++;
+            }
+            $result['data'] = $data;
+        } while (false);
         return response()->json($result);
     }
-
-
 
 
 }
