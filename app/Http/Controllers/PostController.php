@@ -186,6 +186,7 @@ class PostController extends Controller
                 ->skip($skip)
                 ->take($take)
                 ->get();
+            $count = $post->count();
         } else {
             $post = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')
