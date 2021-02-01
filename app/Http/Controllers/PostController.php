@@ -198,6 +198,7 @@ class PostController extends Controller
                 ->skip($skip)
                 ->take($take)
                 ->get();
+            $count = $post->count();
         }
 
         $sub = SubCategory::all();
