@@ -124,6 +124,8 @@ class PostController extends Controller
                 'user_id' => $user->id,
                 'category_id' => $categoryID,
                 'price' => $price,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
             if (!$postID) {
                 DB::rollBack();
@@ -176,7 +178,10 @@ class PostController extends Controller
             $post = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->join('details', 'posts.id', '=', 'details.post_id')
-                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net', 'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email', 'details.from', 'details.to', 'users.user_type', 'posts.price')
+                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume',
+                    'posts.net', 'posts.start_date', 'posts.end_date', 'users.fullName',
+                    'users.phone', 'users.email', 'details.from', 'details.to', 'users.user_type',
+                    'posts.price', 'posts.created_at', 'posts.updated_at')
                 ->where('posts.category_id', $category_id)
                 ->skip($skip)
                 ->take($take)
@@ -185,7 +190,9 @@ class PostController extends Controller
             $post = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->join('details', 'posts.id', '=', 'details.post_id')
-                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net', 'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email', 'details.from', 'details.to', 'users.user_type', 'posts.price')
+                ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net',
+                    'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email',
+                    'details.from', 'details.to', 'users.user_type', 'posts.price','posts.created_at', 'posts.updated_at')
                 ->where('posts.sub_id', '=', $sub_id)
                 ->where('posts.category_id', '=', $category_id)
                 ->skip($skip)
