@@ -186,7 +186,7 @@ class PostController extends Controller
                 ->skip($skip)
                 ->take($take)
                 ->get();
-            $count = $post->count();
+            $count = Post::where('category_id',$category_id)->count();
         } else {
             $post = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')
@@ -199,7 +199,7 @@ class PostController extends Controller
                 ->skip($skip)
                 ->take($take)
                 ->get();
-            $count = $post->count();
+            $count = Post::where('category_id',$category_id)->where('sub_id',$sub_id)->count();
         }
 
         $sub = SubCategory::all();
