@@ -274,7 +274,7 @@ class PostController extends Controller
                 break;
             }
 
-            if (isset($post) && $post->status == 2) {
+            if (isset($post) && $post->status != 1) {
                 $result['message'] = 'К сожалению этот объяление уже неактивна';
                 break;
             }
@@ -413,6 +413,9 @@ class PostController extends Controller
             $order->status = 2;
             $order->save();
             $post = Post::find($order->post_id);
+            $post->status = 2;
+            $post->save();
+            $result['success'] = true;
 
 
         } while (false);

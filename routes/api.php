@@ -60,3 +60,4 @@ Route::post('/addImageToStorage',[StorageController::class,'addImageToStorage'])
 
 //lk orders
 Route::get('/getPerformerOrders',[PostController::class,'getPerformerOrders']);
+Route::get('/acceptPost',[PostController::class,'acceptPost']);
