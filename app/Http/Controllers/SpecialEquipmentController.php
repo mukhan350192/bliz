@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class SpecialEquipmentController extends Controller
 {
     public function getEquipment(){
-        $equipment = SpecialEquipment::all('id','name');
+        $equipment = DB::table('equipment_category')->select('id','name')->get();
         return response()->json($equipment);
     }
 
