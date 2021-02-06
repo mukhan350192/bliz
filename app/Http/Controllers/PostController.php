@@ -278,7 +278,7 @@ class PostController extends Controller
                 $result['message'] = 'К сожалению этот объяление уже неактивна';
                 break;
             }
-            $orders = Order::where('post_id', $postID)->where('from_id', $user->id)->first();
+            $orders = Order::where('post_id', $postID)->where('to_id', $user->id)->first();
             if ($orders) {
                 $result['message'] = 'Вы уже отправили заявку';
                 break;
