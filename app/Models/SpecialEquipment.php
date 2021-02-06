@@ -16,5 +16,7 @@ class SpecialEquipment extends Model
         'volume',
         'net',
         'mobility',
+        'price',
+        'price_type',
     ];
 }
