@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SpecialEquipmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use Illuminate\Http\Request;
@@ -61,3 +62,8 @@ Route::post('/addImageToStorage',[StorageController::class,'addImageToStorage'])
 //lk orders
 Route::get('/getPerformerOrders',[PostController::class,'getPerformerOrders']);
 Route::get('/acceptPost',[PostController::class,'acceptPost']);
+
+
+//adding special equipment
+Route::get('/getEquipmentCategory',[SpecialEquipmentController::class,'getEquipment']);
+Route::post('/addEquipment',[SpecialEquipmentController::class,'addEquipment']);
