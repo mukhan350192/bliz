@@ -78,7 +78,7 @@ class SpecialEquipmentController extends Controller
             }
 
             DB::beginTransaction();
-            $equipment = SpecialEquipment::insertGetId([
+            $equipment = SpecialEquipment::create([
                 'name' => $name,
                 'category_id' => $category_id,
                 'user_id' => $user->id,
