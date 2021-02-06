@@ -24,6 +24,7 @@ class SpecialEquipmentController extends Controller
         $volume = $request->input('volume');
         $image = $request->file('image');
         $price = $request->input('price');
+        $price_type = $request->input('price_type');
         $city_id = $request->input('city_id');
         $address = $request->input('address');
         $result['success'] = false;
@@ -55,6 +56,10 @@ class SpecialEquipmentController extends Controller
             }
             if (!$price){
                 $result['message'] = 'Не передан цена';
+                break;
+            }
+            if (!$price_type){
+                $result['message'] = 'Не передан тип цены';
                 break;
             }
             if (!$city_id){
