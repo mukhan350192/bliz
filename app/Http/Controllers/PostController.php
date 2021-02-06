@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CityResource;
+use App\Http\Resources\UserResource;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Detail;
@@ -477,5 +479,25 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function test(){
+        return CityResource::collection(City::all());
+    }
+
+    public function getUserProfile(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+       /* do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $userID = User::where('token',$token)->first();
+            echo $userID;
+            $user = UserResource::collection($userID);
+            $result['success'] = true;
+            $result = $user;
+        }while(false);*/
+        return response()->json(UserResource::collection(User::where('token',$token)->get()),200);
+    }
 
 }

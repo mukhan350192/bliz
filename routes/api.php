@@ -65,5 +65,8 @@ Route::get('/acceptPost',[PostController::class,'acceptPost']);
 
 
 //adding special equipment
-Route::get('/getEquipmentCategory',[SpecialEquipmentController::class,'getEquipment']);
+Route::get('/getEquipmentCategory',[SpecialEquipmentController::class,'getEquipmentCategory']);
 Route::post('/addEquipment',[SpecialEquipmentController::class,'addEquipment']);
+
+Route::get('/test',[PostController::class,'test']);
+Route::get('/getUserProfile',[PostController::class,'getUserProfile']);

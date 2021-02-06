@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Post;
@@ -335,11 +336,13 @@ class UserController extends Controller
                 break;
             }
 
-            $user = User::where('token', $token)->first();
+            $user = User::where('token', $token)->get();
             if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
+            $result['data'] = UserResource::collection($user);
+            /*
             $result['fullName'] = $user->fullName;
             $result['email'] = $user->email;
             $result['phone'] = $user->phone;
@@ -372,7 +375,7 @@ class UserController extends Controller
                 }
                 $type = DB::table('company_types')->where('id',$companyDetails->types)->first();
                 $result['companyType'] = $type->name;
-            }
+            }*/
             $result['success'] = true;
         } while (false);
 

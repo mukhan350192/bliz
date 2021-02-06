@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class SpecialEquipmentController extends Controller
 {
-    public function getEquipment(){
+    public function getEquipmentCategory(){
         $equipment = DB::table('equipment_category')->select('id','name')->get();
         return response()->json($equipment);
     }
@@ -110,5 +110,32 @@ class SpecialEquipmentController extends Controller
         }while(false);
 
         return response()->json($result);
+    }
+
+    public function getEquipment(Request $request){
+        $category_id = $request->input('category_id');
+        $page = intval($request->input('page'));
+        $result['success'] = false;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        if (!$category_id){
+            $equipment = SpecialEquipment::skip($skip)->take($take)->get();
+            $count = SpecialEquipment::count();
+        }else{
+            $equipment = SpecialEquipment::where('category_id',$category_id)->skip($skip)->take($take)->get();
+            $count = SpecialEquipment::where('category_id',$category_id)->count();
+        }
+        foreach ($equipment as $eq){
+            $user = User::find($eq->user_id);
+            if ($user->user_type == 2){
+
+            }
+        }
     }
 }
