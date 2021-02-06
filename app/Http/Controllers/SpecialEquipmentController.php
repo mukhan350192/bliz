@@ -86,6 +86,7 @@ class SpecialEquipmentController extends Controller
                 'volume' => $volume,
                 'price' => $price,
                 'price_type' => $price_type,
+                'mobility' => $mobility,
                 'city_id' => $city_id,
                 'address' => $address,
                 'created_at' => Carbon::now(),
