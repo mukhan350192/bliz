@@ -15,10 +15,19 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->nullable();
             $table->integer('post_id');
             $table->float('distance');
             $table->string('from');
             $table->string('to');
+            $table->float('volume')->nullable();
+            $table->float('net')->nullable();
+            $table->string('start_date');
+            $table->string('end_date');
+            $table->integer('quantity')->nullable();
+            $table->float('width')->nullable();
+            $table->float('height')->nullable();
+            $table->float('length')->nullable();
             $table->timestamps();
         });
     }

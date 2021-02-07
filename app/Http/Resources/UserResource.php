@@ -20,7 +20,6 @@ class UserResource extends JsonResource
             'fullName' => $this->fullName,
             'email' => $this->email,
             'phone' => $this->phone,
-            //  'city' => CityResource::collection($this->city),
             'address' => $this->address,
             'image' => $this->image,
             'token' => $this->token,

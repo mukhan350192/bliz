@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CityResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\PostAdditionResource;
+use App\Http\Resources\PostConditionResource;
+use App\Http\Resources\PostDocumentResource;
+use App\Http\Resources\PostLoadingResource;
+use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Detail;
@@ -45,7 +48,7 @@ class PostController extends Controller
 //        $cityTwo = $request->input('to');
         $city1 = City::find($cityOne);
         $city2 = City::find($cityTwo);
-        return $this->distance(44.8325386, 63.2229718, 51.147862, 71.3393068, "K");
+        return $this->distance($city1->latitude, $city1->longtitude, $city2->latitude, $city2->longtitude, "K");
 
     }
 
@@ -188,20 +191,20 @@ class PostController extends Controller
                 ->skip($skip)
                 ->take($take)
                 ->get();
-            $count = Post::where('category_id',$category_id)->count();
+            $count = Post::where('category_id', $category_id)->count();
         } else {
             $post = DB::table('posts')
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->join('details', 'posts.id', '=', 'details.post_id')
                 ->select('posts.id', 'posts.sub_id', 'posts.title', 'posts.volume', 'posts.net',
                     'posts.start_date', 'posts.end_date', 'users.fullName', 'users.phone', 'users.email',
-                    'details.from', 'details.to', 'users.user_type', 'posts.price','posts.created_at', 'posts.updated_at')
+                    'details.from', 'details.to', 'users.user_type', 'posts.price', 'posts.created_at', 'posts.updated_at')
                 ->where('posts.sub_id', '=', $sub_id)
                 ->where('posts.category_id', '=', $category_id)
                 ->skip($skip)
                 ->take($take)
                 ->get();
-            $count = Post::where('category_id',$category_id)->where('sub_id',$sub_id)->count();
+            $count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
         }
 
         $sub = SubCategory::all();
@@ -436,34 +439,34 @@ class PostController extends Controller
             4 => 'Завершен',
         ];
         do {
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
             $orders = DB::table('orders')
-                        ->join('posts','posts.id','=','orders.post_id')
-                        ->join('details','details.post_id','=','posts.id')
-                        ->where('orders.status','!=',4)
-                        ->get();
+                ->join('posts', 'posts.id', '=', 'orders.post_id')
+                ->join('details', 'details.post_id', '=', 'posts.id')
+                ->where('orders.status', '!=', 4)
+                ->get();
             $data = [];
             $index = 0;
             $cities = City::all();
             $city = [];
-            foreach ($cities as $c){
+            foreach ($cities as $c) {
                 $city[$c->id] = $c->name;
             }
-            foreach ($orders as $order){
+            foreach ($orders as $order) {
                 $data[$index]['status'] = $statuses[$order->status];
-                if (isset($city[$order->from])){
+                if (isset($city[$order->from])) {
                     $data[$index]['from'] = $city[$order->from];
                 }
-                if (isset($city[$order->to])){
+                if (isset($city[$order->to])) {
                     $data[$index]['to'] = $city[$order->to];
                 }
                 $data[$index]['price'] = $order->price;
@@ -479,25 +482,230 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function test(){
-        return CityResource::collection(City::all());
+    public function getPostDocuments()
+    {
+        return PostDocumentResource::collection(DB::table('post_document')->get());
     }
 
-    public function getUserProfile(Request $request){
+    public function getPostLoading()
+    {
+        return PostLoadingResource::collection(DB::table('post_loading')->get());
+    }
+
+    public function getPostCondition()
+    {
+        return PostConditionResource::collection(DB::table('post_condition')->get());
+    }
+
+    public function getPostAddition()
+    {
+        return PostAdditionResource::collection(DB::table('post_addition')->get());
+    }
+
+    public function newAddPost(Request $request)
+    {
         $token = $request->input('token');
+        $category_id = $request->input('category_id');
+        $sub_id = $request->input('sub_id');
+        $title = $request->input('title');
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $volume = $request->input('volume');
+        $net = $request->input('net');
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $quantity = $request->input('quantity');
+        $width = $request->input('width');
+        $height = $request->input('height');
+        $length = $request->input('length');
+        $documents = $request->input('documents');
+        $loading = $request->input('loading');
+        $condition = $request->input('condition');
+        $addition = $request->input('addition');
+        $price = $request->input('price');
+        $price_type = $request->input('price_type');
+        $payment_type = $request->input('payment_type');
+
         $result['success'] = false;
-       /* do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $userID = User::where('token',$token)->first();
-            echo $userID;
-            $user = UserResource::collection($userID);
+            if (!$category_id) {
+                $result['message'] = 'Не передан категория';
+                break;
+            }
+            if (!$sub_id) {
+                $result['message'] = 'Не передан субкатегория';
+                break;
+            }
+            if (!$title) {
+                $result['message'] = 'Не передан содержание товара';
+                break;
+            }
+            if (!$from) {
+                $result['message'] = 'Не передан откуда увезти груз';
+                break;
+            }
+            if (!$to) {
+                $result['message'] = 'Не передан куда отвезти груз';
+                break;
+            }
+            if (!$price) {
+                $result['message'] = 'Не передан цена за доставку';
+                break;
+            }
+            if (!$price_type) {
+                $result['message'] = 'Не передан валюта';
+                break;
+            }
+            if (!$payment_type) {
+                $result['message'] = 'Не передан способ оплаты';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            DB::beginTransaction();
+            $postID = Post::insertGetId([
+                'sub_id' => $sub_id,
+                'category_id' => $category_id,
+                'priority' => 1,
+                'user_id' => $user->id,
+                'status' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$postID) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+
+            $detailsID = DB::table('details')->insertGetId([
+                'title' => $title,
+                'post_id' => $postID,
+                'distance' => $this->getDistance($from, $to),
+                'from' => $from,
+                'to' => $to,
+                'volume' => $volume,
+                'net' => $net,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'quantity' => $quantity,
+                'width' => $width,
+                'height' => $height,
+                'length' => $length,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            if (!$detailsID) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            $docs = '';
+            foreach ($documents as $doc) {
+                $docs .= ',' . $doc;
+            }
+            $load = '';
+            if (isset($loading)){
+                foreach ($loading as $l) {
+                    $load .= ',' . $l;
+                }
+            }
+
+            $con = '';
+            if (isset($condition)){
+                foreach ($condition as $c) {
+                    $con .= ',' . $con;
+                }
+            }
+
+            $add = '';
+            if (isset($addition)){
+                foreach ($addition as $a) {
+                    $add .= ',' . $a;
+                }
+            }
+            if (!empty($docs)){
+                $docs = ltrim($docs, $docs[0]);
+            }
+            if (!empty($load)){
+                $load = ltrim($load, $load[0]);
+            }
+            if (!empty($con)){
+                $con = ltrim($con, $con[0]);
+            }
+            if (!empty($add)){
+                $add = ltrim($add, $add[0]);
+            }
+
+            $postAdditional = DB::table('post_additional')->insertGetId([
+                'post_id' => $postID,
+                'documents' => $docs,
+                'loading' => $load,
+                'condition' => $con,
+                'addition' => $add,
+            ]);
+            if (!$postAdditional) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            $price = DB::table('post_price')->insertGetId([
+                'post_id' => $postID,
+                'price' => $price,
+                'price_type' => $price_type,
+                'payment_type' => $payment_type,
+            ]);
+
+            DB::commit();
             $result['success'] = true;
-            $result = $user;
-        }while(false);*/
-        return response()->json(UserResource::collection(User::where('token',$token)->get()),200);
+        } while (false);
+
+        return response()->json($result);
     }
 
+    public function newGetPost(Request $request){
+        $page = intval($request->input('page'));
+        $sub_id = $request->input('sub_id');
+        $category_id = $request->input('category_id');
+        $result['success'] = false;
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $count = Post::where('category_id',$category_id)->count();
+
+        $city = City::all();
+        if (!$category_id) {
+            die('Не передан категория айди');
+        }
+        if (!$sub_id){
+            $data = PostResource::collection(Post::where('category_id',$category_id)->skip($skip)->take($take)->get());
+        }else{
+            $data = PostResource::collection(Post::where('category_id',$category_id)->where('sub_id',$sub_id)->skip($skip)->take($take)->get());
+            $count = Post::where('category_id',$category_id)->where('sub_id',$sub_id)->count();
+        }
+        $result['data'] = $data;
+        $result['pagination'] = [
+                'total' => $count,
+                'page' => $page,
+                'max_page' => ceil($count/10),
+        ];
+        $result['success'] = true;
+        return response()->json($result);
+    }
 }

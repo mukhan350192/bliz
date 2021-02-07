@@ -68,5 +68,11 @@ Route::get('/acceptPost',[PostController::class,'acceptPost']);
 Route::get('/getEquipmentCategory',[SpecialEquipmentController::class,'getEquipmentCategory']);
 Route::post('/addEquipment',[SpecialEquipmentController::class,'addEquipment']);
 
-Route::get('/test',[PostController::class,'test']);
-Route::get('/getUserProfile',[PostController::class,'getUserProfile']);
+
+//Post
+Route::get('/postDocuments',[PostController::class,'getPostDocuments']);
+Route::get('/postLoading',[PostController::class,'getPostLoading']);
+Route::get('/postCondition',[PostController::class,'getPostCondition']);
+Route::get('/postAddition',[PostController::class,'getPostAddition']);
+Route::get('/newAddPost',[PostController::class,'newAddPost']);
+Route::get('/newGetPost',[PostController::class,'newGetPost']);

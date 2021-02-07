@@ -17,9 +17,7 @@ class CompanyResource extends JsonResource
     {
         $s = CompanyTypes::collection(DB::table('company_types')->where('id',$this->types)->get());
         $array = [
-        //    'user_id' => $this->user_id,
             'companyName' => $s[0]->name." ".$this->name,
-            //'companyType' => $s,
         ];
         if (!is_null($this->bin)){
             $array['bin'] = $this->bin;
