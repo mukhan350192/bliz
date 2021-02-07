@@ -708,4 +708,14 @@ class PostController extends Controller
         $result['success'] = true;
         return response()->json($result);
     }
+
+    public function getCurrency(){
+        $currency = DB::table('currency')->select('id','name')->get();
+        return response()->json($currency);
+    }
+
+    public function getPaymentType(){
+        $payment = DB::table('payment_type')->select('id','name')->get();
+        return response()->json($payment);
+    }
 }

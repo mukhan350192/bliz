@@ -76,3 +76,5 @@ Route::get('/postCondition',[PostController::class,'getPostCondition']);
 Route::get('/postAddition',[PostController::class,'getPostAddition']);
 Route::get('/newAddPost',[PostController::class,'newAddPost']);
 Route::get('/newGetPost',[PostController::class,'newGetPost']);
+Route::get('/getCurrency',[PostController::class,'getCurrency']);
+Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
