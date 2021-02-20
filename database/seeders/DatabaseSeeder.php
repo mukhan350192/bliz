@@ -31,5 +31,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PostStatus::class);
         $this->call(RentSeeder::class);
         $this->call(SubCategorySeeder::class);
+        $this->call(FireSystemSeeder::class);
+        $this->call(VentilationSeeder::class);
+        //$this->call(SubCategorySeeder::class);
     }
 }

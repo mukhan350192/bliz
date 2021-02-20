@@ -27,15 +27,14 @@ class PostAdditional extends JsonResource
         }
         if (!empty($this->loading)){
             $docs = explode(',',$this->loading);
-            $docsArray = [];
+            $loading = [];
             foreach ($docs as $doc){
                 $s =DB::table('post_loading')->where('id',$doc)->first();
-                $docsArray[] = $s->name;
+                $loading[] = $s->name;
             }
-            $array['loading'] = $docsArray;
+            $array['loading'] = $loading;
         }
         if (!empty($this->condition)){
-            var_dump($this->condition);
             $docs = explode(',',$this->condition);
             $docsArray = [];
             foreach ($docs as $doc){

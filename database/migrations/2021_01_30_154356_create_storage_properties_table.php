@@ -15,8 +15,10 @@ class CreateStoragePropertiesTable extends Migration
     {
         Schema::create('storage_properties', function (Blueprint $table) {
             $table->id();
+            $table->integer('storage_id');
             $table->integer('price');
-            $table->integer('rentTypeID');
+            $table->integer('price_type');
+            $table->integer('currency');
             $table->double('area')->nullable();
             $table->double('total_area')->nullable();
             $table->string('class')->nullable();
@@ -26,8 +28,10 @@ class CreateStoragePropertiesTable extends Migration
             $table->string('address');
             $table->integer('floor')->nullable();
             $table->string('floor_type')->nullable();
-            $table->string('warning')->nullable();
-            $table->string('warning_area')->nullable();
+            $table->string('parking_cargo')->nullable();
+            $table->string('parking_car')->nullable();
+            $table->string('floor_load')->nullable();
+
             $table->timestamps();
         });
     }

@@ -53,7 +53,7 @@ Route::get('/getFavourites',[UserController::class,'getFavourites']);
 
 
 // storage
-Route::post('/addStorage',[StorageController::class,'createStorage']);
+//Route::post('/addStorage',[StorageController::class,'createStorage']);
 Route::get('/editStorage',[StorageController::class,'updateStorage']);
 Route::get('/getAllOwnStorage',[StorageController::class,'getAllOwnStorage']);
 Route::get('/getRentType',[StorageController::class,'getRentType']);
@@ -78,3 +78,11 @@ Route::get('/newAddPost',[PostController::class,'newAddPost']);
 Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
+
+
+//storage
+Route::post('/addStorage',[StorageController::class,'addStorage']);
+Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
+Route::get('/getStorageById',[StorageController::class,'getStorageById']);
+Route::get('/getFireSystem',[StorageController::class,'getFireSystem']);
+Route::get('/getVentilation',[StorageController::class,'getVentilation']);
