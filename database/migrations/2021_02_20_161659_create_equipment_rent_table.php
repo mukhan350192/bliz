@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriceTypeToSpecialEquipment extends Migration
+class CreateEquipmentRentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddPriceTypeToSpecialEquipment extends Migration
      */
     public function up()
     {
-        Schema::table('special_equipment', function (Blueprint $table) {
-            $table->integer('price_type');
+        Schema::create('equipment_rent', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class AddPriceTypeToSpecialEquipment extends Migration
      */
     public function down()
     {
-        Schema::table('special_equipment', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('equipment_rent');
     }
 }

@@ -15,15 +15,8 @@ class CreateSpecialEquipmentTable extends Migration
     {
         Schema::create('special_equipment', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->integer('user_id');
-            $table->string('net');
-            $table->string('mobility');
-            $table->string('volume');
-            $table->string('image');
-            $table->integer('price');
-            $table->integer('city_id');
-            $table->string('address');
+            $table->integer('category_id');
             $table->timestamps();
         });
     }

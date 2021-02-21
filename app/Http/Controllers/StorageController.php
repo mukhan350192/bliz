@@ -396,8 +396,10 @@ class StorageController extends Controller
                 }
 
                 $path = $file->store('public/images/storage/');
+
                 $name = $file->getClientOriginalName();
                 $name = sha1(time() . $name) . '.' . $file->extension();
+                $image->move($path, $name);
                 $imageID = DB::table('storage_images')->insertGetId([
                     'storage_id' => $storage_id,
                     'name' => $name,

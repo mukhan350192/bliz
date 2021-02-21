@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCategoryIdToSpecialEquipment extends Migration
+class CreateEquipmentImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddCategoryIdToSpecialEquipment extends Migration
      */
     public function up()
     {
-        Schema::table('special_equipment', function (Blueprint $table) {
-            $table->integer('category_id')->after('user_id');
+        Schema::create('equipment_images', function (Blueprint $table) {
+            $table->id();
+            $table->integer('equipment_id');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddCategoryIdToSpecialEquipment extends Migration
      */
     public function down()
     {
-        Schema::table('special_equipment', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('equipment_images');
     }
 }

@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SubCategorySeeder::class);
         $this->call(FireSystemSeeder::class);
         $this->call(VentilationSeeder::class);
+        $this->call(EquipmentRentSeeder::class);
         //$this->call(SubCategorySeeder::class);
     }
 }

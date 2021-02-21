@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\SpecialEquipmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
@@ -86,3 +87,14 @@ Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
 Route::get('/getStorageById',[StorageController::class,'getStorageById']);
 Route::get('/getFireSystem',[StorageController::class,'getFireSystem']);
 Route::get('/getVentilation',[StorageController::class,'getVentilation']);
+
+//equipment
+Route::get('/getEquipmentCategory',[EquipmentController::class,'getEquipmentCategory']);
+Route::get('/getEquipmentRent',[EquipmentController::class,'getEquipmentRent']);
+Route::post('/addEquipment',[EquipmentController::class,'addEquipment']);
+Route::get('/getAllEquipment',[EquipmentController::class,'getAllEquipment']);
+Route::get('/getEquipmentByID',[EquipmentController::class,'getEquipmentByID']);
+
+//аукцион
+
+
