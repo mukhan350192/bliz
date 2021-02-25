@@ -701,7 +701,7 @@ class PostController extends Controller
                 $result['message'] = 'Не передан пост айди';
                 break;
             }
-            $post = Post::find($post_id);
+            $post = Post::where('id',$post_id)->get();
             $data = PostResource::collection($post);
             $result['data'] = $data;
         }while(false);
