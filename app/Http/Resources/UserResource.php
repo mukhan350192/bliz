@@ -19,14 +19,13 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'fullName' => $this->fullName,
             'email' => $this->email,
+            'city' => $this->city,
             'phone' => $this->phone,
             'address' => $this->address,
             'image' => $this->image,
             'token' => $this->token,
         ];
-        if (!is_null($this->city)) {
-            $array['city'] = CityResource::collection($this->city);
-        }
+
         if ($this->user_type == 2) {
             $array['companyDetails'] = CompanyResource::collection(DB::table('company_details')->where('user_id',$this->id)->get());
         }
