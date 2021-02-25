@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FireSystemSeeder::class);
         $this->call(VentilationSeeder::class);
         $this->call(EquipmentRentSeeder::class);
+        $this->call(TransportSeeder::class);
         //$this->call(SubCategorySeeder::class);
     }
 }

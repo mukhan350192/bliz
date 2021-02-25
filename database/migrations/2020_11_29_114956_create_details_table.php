@@ -20,6 +20,7 @@ class CreateDetailsTable extends Migration
             $table->string('from');
             $table->string('middle_city')->nullable();
             $table->string('to');
+            $table->integer('type_transport');
             $table->float('volume')->nullable();
             $table->float('net')->nullable();
             $table->string('start_date');

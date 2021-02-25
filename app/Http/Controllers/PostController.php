@@ -6,6 +6,7 @@ use App\Http\Resources\PostAdditionResource;
 use App\Http\Resources\PostConditionResource;
 use App\Http\Resources\PostDocumentResource;
 use App\Http\Resources\PostLoadingResource;
+use App\Http\Resources\PostMinResource;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\City;
@@ -494,7 +495,7 @@ class PostController extends Controller
         $price = $request->input('price');
         $price_type = $request->input('price_type');
         $payment_type = $request->input('payment_type');
-
+        $type_transport = $request->input('type_transport');
         $result['success'] = false;
         do {
             if (!$token) {
@@ -533,6 +534,10 @@ class PostController extends Controller
                 $result['message'] = 'Не передан способ оплаты';
                 break;
             }
+            if (!$type_transport){
+                $result['message'] = 'Не передан тип транспорта';
+                break;
+            }
 
             $user = User::where('token', $token)->first();
             if (!$user) {
@@ -562,6 +567,7 @@ class PostController extends Controller
                 'to' => $to,
                 'volume' => $volume,
                 'net' => $net,
+                'type_transport' => $type_transport,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'quantity' => $quantity,
@@ -662,9 +668,9 @@ class PostController extends Controller
             die('Не передан категория айди');
         }
         if (!$sub_id){
-            $data = PostResource::collection(Post::where('category_id',$category_id)->skip($skip)->take($take)->get());
+            $data = PostMinResource::collection(Post::where('category_id',$category_id)->skip($skip)->take($take)->get());
         }else{
-            $data = PostResource::collection(Post::where('category_id',$category_id)->where('sub_id',$sub_id)->skip($skip)->take($take)->get());
+            $data = PostMinResource::collection(Post::where('category_id',$category_id)->where('sub_id',$sub_id)->skip($skip)->take($take)->get());
             $count = Post::where('category_id',$category_id)->where('sub_id',$sub_id)->count();
         }
         $result['data'] = $data;
