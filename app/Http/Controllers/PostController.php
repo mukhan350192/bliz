@@ -692,4 +692,19 @@ class PostController extends Controller
         $payment = DB::table('payment_type')->select('id','name')->get();
         return response()->json($payment);
     }
+
+    public function getPostByID(Request $request){
+        $post_id = $request->input('post_id');
+        $result['success'] = false;
+        do{
+            if (!$post_id){
+                $result['message'] = 'Не передан пост айди';
+                break;
+            }
+            $post = Post::find($post_id);
+            $data = PostResource::collection($post);
+            $result['data'] = $data;
+        }while(false);
+        return response()->json($result);
+    }
 }

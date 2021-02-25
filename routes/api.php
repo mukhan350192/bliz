@@ -79,7 +79,7 @@ Route::get('/newAddPost',[PostController::class,'newAddPost']);
 Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
-
+Route::get('/getPostByID',[PostController::class,'getPostByID']);
 
 //storage
 Route::post('/addStorage',[StorageController::class,'addStorage']);
