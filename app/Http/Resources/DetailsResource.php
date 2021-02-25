@@ -18,8 +18,8 @@ class DetailsResource extends JsonResource
         $from = CityResource::collection(City::where('id',$this->from)->get());
         $to = CityResource::collection(City::where('id',$this->to)->get());
         $array = [
-            'from' => $from[0]->name,
-            'to' => $to[0]->name,
+            'from' =>$this->from,
+            'to' => $this->to,
             'distance' => $this->distance,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
@@ -29,6 +29,9 @@ class DetailsResource extends JsonResource
         }
         if (isset($this->net)){
             $array['net'] = $this->net;
+        }
+        if (isset($this->middle)){
+            $array['middle'] = $this->middle;
         }
         return $array;
     }

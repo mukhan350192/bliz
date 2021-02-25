@@ -24,7 +24,8 @@ class CreateStoragePropertiesTable extends Migration
             $table->string('class')->nullable();
             $table->string('type_storage')->nullable();
             $table->integer('year')->nullable();
-            $table->integer('city_id');
+            $table->string('city_id');
+            $table->string('region')->nullable();
             $table->string('address');
             $table->integer('floor')->nullable();
             $table->string('floor_type')->nullable();

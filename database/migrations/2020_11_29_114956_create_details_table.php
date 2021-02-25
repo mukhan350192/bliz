@@ -17,8 +17,8 @@ class CreateDetailsTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->integer('post_id');
-            $table->float('distance');
             $table->string('from');
+            $table->string('middle_city')->nullable();
             $table->string('to');
             $table->float('volume')->nullable();
             $table->float('net')->nullable();

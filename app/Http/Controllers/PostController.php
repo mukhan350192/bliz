@@ -20,37 +20,6 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    function distance($lat1, $lon1, $lat2, $lon2, $unit)
-    {
-        if (($lat1 == $lat2) && ($lon1 == $lon2)) {
-            return 0;
-        } else {
-            $theta = $lon1 - $lon2;
-            $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
-            $dist = acos($dist);
-            $dist = rad2deg($dist);
-            $miles = $dist * 60 * 1.1515;
-            $unit = strtoupper($unit);
-
-            if ($unit == "K") {
-                return ($miles * 1.609344);
-            } else if ($unit == "N") {
-                return ($miles * 0.8684);
-            } else {
-                return $miles;
-            }
-        }
-    }
-
-    public function getDistance($cityOne, $cityTwo)
-    {
-//        $cityOne = $request->input('from');
-//        $cityTwo = $request->input('to');
-        $city1 = City::find($cityOne);
-        $city2 = City::find($cityTwo);
-        return $this->distance($city1->latitude, $city1->longtitude, $city2->latitude, $city2->longtitude, "K");
-
-    }
 
     public function addPost(Request $request)
     {
@@ -589,7 +558,6 @@ class PostController extends Controller
             $detailsID = DB::table('details')->insertGetId([
                 'title' => $title,
                 'post_id' => $postID,
-                'distance' => $this->getDistance($from, $to),
                 'from' => $from,
                 'to' => $to,
                 'volume' => $volume,

@@ -23,13 +23,14 @@ class StorageProperties extends JsonResource
             'area' => $this->area,
             'total_area' => $this->total_area,
             'price' => $this->price . ' ' . $currency->name . '/' . $price_type->name,
+
         ];
 
         if (isset($this->year)) {
             $array['year'] = $this->year;
         }
-        if (isset($this->city_id)) {
-            $array['city'] = CityResource::collection(City::where('id', $this->city_id)->get());
+        if (isset($this->city)){
+            $array['city'] = $this->city;
         }
         if (isset($this->address)) {
             $array['address'] = $this->address;

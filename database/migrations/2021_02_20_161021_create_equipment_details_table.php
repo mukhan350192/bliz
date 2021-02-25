@@ -18,7 +18,8 @@ class CreateEquipmentDetailsTable extends Migration
             $table->integer('equipment_id');
             $table->integer('type_equipment');
             $table->string('name');
-            $table->integer('city_id');
+            $table->string('city_id');
+            $table->string('region')->nullable();
             $table->string('address');
             $table->integer('net')->nullable();
             $table->integer('year')->nullable();

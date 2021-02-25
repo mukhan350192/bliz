@@ -449,34 +449,37 @@ class StorageController extends Controller
         return response()->json($result);
     }
 
-    public function getStorageById(Request $request){
+    public function getStorageById(Request $request)
+    {
         $storage_id = $request->input('storage_id');
         $result['success'] = false;
 
-        do{
-            if (!$storage_id){
+        do {
+            if (!$storage_id) {
                 $result['message'] = 'Не передан айди';
                 break;
             }
             $storage = Storage::find($storage_id)->first();
-            if (!$storage){
+            if (!$storage) {
                 $result['message'] = 'Не найден склад';
                 break;
             }
             $result['success'] = true;
-            $result['data'] = StorageDetailResource::collection(Storage::where('id',$storage_id)->get());
-        }while(false);
+            $result['data'] = StorageDetailResource::collection(Storage::where('id', $storage_id)->get());
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getFireSystem(){
-        $data = DB::table('storage_fire_system')->select('id','name')->get();
+    public function getFireSystem()
+    {
+        $data = DB::table('storage_fire_system')->select('id', 'name')->get();
         return response()->json($data);
     }
 
-    public function getVentilation(){
-        $data = DB::table('storage_ventilation')->select('id','name')->get();
+    public function getVentilation()
+    {
+        $data = DB::table('storage_ventilation')->select('id', 'name')->get();
         return response()->json($data);
     }
 }
