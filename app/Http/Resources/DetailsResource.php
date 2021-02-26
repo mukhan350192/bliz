@@ -32,6 +32,12 @@ class DetailsResource extends JsonResource
         if (isset($this->middle)){
             $array['middle'] = $this->middle;
         }
+        if (isset($this->distance)){
+            $array['distance'] = $this->distance;
+        }
+        if (isset($this->duration)){
+            $array['duration'] = $this->duration;
+        }
         return $array;
     }
 }

@@ -496,6 +496,8 @@ class PostController extends Controller
         $price_type = $request->input('price_type');
         $payment_type = $request->input('payment_type');
         $type_transport = $request->input('type_transport');
+        $distance = $request->input('distance');
+        $duration = $request->input('duration');
         $result['success'] = false;
         do {
             if (!$token) {
@@ -568,6 +570,8 @@ class PostController extends Controller
                 'volume' => $volume,
                 'net' => $net,
                 'type_transport' => $type_transport,
+                'distance' => $distance,
+                'duration' => $duration,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'quantity' => $quantity,

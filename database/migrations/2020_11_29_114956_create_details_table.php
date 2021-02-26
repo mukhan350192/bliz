@@ -21,6 +21,8 @@ class CreateDetailsTable extends Migration
             $table->string('middle_city')->nullable();
             $table->string('to');
             $table->integer('type_transport');
+            $table->string('distance')->nullable();
+            $table->string('duration')->nullable();
             $table->float('volume')->nullable();
             $table->float('net')->nullable();
             $table->string('start_date');

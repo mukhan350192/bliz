@@ -32,5 +32,6 @@ class DetailsMinResource extends JsonResource
             'title' => $this->title,
             'price' => $price,
         ];
+
     }
 }
