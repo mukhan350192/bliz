@@ -91,6 +91,7 @@ Route::get('/getVentilation',[StorageController::class,'getVentilation']);
 //equipment
 Route::get('/getEquipmentCategory',[EquipmentController::class,'getEquipmentCategory']);
 Route::get('/getEquipmentRent',[EquipmentController::class,'getEquipmentRent']);
+Route::get('/getEquipmentType',[EquipmentController::class,'getEquipmentType']);
 Route::post('/addEquipment',[EquipmentController::class,'addEquipment']);
 Route::get('/getAllEquipment',[EquipmentController::class,'getAllEquipment']);
 Route::get('/getEquipmentByID',[EquipmentController::class,'getEquipmentByID']);

@@ -22,7 +22,7 @@ class TypeEquipmentSeeder extends Seeder
     public function run()
     {
         foreach (self::$transport as $t){
-            DB::table('type_transport')->insertGetId([
+            DB::table('type_equipment')->insertGetId([
                 'name' => $t,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

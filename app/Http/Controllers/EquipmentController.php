@@ -24,6 +24,11 @@ class EquipmentController extends Controller
         return response()->json($data);
     }
 
+    //получить тип спецтехники
+    public function getEquipmentType(){
+        $data = DB::table('type_equipment')->select('id','name')->get();
+        return response()->json($data);
+    }
     public function addEquipment(Request $request){
         $category_id = $request->input('category_id');
         $type_equipment = $request->input('type_equipment');
