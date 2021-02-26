@@ -23,6 +23,7 @@ class PostResource extends JsonResource
             'details' => DetailsResource::collection(DB::table('details')->where('post_id', $this->id)->get()),
             'additional' => PostAdditional::collection(DB::table('post_additional')->where('post_id',$this->id)->get()),
             'price' => PriceResource::collection(DB::table('post_price')->where('post_id',$this->id)->get()),
+            'updated_at' => $this->updated_at,
         ];
 
         return $array;

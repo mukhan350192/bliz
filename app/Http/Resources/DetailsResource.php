@@ -44,6 +44,9 @@ class DetailsResource extends JsonResource
         if (isset($this->to_string)){
             $array['to_string'] = $this->to_string;
         }
+        if (isset($this->title)){
+            $array['title'] = $this->title;
+        }
         return $array;
     }
 }
