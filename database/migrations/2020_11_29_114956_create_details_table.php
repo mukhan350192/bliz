@@ -20,6 +20,8 @@ class CreateDetailsTable extends Migration
             $table->string('from');
             $table->string('middle_city')->nullable();
             $table->string('to');
+            $table->string('from_string');
+            $table->string('to_string');
             $table->integer('type_transport');
             $table->string('distance')->nullable();
             $table->string('duration')->nullable();
