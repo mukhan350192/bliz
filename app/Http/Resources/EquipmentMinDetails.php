@@ -22,7 +22,7 @@ class EquipmentMinDetails extends JsonResource
         return [
             'name' => $this->name,
             'price' => $this->price . $currency->name. '/'. $price_type->name,
-            'city' => $this->city,
+            'city' => $this->city_id,
             'address' => $this->address,
             'net' => $this->net,
             'power' => $this->power,
