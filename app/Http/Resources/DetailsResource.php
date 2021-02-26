@@ -38,6 +38,12 @@ class DetailsResource extends JsonResource
         if (isset($this->duration)){
             $array['duration'] = $this->duration;
         }
+        if (isset($this->from_string)){
+            $array['from_string'] = $this->from_string;
+        }
+        if (isset($this->to_string)){
+            $array['to_string'] = $this->to_string;
+        }
         return $array;
     }
 }

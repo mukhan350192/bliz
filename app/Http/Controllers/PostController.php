@@ -498,6 +498,8 @@ class PostController extends Controller
         $type_transport = $request->input('type_transport');
         $distance = $request->input('distance');
         $duration = $request->input('duration');
+        $from_string = $request->input('from_string');
+        $to_string = $request->input('to_string');
         $result['success'] = false;
         do {
             if (!$token) {
@@ -572,6 +574,8 @@ class PostController extends Controller
                 'type_transport' => $type_transport,
                 'distance' => $distance,
                 'duration' => $duration,
+                'from_string' => $from_string,
+                'to_string' => $to_string,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'quantity' => $quantity,

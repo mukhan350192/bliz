@@ -21,7 +21,7 @@ class DetailsMinResource extends JsonResource
         $currency = DB::table('currency')->where('id',$price->price_type)->first();
         $price = $price->price.' '.$currency->name;
 
-        return [
+        $array = [
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'from' => $this->from,
@@ -32,6 +32,21 @@ class DetailsMinResource extends JsonResource
             'title' => $this->title,
             'price' => $price,
         ];
+
+        if ($this->from_string){
+            $array['from_string'] = $this->from_string;
+        }
+        if ($this->to_string){
+            $array['to_string'] = $this->to_string;
+        }
+        if ($this->distance){
+            $array['distance'] = $this->distance;
+        }
+        if ($this->duration){
+            $array['duration'] = $this->duration;
+        }
+
+        return $array;
 
     }
 }
