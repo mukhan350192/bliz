@@ -701,17 +701,18 @@ class PostController extends Controller
         return response()->json($payment);
     }
 
-    public function getPostByID(Request $request){
-        $post_id = $request->input('post_id');
+    public function getPostByID($id){
+        //$post_id = $request->input('post_id');
         $result['success'] = false;
         do{
-            if (!$post_id){
+            if (!$id){
                 $result['message'] = 'Не передан пост айди';
                 break;
             }
-            $post = Post::where('id',$post_id)->get();
+            $post = Post::where('id',$id)->get();
             $data = PostResource::collection($post);
             $result['data'] = $data;
+            $result['success'] = true;
         }while(false);
         return response()->json($result);
     }

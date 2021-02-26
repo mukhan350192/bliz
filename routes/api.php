@@ -84,7 +84,7 @@ Route::get('/getPostByID',[PostController::class,'getPostByID']);
 //storage
 Route::post('/addStorage',[StorageController::class,'addStorage']);
 Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
-Route::get('/getStorageById',[StorageController::class,'getStorageById']);
+Route::get('/getStorageById/{id}',[StorageController::class,'getStorageById']);
 Route::get('/getFireSystem',[StorageController::class,'getFireSystem']);
 Route::get('/getVentilation',[StorageController::class,'getVentilation']);
 
