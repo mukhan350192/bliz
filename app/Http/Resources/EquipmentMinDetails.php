@@ -19,11 +19,10 @@ class EquipmentMinDetails extends JsonResource
     {
         $currency = DB::table('currency')->where('id',$this->currency)->first();
         $price_type = DB::table('equipment_rent')->where('id',$this->price_type)->first();
-        $city = City::where('id',$this->city_id)->first();
         return [
             'name' => $this->name,
             'price' => $this->price . $currency->name. '/'. $price_type->name,
-            'city' => $city->name,
+            'city' => $this->city,
             'address' => $this->address,
             'net' => $this->net,
             'power' => $this->power,

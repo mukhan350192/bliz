@@ -159,12 +159,12 @@ class EquipmentController extends Controller
 
                 $path = $file->store('public/images/equipment/');
 
-                $name = $file->getClientOriginalName();
-                $name = sha1(time() . $name) . '.' . $file->extension();
-                $file->move($path, $name);
+                $fileName = $file->getClientOriginalName();
+                $fileName = sha1(time() . $fileName) . '.' . $file->extension();
+                $file->move($path, $fileName);
                 $imageID = DB::table('equipment_images')->insertGetId([
                     'equipment_id' => $equipmentID,
-                    'name' => $name,
+                    'name' => $fileName,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
