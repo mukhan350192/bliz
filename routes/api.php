@@ -79,12 +79,12 @@ Route::get('/newAddPost',[PostController::class,'newAddPost']);
 Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
-Route::get('/getPostByID',[PostController::class,'getPostByID']);
+Route::get('/getPostByID/{id}',[PostController::class,'getPostByID']);
 
 //storage
 Route::post('/addStorage',[StorageController::class,'addStorage']);
 Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
-Route::get('/getStorageById/{id}',[StorageController::class,'getStorageById']);
+Route::get('/getStorageById',[StorageController::class,'getStorageById']);
 Route::get('/getFireSystem',[StorageController::class,'getFireSystem']);
 Route::get('/getVentilation',[StorageController::class,'getVentilation']);
 
