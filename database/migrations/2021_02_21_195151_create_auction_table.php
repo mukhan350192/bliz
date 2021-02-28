@@ -16,6 +16,7 @@ class CreateAuctionTable extends Migration
         Schema::create('auction', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }
