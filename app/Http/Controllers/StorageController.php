@@ -383,39 +383,41 @@ class StorageController extends Controller
                 break;
             }
 
+            if (isset($image)){
+                $allowedfileExtension = ['jpeg', 'jpg', 'png'];
+                foreach ($request->file('image') as $file) {
 
-            $allowedfileExtension = ['jpeg', 'jpg', 'png'];
-            foreach ($request->file('image') as $file) {
+                    $extension = $file->getClientOriginalExtension();
 
-                $extension = $file->getClientOriginalExtension();
+                    $check = in_array($extension, $allowedfileExtension);
+                    if (!$check) {
+                        $result['message'] = 'Пожалуйста, загружайте только jpeg,jpg,png';
+                        break;
+                    }
 
-                $check = in_array($extension, $allowedfileExtension);
-                if (!$check) {
-                    $result['message'] = 'Пожалуйста, загружайте только jpeg,jpg,png';
-                    break;
-                }
+                    $path = $file->store('public/images/storage/');
 
-                $path = $file->store('public/images/storage/');
+                    $name = $file->getClientOriginalName();
+                    $name = sha1(time() . $name) . '.' . $file->extension();
+                    $file->move($path, $name);
+                    $imageID = DB::table('storage_images')->insertGetId([
+                        'storage_id' => $storage_id,
+                        'name' => $name,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
 
-                $name = $file->getClientOriginalName();
-                $name = sha1(time() . $name) . '.' . $file->extension();
-                $file->move($path, $name);
-                $imageID = DB::table('storage_images')->insertGetId([
-                    'storage_id' => $storage_id,
-                    'name' => $name,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
+                    if (!$imageID) {
+                        DB::rollBack();
+                        $result['message'] = 'Попробуйте позже';
+                        break;
+                    }
 
-                if (!$imageID) {
-                    DB::rollBack();
-                    $result['message'] = 'Попробуйте позже';
-                    break;
+
                 }
 
 
             }
-
             DB::commit();
             $result['success'] = true;
         } while (false);

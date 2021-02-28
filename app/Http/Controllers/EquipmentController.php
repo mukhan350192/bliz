@@ -145,34 +145,35 @@ class EquipmentController extends Controller
                 $result['message'] = 'Попробуйте позже';
                 break;
             }
+            if (isset($image)) {
+                $allowedfileExtension = ['jpeg', 'jpg', 'png'];
+                foreach ($request->file('image') as $file) {
 
-            $allowedfileExtension = ['jpeg', 'jpg', 'png'];
-            foreach ($request->file('image') as $file) {
+                    $extension = $file->getClientOriginalExtension();
 
-                $extension = $file->getClientOriginalExtension();
+                    $check = in_array($extension, $allowedfileExtension);
+                    if (!$check) {
+                        $result['message'] = 'Пожалуйста, загружайте только jpeg,jpg,png';
+                        break;
+                    }
 
-                $check = in_array($extension, $allowedfileExtension);
-                if (!$check) {
-                    $result['message'] = 'Пожалуйста, загружайте только jpeg,jpg,png';
-                    break;
-                }
+                    $path = $file->store('public/images/equipment/');
 
-                $path = $file->store('public/images/equipment/');
+                    $fileName = $file->getClientOriginalName();
+                    $fileName = sha1(time() . $fileName) . '.' . $file->extension();
+                    $file->move($path, $fileName);
+                    $imageID = DB::table('equipment_images')->insertGetId([
+                        'equipment_id' => $equipmentID,
+                        'name' => $fileName,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
 
-                $fileName = $file->getClientOriginalName();
-                $fileName = sha1(time() . $fileName) . '.' . $file->extension();
-                $file->move($path, $fileName);
-                $imageID = DB::table('equipment_images')->insertGetId([
-                    'equipment_id' => $equipmentID,
-                    'name' => $fileName,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-
-                if (!$imageID) {
-                    DB::rollBack();
-                    $result['message'] = 'Попробуйте позже';
-                    break;
+                    if (!$imageID) {
+                        DB::rollBack();
+                        $result['message'] = 'Попробуйте позже';
+                        break;
+                    }
                 }
             }
 
