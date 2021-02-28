@@ -15,6 +15,10 @@ class CreateAuctionOrdersTable extends Migration
     {
         Schema::create('auction_orders', function (Blueprint $table) {
             $table->id();
+            $table->integer('auction_id');
+            $table->integer('user_id');
+            $table->double('price');
+            $table->integer('currency');
             $table->timestamps();
         });
     }

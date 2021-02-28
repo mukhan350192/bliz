@@ -214,4 +214,55 @@ class AuctionController extends Controller
     }
 
 
+    public function sendAuctionRequest(Request $request){
+        $token = $request->input('token');
+        $price = $request->input('price');
+        $auction_id = $request->input('auction_id');
+        $currency = $request->input('currency');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$price){
+                $result['message'] = 'Не передан цена';
+                break;
+            }
+            if (!$currency){
+                $result['message'] = 'Не передан валюта';
+                break;
+            }
+            if (!$auction_id){
+                $result['message'] = 'Не передан аукцион айди';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            DB::beginTransaction();
+            $auctionOrders = DB::table('auction_orders')->insertGetId([
+                'auction_id' => $auction_id,
+                'user_id' => $user->id,
+                'price' => $price,
+                'currency' => $currency,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$auctionOrders){
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            DB::commit();
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
 }

@@ -459,7 +459,7 @@ class StorageController extends Controller
                 $result['message'] = 'Не передан айди';
                 break;
             }
-            $storage = Storage::find($storage_id)->first();
+            $storage = Storage::find($storage_id);
             if (!$storage) {
                 $result['message'] = 'Не найден склад';
                 break;
