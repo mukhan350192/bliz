@@ -249,6 +249,7 @@ class StorageController extends Controller
         $year = $request->input('year');
         $city_id = $request->input('city_id');
         $address = $request->input('address');
+        $region = $request->input('region');
         $floor = $request->input('floor');
         $parking_car = $request->input('parking_car');
         $parking_cargo = $request->input('parking_cargo');
@@ -334,6 +335,7 @@ class StorageController extends Controller
                 'year' => $year,
                 'city_id' => $city_id,
                 'address' => $address,
+                'region' => $region,
                 'floor' => $floor,
                 'floor_type' => $floor_type,
                 'parking_car' => $parking_car,
