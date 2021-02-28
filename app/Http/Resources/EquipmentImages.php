@@ -14,8 +14,10 @@ class EquipmentImages extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'name' => $this->name,
-        ];
+        $array = [];
+        if (isset($this->name)){
+            $array['name'] = $this->name;
+        }
+        return $array;
     }
 }
