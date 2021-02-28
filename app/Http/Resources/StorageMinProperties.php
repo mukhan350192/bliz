@@ -29,6 +29,15 @@ class StorageMinProperties extends JsonResource
         if (isset($this->type_storage)){
             $array['type'] = $this->type_storage;
         }
+        if (isset($this->city_id)){
+            $array['city_id'] = $this->city_id;
+        }
+        if (isset($this->region)){
+            $array['region'] = $this->region;
+        }
+        if (isset($this->address)){
+            $array['address'] = $this->address;
+        }
         return $array;
     }
 }

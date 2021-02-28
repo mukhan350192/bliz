@@ -29,8 +29,8 @@ class StorageProperties extends JsonResource
         if (isset($this->year)) {
             $array['year'] = $this->year;
         }
-        if (isset($this->city)){
-            $array['city'] = $this->city;
+        if (isset($this->city_id)){
+            $array['city'] = $this->city_id;
         }
         if (isset($this->address)) {
             $array['address'] = $this->address;
@@ -43,6 +43,9 @@ class StorageProperties extends JsonResource
         }
         if (isset($parking_cargo)) {
             $array['parking_cargo'] = $this->parking_cargo;
+        }
+        if (isset($this->region)){
+            $array['region'] = $this->region;
         }
         if (isset($parking_car)) {
             $array['parking_car'] = $this->parking_car;
