@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\SpecialEquipmentController;
 use App\Http\Controllers\UserController;
@@ -97,5 +98,4 @@ Route::get('/getAllEquipment',[EquipmentController::class,'getAllEquipment']);
 Route::get('/getEquipmentByID',[EquipmentController::class,'getEquipmentByID']);
 
 //аукцион
-
-
+Route::post('/addAuction',[AuctionController::class,'addAuction']);

@@ -19,6 +19,7 @@ class CreateAuctionAdditionalTable extends Migration
             $table->string('documents')->nullable();
             $table->string('loading')->nullable();
             $table->string('condition')->nullable();
+            $table->string('addition')->nullable();
             $table->boolean('negotiable_price')->default(false);
             $table->boolean('nds')->default(false);
             $table->boolean('when_loading')->default(false);

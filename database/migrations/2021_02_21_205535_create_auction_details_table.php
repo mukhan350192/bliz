@@ -20,6 +20,10 @@ class CreateAuctionDetailsTable extends Migration
             $table->string('from_city');
             $table->string('to_city');
             $table->string('middle_city')->nullable();
+            $table->string('from_string')->nullable();
+            $table->string('to_string')->nullable();
+            $table->string('distance')->nullable();
+            $table->string('duration')->nullable();
             $table->date('date_start');
             $table->date('date_end');
             $table->string('title');

@@ -427,7 +427,6 @@ class StorageController extends Controller
     {
         $page = intval($request->input('page'));
         $result['success'] = true;
-        var_dump($page);
         if (!$page || $page == 1) {
             $page = 1;
             $skip = 0;
@@ -437,7 +436,6 @@ class StorageController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        var_dump($skip);
         $count = Storage::all();
         $count = $count->count();
         $result['all'] = $count;

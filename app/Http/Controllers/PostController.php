@@ -592,9 +592,12 @@ class PostController extends Controller
                 break;
             }
             $docs = '';
-            foreach ($documents as $doc) {
-                $docs .= ',' . $doc;
+            if (isset($documents)){
+                foreach ($documents as $doc) {
+                    $docs .= ',' . $doc;
+                }
             }
+
             $load = '';
             if (isset($loading)){
                 foreach ($loading as $l) {
