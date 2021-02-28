@@ -436,7 +436,6 @@ class StorageController extends Controller
             $skip = 0;
             $take = 10;
         } else {
-            echo "yes";
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }

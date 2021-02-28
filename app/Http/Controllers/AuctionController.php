@@ -213,6 +213,9 @@ class AuctionController extends Controller
         return response()->json($result);
     }
 
+    public  function getAllAuction(Request $request){
+
+    }
 
     public function sendAuctionRequest(Request $request){
         $token = $request->input('token');
