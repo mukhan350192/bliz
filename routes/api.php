@@ -100,3 +100,5 @@ Route::get('/getEquipmentByID',[EquipmentController::class,'getEquipmentByID']);
 //аукцион
 Route::post('/addAuction',[AuctionController::class,'addAuction']);
 Route::post('/sendAuctionRequest',[AuctionController::class,'sendAuctionRequest']);
+Route::get('/getAllAuction',[AuctionController::class,'getAllAuction']);
+Route::get('/getAuctionById',[AuctionController::class,'getAuctionById']);

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class AuctionMinDetails extends JsonResource
 {
@@ -17,8 +18,11 @@ class AuctionMinDetails extends JsonResource
 
         $array = [
             'id' => $this->id,
+            'details' => AuctionMinProperties::collection(DB::table('auction_details')->where('auction_id',$this->id)->get()),
+            'price_details' => AuctionMinPrice::collection(DB::table('auction_orders')->where('auction_id',$this->id)->get()),
+            'updated_at' => $this->updated_at,
         ];
 
-        return parent::toArray($request);
+        return $array;
     }
 }

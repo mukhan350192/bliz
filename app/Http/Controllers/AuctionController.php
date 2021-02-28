@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AuctionDetails;
+use App\Http\Resources\AuctionMinDetails;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -142,49 +144,49 @@ class AuctionController extends Controller
                 break;
             }
             $docs = '';
-            if (isset($documents)){
+            if (isset($documents)) {
                 foreach ($documents as $doc) {
                     $docs .= ',' . $doc;
                 }
             }
 
             $load = '';
-            if (isset($loading)){
+            if (isset($loading)) {
                 foreach ($loading as $l) {
                     $load .= ',' . $l;
                 }
             }
 
             $con = '';
-            if (isset($condition)){
+            if (isset($condition)) {
                 foreach ($condition as $c) {
                     $con .= ',' . $con;
                 }
             }
             $add = '';
-            if (isset($addition)){
+            if (isset($addition)) {
                 foreach ($addition as $a) {
                     $add .= ',' . $a;
                 }
             }
-            if (!empty($add)){
+            if (!empty($add)) {
                 $add = ltrim($add, $add[0]);
             }
 
-            if (!empty($docs)){
+            if (!empty($docs)) {
                 $docs = ltrim($docs, $docs[0]);
             }
-            if (!empty($load)){
+            if (!empty($load)) {
                 $load = ltrim($load, $load[0]);
             }
-            if (!empty($con)){
+            if (!empty($con)) {
                 $con = ltrim($con, $con[0]);
             }
 
 
             $auctionAdditional = DB::table('auction_additional')->insertGetId([
-               'auction_id' => $auctionID,
-               'documents' => $docs,
+                'auction_id' => $auctionID,
+                'documents' => $docs,
                 'loading' => $load,
                 'condition' => $con,
                 'addition' => $add,
@@ -199,7 +201,7 @@ class AuctionController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-            if (!$auctionAdditional){
+            if (!$auctionAdditional) {
                 DB::rollBack();
                 $result['message'] = 'Попробуйте позже';
                 break;
@@ -213,38 +215,80 @@ class AuctionController extends Controller
         return response()->json($result);
     }
 
-    public  function getAllAuction(Request $request){
-
+    public function getAllAuction(Request $request)
+    {
+        $page = $request->input('page');
+        $take = 10;
+        if (!isset($page) || $page == 1) {
+            $page = 1;
+            $skip = 0;
+        } else {
+            $skip = ($page - 1) * 10;
+        }
+        $count = DB::table('auction')->count();
+        $data = AuctionMinDetails::collection(DB::table('auction')->skip($skip)->take($take)->get());
+        $result['current_page'] = $page;
+        $result['max_page'] = ceil($count / 10);
+        $result['per_page'] = 10;
+        $result['data'] = $data;
+        return response()->json($result);
     }
 
-    public function sendAuctionRequest(Request $request){
+    public function getAuctionById(Request $request)
+    {
+        $auction_id = $request->input('auction_id');
+        $result['success'] = false;
+        do {
+            if (!$auction_id) {
+                $result['message'] = 'Не передан аукцион айди';
+                break;
+            }
+            $auction = DB::table('auction')->where('id', $auction_id)->get();
+            if (!$auction) {
+                $result['message'] = 'Не найден аукцион';
+                break;
+            }
+            $data = AuctionDetails::collection($auction);
+            $result['data'] = $data;
+            $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function sendAuctionRequest(Request $request)
+    {
         $token = $request->input('token');
         $price = $request->input('price');
         $auction_id = $request->input('auction_id');
         $currency = $request->input('currency');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$price){
+            if (!$price) {
                 $result['message'] = 'Не передан цена';
                 break;
             }
-            if (!$currency){
+            if (!$currency) {
                 $result['message'] = 'Не передан валюта';
                 break;
             }
-            if (!$auction_id){
+            if (!$auction_id) {
                 $result['message'] = 'Не передан аукцион айди';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $auction = DB::table('auction_orders')->where('user_id',$user->id)->first();
+            if ($auction){
+                $result['message'] = 'Вы уже отправили заявку';
                 break;
             }
 
@@ -257,14 +301,14 @@ class AuctionController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            if (!$auctionOrders){
+            if (!$auctionOrders) {
                 DB::rollBack();
                 $result['message'] = 'Попробуйте позже';
                 break;
             }
             DB::commit();
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
