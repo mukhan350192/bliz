@@ -16,7 +16,7 @@ class AuctionProperties extends JsonResource
     public function toArray($request)
     {
         $array = [
-            'date_finish' => date('d.m.Y',strtotime($this->date_finish)),
+            'date_finish' => date('d.m.Y H:i',strtotime($this->date_finish)),
             'date_start' => date('d.m.Y',strtotime($this->date_start)),
             'date_end' => date('d.m.Y',strtotime($this->date_end)),
             'from_city' => $this->from_city,
