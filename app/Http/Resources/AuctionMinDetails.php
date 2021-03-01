@@ -20,7 +20,7 @@ class AuctionMinDetails extends JsonResource
             'id' => $this->id,
             'details' => AuctionMinProperties::collection(DB::table('auction_details')->where('auction_id',$this->id)->get()),
             'price_details' => AuctionMinPrice::collection(DB::table('auction_orders')->where('auction_id',$this->id)->get()),
-            'updated_at' => $this->updated_at,
+            'updated_at' => date('d.m.Y',strtotime($this->updated_at)),
         ];
 
         return $array;
