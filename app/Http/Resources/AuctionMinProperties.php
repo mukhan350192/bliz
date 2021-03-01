@@ -16,8 +16,8 @@ class AuctionMinProperties extends JsonResource
     {
         $array = [
             'date_finish' => $this->date_finish,
-            'date_start' => $this->date_start,
-            'date_end' => $this->date_end,
+            'date_start' => date('d.m.Y',strtotime($this->date_start)),
+            'date_end' => date('d.m.Y',strtotime($this->date_end)),
             'from_city' => $this->from_city,
             'to_city' => $this->to_city,
             'title' => $this->title,
