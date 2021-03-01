@@ -26,6 +26,16 @@ class OrderSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
         DB::table('order_status')->insert([
+            'name' => 'Груз в пути',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        DB::table('order_status')->insert([
+            'name' => 'Доставлен',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        DB::table('order_status')->insert([
             'name' => 'Откленено',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

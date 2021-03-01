@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderMinExecutePosts;
 use App\Http\Resources\PostAdditionResource;
 use App\Http\Resources\PostConditionResource;
 use App\Http\Resources\PostDocumentResource;
@@ -253,7 +254,7 @@ class PostController extends Controller
                 $result['message'] = 'К сожалению этот объяление уже неактивна';
                 break;
             }
-            $orders = Order::where('post_id', $postID)->where('to_id', $user->id)->first();
+            $orders = Order::where('post_id', $postID)->where('executor', $user->id)->first();
             if ($orders) {
                 $result['message'] = 'Вы уже отправили заявку';
                 break;
@@ -262,8 +263,8 @@ class PostController extends Controller
             DB::beginTransaction();
             $orders = Order::insertGetId([
                 'post_id' => $postID,
-                'from_id' => $post->user_id,
-                'to_id' => $user->id,
+                'customer' => $post->user_id,
+                'executor' => $user->id,
                 'status' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -538,7 +539,7 @@ class PostController extends Controller
                 $result['message'] = 'Не передан способ оплаты';
                 break;
             }
-            if (!$type_transport){
+            if (!$type_transport) {
                 $result['message'] = 'Не передан тип транспорта';
                 break;
             }
@@ -592,42 +593,42 @@ class PostController extends Controller
                 break;
             }
             $docs = '';
-            if (isset($documents)){
+            if (isset($documents)) {
                 foreach ($documents as $doc) {
                     $docs .= ',' . $doc;
                 }
             }
 
             $load = '';
-            if (isset($loading)){
+            if (isset($loading)) {
                 foreach ($loading as $l) {
                     $load .= ',' . $l;
                 }
             }
 
             $con = '';
-            if (isset($condition)){
+            if (isset($condition)) {
                 foreach ($condition as $c) {
                     $con .= ',' . $con;
                 }
             }
 
             $add = '';
-            if (isset($addition)){
+            if (isset($addition)) {
                 foreach ($addition as $a) {
                     $add .= ',' . $a;
                 }
             }
-            if (!empty($docs)){
+            if (!empty($docs)) {
                 $docs = ltrim($docs, $docs[0]);
             }
-            if (!empty($load)){
+            if (!empty($load)) {
                 $load = ltrim($load, $load[0]);
             }
-            if (!empty($con)){
+            if (!empty($con)) {
                 $con = ltrim($con, $con[0]);
             }
-            if (!empty($add)){
+            if (!empty($add)) {
                 $add = ltrim($add, $add[0]);
             }
 
@@ -657,7 +658,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function newGetPost(Request $request){
+    public function newGetPost(Request $request)
+    {
         $page = intval($request->input('page'));
         $sub_id = $request->input('sub_id');
         $category_id = $request->input('category_id');
@@ -672,51 +674,184 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $count = Post::where('category_id',$category_id)->count();
+        $count = Post::where('category_id', $category_id)->count();
 
         $city = City::all();
         if (!$category_id) {
             die('Не передан категория айди');
         }
-        if (!$sub_id){
-            $data = PostMinResource::collection(Post::where('category_id',$category_id)->skip($skip)->take($take)->get());
-        }else{
-            $data = PostMinResource::collection(Post::where('category_id',$category_id)->where('sub_id',$sub_id)->skip($skip)->take($take)->get());
-            $count = Post::where('category_id',$category_id)->where('sub_id',$sub_id)->count();
+        if (!$sub_id) {
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->get());
+        } else {
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->get());
+            $count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
         }
         $result['data'] = $data;
         $result['pagination'] = [
-                'total' => $count,
-                'page' => $page,
-                'max_page' => ceil($count/10),
+            'total' => $count,
+            'page' => $page,
+            'max_page' => ceil($count / 10),
         ];
         $result['success'] = true;
         return response()->json($result);
     }
 
-    public function getCurrency(){
-        $currency = DB::table('currency')->select('id','name')->get();
+    public function getCurrency()
+    {
+        $currency = DB::table('currency')->select('id', 'name')->get();
         return response()->json($currency);
     }
 
-    public function getPaymentType(){
-        $payment = DB::table('payment_type')->select('id','name')->get();
+    public function getPaymentType()
+    {
+        $payment = DB::table('payment_type')->select('id', 'name')->get();
         return response()->json($payment);
     }
 
-    public function getPostByID($id){
+    public function getPostByID($id)
+    {
         //$post_id = $request->input('post_id');
         $result['success'] = false;
-        do{
-            if (!$id){
+        do {
+            if (!$id) {
                 $result['message'] = 'Не передан пост айди';
                 break;
             }
-            $post = Post::where('id',$id)->get();
+            $post = Post::where('id', $id)->get();
             $data = PostResource::collection($post);
             $result['data'] = $data;
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
+
+
+    public function customerOrdersInWork(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $count = DB::table('orders')
+                ->where('executor', $user->id)
+                ->whereIn('status', [2,3,4])
+                ->count();
+            $data = OrderMinExecutePosts::collection(
+                DB::table('orders')
+                    ->where('executor', $user->id)
+                    ->whereIn('status', [2,3,4])
+                    ->get());
+            $result['count'] = $count;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function executorOrdersInWork(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $count = DB::table('orders')
+                ->where('customer', $user->id)
+                ->whereIn('status', [2,3,4])
+                ->count();
+            $data = OrderMinExecutePosts::collection(
+                DB::table('orders')
+                    ->where('customer', $user->id)
+                    ->whereIn('status', [2,3,4])
+                    ->get());
+            $result['count'] = $count;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function customerOrdersInHold(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $count = DB::table('orders')
+                ->where('executor', $user->id)
+                ->whereIn('status', [1,5,6])
+                ->count();
+            $data = OrderMinExecutePosts::collection(
+                DB::table('orders')
+                    ->where('executor', $user->id)
+                    ->whereIn('status', [1,5,6])
+                    ->get());
+            $result['count'] = $count;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function executorOrdersInHold(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $count = DB::table('orders')
+                ->where('customer', $user->id)
+                ->whereIn('status', [1,5,6])
+                ->count();
+            $data = OrderMinExecutePosts::collection(
+                DB::table('orders')
+                    ->where('customer', $user->id)
+                    ->whereIn('status', [1,5,6])
+                    ->get());
+            $result['count'] = $count;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
 }
