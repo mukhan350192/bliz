@@ -230,6 +230,7 @@ class AuctionController extends Controller
         $result['current_page'] = $page;
         $result['max_page'] = ceil($count / 10);
         $result['per_page'] = 10;
+        $result['total'] = $count;
         $result['data'] = $data;
         return response()->json($result);
     }
