@@ -109,3 +109,5 @@ Route::get('/executorOrdersInWork',[PostController::class,'executorOrdersInWork'
 Route::get('/customerOrdersInHold',[PostController::class,'customerOrdersInHold']);
 Route::get('/executorOrdersInHold',[PostController::class,'executorOrdersInHold']);
 Route::post('/addEmployee',[UserController::class,'addController']);
+
+Route::get('/distance',[PostController::class,'getDistance'])->middleware('cors');

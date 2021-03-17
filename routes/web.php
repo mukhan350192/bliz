@@ -24,4 +24,4 @@ Route::get('/test', function(){
     Artisan::call('migrate:fresh');
 });
 
-Route::get('/distance',[\App\Http\Controllers\PostController::class,'getDistance']);
+
