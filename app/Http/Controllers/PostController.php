@@ -889,9 +889,7 @@ class PostController extends Controller
     public function currency(Request $request){
         $url = 'https://www.nationalbank.kz/rss/rates_all.xml';
         $s = file_get_contents($url);
-        $result['data'] = $s;
-        return response()->json($result)
-            ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        //$result['data'] = $s;
+        return $s;
     }
 }
