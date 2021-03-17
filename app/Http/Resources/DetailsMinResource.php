@@ -20,9 +20,7 @@ class DetailsMinResource extends JsonResource
         $price = DB::table('post_price')->where('post_id',$this->id)->limit(1)->first();
         var_dump($price);
         //echo $price[0];
-        foreach ($price as $p){
-            echo $p;
-        }
+        echo $price['id'];
         $currency = DB::table('currency')->where('id',$price->price_type)->first();
         $price = $price->price.' '.$currency->name;
 
