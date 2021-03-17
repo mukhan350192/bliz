@@ -854,4 +854,36 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function getDistance(Request $request){
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $result['success'] = false;
+        $key = 'AIzaSyAplKiP9AOLuUbWdH655ApFMl1nnfXwcwk';
+        do{
+            if (!$from){
+                $result['message'] = 'Не передан откуда';
+                break;
+            }
+            if (!$to){
+                $result['message'] = 'Не передан куда';
+                break;
+            }
+            $url = "https://maps.googleapis.com/maps/api/directions/json?language=ru-RU&origin=place_id:$from&destination=place_id:$to&key=$key";
+            $s = file_get_contents($url);
+            $s = json_decode($s,true);
+            //echo $s->geocoded_waypoints;
+            //var_dump($s);
+            $distance = $s['routes'][0]['legs'][0]['distance']['text'];
+            $duration = $s['routes'][0]['legs'][0]['duration']['text'];
+            $routes =$s['routes'][0]['legs'][0]['steps'];
+            $result = [
+                'success' => true,
+                'distance' => $distance,
+                'duration' => $duration,
+                'routes' => $routes,
+            ];
+        }while(false);
+        return response()->json($result);
+    }
+
 }
