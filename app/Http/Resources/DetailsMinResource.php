@@ -23,8 +23,10 @@ class DetailsMinResource extends JsonResource
             $price_type =  $p->price_type;
             $priceValue = $p->price;
         }
-        $currency = DB::table('currency')->where('id',$price_type)->first();
-        $price = $priceValue.' '.$currency->name;
+        if (isset($price_type)){
+            $currency = DB::table('currency')->where('id',$price_type)->first();
+            $price = $priceValue.' '.$currency->name;
+        }
 
         $array = [
             'start_date' => $this->start_date,
@@ -35,9 +37,10 @@ class DetailsMinResource extends JsonResource
             'net' => $this->net,
             'type_transport' => $type,
             'title' => $this->title,
-            'price' => $price,
         ];
-
+        if (isset($price)){
+            $array['price'] = $price;
+        }
         if ($this->from_string){
             $array['from_string'] = $this->from_string;
         }
