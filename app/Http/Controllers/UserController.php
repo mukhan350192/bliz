@@ -25,7 +25,7 @@ class UserController extends Controller
         $result['success'] = false;
 
         do {
-            if (!$fullName){
+            if (!$fullName) {
                 $result['message'] = 'Не передан ФИО';
                 break;
             }
@@ -47,16 +47,16 @@ class UserController extends Controller
                 $result['message'] = 'Этот емейл уже регистирован';
                 break;
             }
-            $userPhone = User::where('phone',$phone)->first();
-            if ($userPhone){
+            $userPhone = User::where('phone', $phone)->first();
+            if ($userPhone) {
                 $result['message'] = 'Этот телефон уже регистирован';
                 break;
             }
             $token = Str::random(60);
-            $token = sha1($token.time());
+            $token = sha1($token . time());
             $types = DB::table('user_types')->get();
             $typesData = [];
-            foreach ($types as $type){
+            foreach ($types as $type) {
                 $typesData[] = [
                     $type->id => $type->name,
                 ];
@@ -93,7 +93,8 @@ class UserController extends Controller
         return response()->json($result);
     }
 
-    public function entityRegistration(Request $request){
+    public function entityRegistration(Request $request)
+    {
         $companyType = $request->input('companyType');
         $companyName = $request->input('companyName');
         $bin = $request->input('bin');
@@ -104,43 +105,43 @@ class UserController extends Controller
 
         $result['success'] = false;
 
-        do{
-            if (!$companyType){
+        do {
+            if (!$companyType) {
                 $result['message'] = 'Не передан тип компании';
                 break;
             }
-            if (!$companyName){
+            if (!$companyName) {
                 $result['message'] = 'Не передан название компании';
                 break;
             }
-            if (!$fullName){
+            if (!$fullName) {
                 $result['message'] = 'Не передан фио контактный лицо';
                 break;
             }
-            if (!$phone){
+            if (!$phone) {
                 $result['message'] = 'Не передан телефон';
                 break;
             }
-            if (!$email){
+            if (!$email) {
                 $result['message'] = 'Не передан почта';
                 break;
             }
-            if (!$password){
+            if (!$password) {
                 $result['message'] = 'Не передан пароль';
                 break;
             }
-            $user = User::where('email',$email)->first();
-            if(isset($user)) {
+            $user = User::where('email', $email)->first();
+            if (isset($user)) {
                 $result['message'] = 'Этот email уже зарегистрирован!';
                 break;
             }
-            $userPhone = User::where('phone',$phone)->first();
-            if ($userPhone){
+            $userPhone = User::where('phone', $phone)->first();
+            if ($userPhone) {
                 $result['message'] = 'Этот телефон уже регистирован';
                 break;
             }
             $token = str::random(60);
-            $token = sha1($token.time());
+            $token = sha1($token . time());
 
             DB::beginTransaction();
             $user = User::insertGetId([
@@ -154,7 +155,7 @@ class UserController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-            if (!$user){
+            if (!$user) {
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
                 break;
@@ -168,7 +169,7 @@ class UserController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-            if (!$company){
+            if (!$company) {
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так. Попробуйте позже';
                 break;
@@ -181,10 +182,10 @@ class UserController extends Controller
             $result['companyName'] = $companyName;
             $result['companyType'] = $companyType;
             $result['fullName'] = $fullName;
-            if (isset($bin)){
+            if (isset($bin)) {
                 $result['bin'] = $bin;
             }
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
@@ -219,26 +220,26 @@ class UserController extends Controller
             $user->token = $token;
             $user->save();
             $result['success'] = true;
-            if (isset($user->image)){
+            if (isset($user->image)) {
                 $result['image'] = $user->image;
             }
             $result['fullName'] = $user->fullName;
             $result['phone'] = $user->phone;
-            if ($user->type == 1){
+            if ($user->type == 1) {
                 $result['url'] = 'http://test.money-men.kz/public/images/avatars/';
-            }else if ($user->type == 2){
-                $company = DB::table('company_details')->where('user_id',$user->id)->first();
-                if (isset($company)){
-                    $companyType = DB::table('company_types')->where('id',$company->types)->first();
+            } else if ($user->type == 2) {
+                $company = DB::table('company_details')->where('user_id', $user->id)->first();
+                if (isset($company)) {
+                    $companyType = DB::table('company_types')->where('id', $company->types)->first();
                     $result['companyName'] = $company->name;
                     $result['companyType'] = $companyType->name;
-                    if (isset($company->bin)){
+                    if (isset($company->bin)) {
                         $result['bin'] = $company->bin;
                     }
-                    if (isset($company->registration)){
+                    if (isset($company->registration)) {
                         $result['registration'] = $company->registration;
                     }
-                    if (isset($company->license)){
+                    if (isset($company->license)) {
                         $result['license'] = $company->license;
                     }
                 }
@@ -384,7 +385,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-       // $country = $request->input('country');
+        // $country = $request->input('country');
         $fullName = $request->input('fullName');
         $city = $request->input('city');
         $address = $request->input('address');
@@ -405,7 +406,7 @@ class UserController extends Controller
                 break;
             }
             $user->fullName = $fullName;
-          //  $user->country = $country;
+            //  $user->country = $country;
             $user->city = $city;
             $user->address = $address;
             $user->email = $email;
@@ -459,7 +460,7 @@ class UserController extends Controller
                 break;
             }
             $post = Post::find($post_id);
-            if (!$post){
+            if (!$post) {
                 $result['message'] = 'Не найден объявление';
                 break;
             }
@@ -513,40 +514,43 @@ class UserController extends Controller
         return response()->json($result);
     }
 
-    public function getCompanyTypes(){
+    public function getCompanyTypes()
+    {
         $company = DB::table('company_types')->get();
         return response()->json($company);
     }
 
-    public function updateBin(Request $request){
+    public function updateBin(Request $request)
+    {
         $token = $request->input('token');
         $bin = $request->input('bin');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$bin){
+            if (!$bin) {
                 $result['message'] = 'Не передан бин';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
             $update = DB::table('company_details')
-                ->where('user_id',$user->id)
+                ->where('user_id', $user->id)
                 ->update(['bin' => $bin]);
             $result['success'] = true;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function updateRegistration(Request $request){
+    public function updateRegistration(Request $request)
+    {
         $token = $request->input('token');
         $register = $request->file('register');
         $result['success'] = false;
@@ -570,13 +574,14 @@ class UserController extends Controller
 
             $destinationPath = public_path('/images/company/');
             $register->move($destinationPath, $name);
-            DB::table('company_details')->where('user_id',$user->id)->update(['registration' => $name]);
+            DB::table('company_details')->where('user_id', $user->id)->update(['registration' => $name]);
             $result['success'] = true;
         } while (false);
         return response()->json($result);
     }
 
-    public function updateLicense(Request $request){
+    public function updateLicense(Request $request)
+    {
         $token = $request->input('token');
         $license = $request->file('license');
         $result['success'] = false;
@@ -600,86 +605,155 @@ class UserController extends Controller
 
             $destinationPath = public_path('/images/company/');
             $license->move($destinationPath, $name);
-            DB::table('company_details')->where('user_id',$user->id)->update(['license' => $name]);
+            DB::table('company_details')->where('user_id', $user->id)->update(['license' => $name]);
             $result['success'] = true;
         } while (false);
         return response()->json($result);
     }
 
-    public function changePassword(Request $request){
+    public function changePassword(Request $request)
+    {
         $password = $request->input('password');
         $repeat = $request->input('password');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$password){
+        do {
+            if (!$password) {
                 $result['message'] = 'Не передан пароль';
                 break;
             }
-            if (!$repeat){
+            if (!$repeat) {
                 $result['message'] = 'Не передан подтверждение пароля';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден токен';
                 break;
             }
             $user->password = bcrypt($password);
             $user->save();
             $result['success'] = true;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function deleteAccount(Request $request){
+    public function deleteAccount(Request $request)
+    {
         $token = $request->input('token');
         $password = $request->input('password');
         $result['success'] = false;
 
         do {
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$password){
+            if (!$password) {
                 $result['message'] = 'Не передан пароль';
                 break;
             }
-            $user = User::where('token',$token)->first();
+            $user = User::where('token', $token)->first();
 
-            if (!$user){
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
 
-            if (!Hash::check($password,$user->password)){
+            if (!Hash::check($password, $user->password)) {
                 $result['message'] = 'Не совпадают пароль';
                 break;
             }
 
             DB::beginTransaction();
-            if ($user->user_type == 2){
-                $company = DB::table('company_details')->where('user_id',$user->id)->delete();
+            if ($user->user_type == 2) {
+                $company = DB::table('company_details')->where('user_id', $user->id)->delete();
             }
-            $posts = Post::where('user_id',$user->id)->delete();
+            $posts = Post::where('user_id', $user->id)->delete();
 
-            $favourites = DB::table('favourites')->where('user_id',$user->id)->delete();
+            $favourites = DB::table('favourites')->where('user_id', $user->id)->delete();
 
 
             User::find($user->id)->delete();
             DB::commit();
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
+    public function addEmployee(Request $request)
+    {
+        $token = $request->input('token');
+        $fio = $request->input('fio');
+        $email = $request->input('email');
+        $phone = $request->input('phone');
+        $password = $request->input('password');
+        $result['success'] = false;
 
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$fio) {
+                $result['message'] = 'Не передан фио';
+                break;
+            }
+            if (!$email) {
+                $result['message'] = 'Не передан почта';
+                break;
+            }
+            if (!$phone) {
+                $result['message'] = 'Не передан телефон';
+                break;
+            }
+            if (!$password) {
+                $result['message'] = 'Не передан пароль';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            DB::beginTransaction();
+            $employeeID = DB::table('employee')->insertGetId([
+                'email' => $email,
+                'fio' => $fio,
+                'phone' => $phone,
+                'password' => bcrypt($password),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$employeeID) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+
+            $userEmployeeID = DB::table('user_employee')->insertGetId([
+                'employee_id' => $employeeID,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            if (!$userEmployeeID){
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            DB::commit();
+            $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
 }
+
+
