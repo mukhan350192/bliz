@@ -21,9 +21,10 @@ class DetailsMinResource extends JsonResource
         var_dump($price);
         foreach ($price as $p){
             $price_type =  $p->price_type;
+            $priceValue = $p->price;
         }
         $currency = DB::table('currency')->where('id',$price_type)->first();
-        $price = $price->price.' '.$currency->name;
+        $price = $priceValue.' '.$currency->name;
 
         $array = [
             'start_date' => $this->start_date,
