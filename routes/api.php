@@ -111,4 +111,5 @@ Route::get('/executorOrdersInHold',[PostController::class,'executorOrdersInHold'
 Route::post('/addEmployee',[UserController::class,'addController']);
 Route::group(['middleware' => 'cors'],function (){
     Route::get('/distance',[PostController::class,'getDistance']);
+    Route::get('/currency',[PostController::class,'currency']);
 });

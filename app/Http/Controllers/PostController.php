@@ -871,8 +871,6 @@ class PostController extends Controller
             $url = "https://maps.googleapis.com/maps/api/directions/json?language=ru-RU&origin=place_id:$from&destination=place_id:$to&key=$key";
             $s = file_get_contents($url);
             $s = json_decode($s,true);
-            //echo $s->geocoded_waypoints;
-            //var_dump($s);
             $distance = $s['routes'][0]['legs'][0]['distance']['text'];
             $duration = $s['routes'][0]['legs'][0]['duration']['text'];
             $routes =$s['routes'][0]['legs'][0]['steps'];
@@ -888,4 +886,12 @@ class PostController extends Controller
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 
+    public function currency(Request $request){
+        $url = 'https://www.nationalbank.kz/rss/rates_all.xml';
+        $s = file_get_contents($url);
+        $result['data'] = $s;
+        return response()->json($result)
+            ->header('Access-Control-Allow-Origin', '*')
+            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    }
 }
