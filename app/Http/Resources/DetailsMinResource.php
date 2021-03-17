@@ -17,8 +17,8 @@ class DetailsMinResource extends JsonResource
     {
         $type = DB::table('type_transport')->where('id',$this->type_transport)->first();
         $type = $type->name;
-        $price = DB::table('post_price')->where('post_id',$this->id)->first();
-        var_dump($price);
+        $price = DB::table('post_price')->where('post_id',$this->id)->limit(1)->first();
+       // var_dump($price);
         $currency = DB::table('currency')->where('id',$price->price_type)->first();
         $price = $price->price.' '.$currency->name;
 
