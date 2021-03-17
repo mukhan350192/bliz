@@ -18,7 +18,6 @@ class DetailsMinResource extends JsonResource
         $type = DB::table('type_transport')->where('id',$this->type_transport)->first();
         $type = $type->name;
         $price = DB::table('post_price')->where('post_id',$this->id)->get();
-        var_dump($price);
         foreach ($price as $p){
             $price_type =  $p->price_type;
             $priceValue = $p->price;
