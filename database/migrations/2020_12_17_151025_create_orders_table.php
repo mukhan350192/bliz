@@ -18,7 +18,9 @@ class CreateOrdersTable extends Migration
             $table->integer('post_id');
             $table->integer('customer');
             $table->integer('executor');
-            $table->string('comment');
+            $table->string('comment')->nullable();
+            $table->double('price');
+            $table->integer('currency');
             $table->integer('status')->default(1);
             $table->timestamps();
         });

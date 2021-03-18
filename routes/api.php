@@ -58,6 +58,7 @@ Route::get('/addPostFavourites',[PostController::class,'addPostFavourites']);
 Route::get('/addStorageFavourites',[PostController::class,'addStorageFavourites']);
 Route::get('/addSpecialFavourites',[PostController::class,'addSpecialFavourites']);
 Route::get('/getAllFavourites',[PostController::class,'getAllFavourites']);
+Route::get('/getListCargoFavourites',[PostController::class,'getListPostFavourites']);
 
 // storage
 //Route::post('/addStorage',[StorageController::class,'createStorage']);

@@ -227,6 +227,9 @@ class PostController extends Controller
     {
         $token = $request->input('token');
         $postID = $request->input('post_id');
+        $price = $request->input('price');
+        $currency = $request->input('currency');
+
         $result['success'] = false;
 
         do {
@@ -268,6 +271,8 @@ class PostController extends Controller
                 'customer' => $post->user_id,
                 'executor' => $user->id,
                 'status' => 1,
+                'currency' => $currency,
+                'price' => $price,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -1064,5 +1069,30 @@ class PostController extends Controller
 
         return response()->json($result);
 
+    }
+
+    public function getListCargoFavourites(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+
+
+            $result['success'] = true;
+
+        }while(false);
+
+        return response()->json($result);
     }
 }
