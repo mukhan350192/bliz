@@ -19,7 +19,7 @@ class AuctionDetails extends JsonResource
 
         $price = DB::table('auction_orders')
             ->join('currency','auction_orders.currency','=','currency.id')
-            ->select('currency.name','auction_orders.price','auction_orders.user_id')
+            ->select('currency.name','auction_orders.price','auction_orders.user_id','auction_orders.created_at')
             ->where('auction_orders.auction_id','=',$this->id)
             ->orderBy('price','asc')->get();
         $priceDetail = [];
@@ -28,6 +28,7 @@ class AuctionDetails extends JsonResource
             $priceDetail[$index]['user'] = UserForAuction::collection(User::where('id',$p->user_id)->get());
             $priceDetail[$index]['price'] = $p->price;
             $priceDetail[$index]['currency'] = $p->name;
+            $priceDetail[$index]['created'] = date('d.m.Y H:i',strtotime($p->created_at));
             $index++;
         }
 
