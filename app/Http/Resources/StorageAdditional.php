@@ -37,7 +37,6 @@ class StorageAdditional extends JsonResource
         if (!empty($this->ventilation)){
             $length = strlen($this->ventilation);
           if ($length == 1){
-                echo 'yes';
                 $s =DB::table('storage_ventilation')->where('id',$this->ventilation)->first();
                 $ventArray[]=$s->name;
             }else{

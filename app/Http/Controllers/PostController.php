@@ -890,6 +890,7 @@ class PostController extends Controller
         $url = 'https://www.nationalbank.kz/rss/rates_all.xml';
         $s = file_get_contents($url);
         //$result['data'] = $s;
+        //var_dump($s);
         return $s;
     }
 }
