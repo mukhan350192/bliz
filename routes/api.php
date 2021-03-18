@@ -53,6 +53,11 @@ Route::get('/deleteFavourites',[UserController::class,'deleteFavourites']);
 //TODO
 Route::get('/getFavourites',[UserController::class,'getFavourites']);
 
+//Избранные
+Route::get('/addPostFavourites',[PostController::class,'addPostFavourites']);
+Route::get('/addStorageFavourites',[PostController::class,'addStorageFavourites']);
+Route::get('/addSpecialFavourites',[PostController::class,'addSpecialFavourites']);
+
 
 // storage
 //Route::post('/addStorage',[StorageController::class,'createStorage']);

@@ -14,6 +14,8 @@ use App\Models\City;
 use App\Models\Detail;
 use App\Models\Order;
 use App\Models\Post;
+use App\Models\SpecialEquipment;
+use App\Models\Storage;
 use App\Models\SubCategory;
 use App\Models\User;
 use Carbon\Carbon;
@@ -752,6 +754,7 @@ class PostController extends Controller
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
+            $result['success'] = true;
 
         } while (false);
 
@@ -784,7 +787,7 @@ class PostController extends Controller
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
-
+            $result['success'] = true;
         } while (false);
 
         return response()->json($result);
@@ -816,7 +819,7 @@ class PostController extends Controller
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
-
+            $result['success'] = true;
         } while (false);
 
         return response()->json($result);
@@ -848,7 +851,7 @@ class PostController extends Controller
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
-
+            $result['success'] = true;
         } while (false);
 
         return response()->json($result);
@@ -892,5 +895,137 @@ class PostController extends Controller
         //$result['data'] = $s;
         //var_dump($s);
         return $s;
+    }
+
+
+    public function addPostFavourites(Request $request){
+        $token = $request->input('token');
+        $post_id = $request->input('post_id');
+        $category_id = $request->input('category_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$post_id) {
+                $result['message'] = 'Не передан номер объявление';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = Post::where('id',$post_id)->where('category_id',1)->get();
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+            DB::beginTransaction();
+            $favourites = DB::table('favourites')->insert([
+                'user_id' => $user->id,
+                'post_id' => $post_id,
+                'category_id' => $category_id,
+            ]);
+            if (!$favourites) {
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            DB::commit();
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function addStorageFavourites(Request $request){
+        $token = $request->input('token');
+        $storage_id = $request->input('storage_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$storage_id) {
+                $result['message'] = 'Не передан айди склада';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = Storage::find($storage_id);
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+            DB::beginTransaction();
+            $favourites = DB::table('storage_favourites')->insert([
+                'user_id' => $user->id,
+                'storage_id' => $storage_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            if (!$favourites) {
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            DB::commit();
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function addSpecialFavourites(Request $request){
+        $token = $request->input('token');
+        $special_id = $request->input('special_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$special_id) {
+                $result['message'] = 'Не передан айди спецтехника';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = SpecialEquipment::find($special_id);
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+            DB::beginTransaction();
+            $favourites = DB::table('special_favourites')->insert([
+                'user_id' => $user->id,
+                'special_id' => $special_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            if (!$favourites) {
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+            DB::commit();
+        } while (false);
+        return response()->json($result);
     }
 }
