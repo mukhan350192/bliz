@@ -1028,4 +1028,41 @@ class PostController extends Controller
         } while (false);
         return response()->json($result);
     }
+
+    public function getAllFavourites(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $cargo = DB::table('favourites')->where('user_id',$user->id)->where('category_id',1)->count();
+            $post = DB::table('favourites')->where('user_id',$user->id)->where('category_id',2)->count();
+            $auction = DB::table('favourites')->where('user_id',$user->id)->where('category_id',3)->count();
+
+            $storage = DB::table('storage_favourites')->where('user_id',$user->id)->count();
+
+            $special = DB::table('special_favourites')->where('user_id',$user->id)->count();
+            $result['success'] = true;
+            $result['data'] = [
+                'cargo' => $cargo,
+                'post' => $post,
+                'auction' => $auction,
+                'storage' => $storage,
+                'special' => $special,
+            ];
+        }while(false);
+
+        return response()->json($result);
+
+    }
 }
