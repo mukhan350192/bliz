@@ -695,6 +695,7 @@ class UserController extends Controller
         $email = $request->input('email');
         $phone = $request->input('phone');
         $password = $request->input('password');
+        $position = $request->input('position');
         $result['success'] = false;
 
         do {
@@ -729,6 +730,7 @@ class UserController extends Controller
                 'fio' => $fio,
                 'phone' => $phone,
                 'password' => bcrypt($password),
+                'position' => $position,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
@@ -755,6 +757,49 @@ class UserController extends Controller
         return response()->json($result);
     }
 
+    public function getPositions(Request $request){
+        $data = DB::table('positions')->select('id','name')->get();
+        return response()->json($data);
+    }
+
+    public function getEmployee(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $employeeID = DB::table('user_employee')->where('user_id',$user->id)->get();
+            $count = $employeeID->count();
+            if (!$employeeID){
+                $result['success'] = true;
+                $result['count'] = 0;
+                break;
+            }
+            $data = [];
+            foreach ($employeeID as $em){
+                $emp = DB::table('employee')->where('id',$em->employee_id)->first();
+                $position = DB::table('positions')->where('id',$emp->position)->first();
+                $data[] = [
+                    'fio' => $emp->fio,
+                    'phone' => $emp->phone,
+                    'email' => $emp->email,
+                    'position' => $position->name,
+                ];
+            }
+            $result['success'] = true;
+            $result['data'] = $data;
+            $result['count'] = $count;
+        }while(false);
+        return response()->json($result);
+    }
 }
 
 
