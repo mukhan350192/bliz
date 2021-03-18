@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AuctionMinDetails;
+use App\Http\Resources\EquipmentMin;
 use App\Http\Resources\OrderMinExecutePosts;
 use App\Http\Resources\PostAdditionResource;
 use App\Http\Resources\PostConditionResource;
@@ -1086,13 +1088,90 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-
+            $data = PostMinResource::collection(Post::where('category_id', 1)->where('user_id',$user->id)->get());
 
 
             $result['success'] = true;
-
+            $result['data'] = $data;
         }while(false);
 
         return response()->json($result);
     }
+
+    public function getListPostFavourites(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $data = PostMinResource::collection(Post::where('category_id', 2)->where('user_id',$user->id)->get());
+
+
+            $result['success'] = true;
+            $result['data'] = $data;
+        }while(false);
+
+        return response()->json($result);
+    }
+
+    public function getListAuctionFavourites(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+        }while(false);
+
+        return response()->json($result);
+    }
+
+    public function getListSpecialFavourites(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id',$user->id)->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+        }while(false);
+
+        return response()->json($result);
+    }
+
+
 }
