@@ -16,13 +16,13 @@ class EquipmentDetails extends JsonResource
      */
     public function toArray($request)
     {
-        $city = City::find($this->city_id)->first();
+        //$city = City::find($this->city_id)->first();
         $currency = DB::table('currency')->where('id',$this->currency)->first();
         $equipmentRent = DB::table('equipment_rent')->where('id',$this->price_type)->first();
         $array = [
             'type' => $this->type_equipment,
             'name' => $this->name,
-            'city' => $city->name,
+            'city' => $this->city_id,
             'address' => $this->address,
             'price' => $this->price,
             'currency' => $currency->name,
