@@ -1193,7 +1193,7 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $order = Order::find($order_id);
+            $order = Order::where('id',$order_id)->where('customer',$user->id)->first();
             if (!$order){
                 $result['message'] = 'Не найден заказ';
                 break;
