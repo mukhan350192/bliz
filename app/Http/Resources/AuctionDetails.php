@@ -30,7 +30,7 @@ class AuctionDetails extends JsonResource
             $priceDetail[$index]['price'] = $p->price;
             $priceDetail[$index]['currency'] = $p->name;
             $priceDetail[$index]['created'] = date('d.m.Y H:i',strtotime($p->created_at));
-            $user_id[$index]['user_id'] = [$p->user_id];
+            $user_id .= [$p->user_id];
             $index++;
         }
 
