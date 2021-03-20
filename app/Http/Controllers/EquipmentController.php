@@ -34,21 +34,31 @@ class EquipmentController extends Controller
         $type_equipment = $request->input('type_equipment');
         $name = $request->input('name');
         $city_id = $request->input('city_id');
+        $region = $request->input('region');
         $address = $request->input('address');
         $net = intval($request->input('net'));
         $year = intval($request->input('year'));
-        $type_blade = $request->input('type_blade');
+        $token = $request->input('token');
+        $image = $request->file('image');
+        $price = $request->input('price');
+        $equipment_rent = $request->input('equipment_rent');
+        $currency = $request->input('currency');
+        $params = $request->input('params');
+        $description = $request->input('description');
+      /*
+       *
+         $type_blade = $request->input('type_blade');
         $power = $request->input('power');
         $height = $request->input('height');
         $width = $request->input('width');
         $rise = $request->input('rise');
         $deep = $request->input('deep');
         $description = $request->input('description');
-        $price = $request->input('price');
-        $currency = $request->input('currency');
-        $equipment_rent = $request->input('equipment_rent');
-        $token = $request->input('token');
-        $image = $request->file('image');
+
+
+
+
+      */
         $result['success'] = false;
 
         do{
@@ -126,16 +136,11 @@ class EquipmentController extends Controller
                 'address' => $address,
                 'net' => $net,
                 'year' => $year,
-                'type_blade' => $type_blade,
-                'power' => $power,
-                'height' => $height,
-                'width' => $width,
-                'rise' => $rise,
-                'deep' => $deep,
                 'description' => $description,
                 'price' => $price,
                 'price_type' => $equipment_rent,
                 'currency' => $currency,
+                'params' => $params,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

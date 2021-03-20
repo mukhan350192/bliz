@@ -23,16 +23,11 @@ class CreateEquipmentDetailsTable extends Migration
             $table->string('address');
             $table->integer('net')->nullable();
             $table->integer('year')->nullable();
-            $table->integer('type_blade')->nullable();
-            $table->integer('power')->nullable();
-            $table->double('height')->nullable();
-            $table->double('width')->nullable();
-            $table->double('rise')->nullable();
-            $table->double('deep')->nullable();
             $table->text('description')->nullable();
             $table->integer('price');
             $table->integer('price_type');
             $table->integer('currency');
+            $table->text('params')->nullable();
             $table->timestamps();
         });
     }

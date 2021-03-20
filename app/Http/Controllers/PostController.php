@@ -1206,4 +1206,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function acceptOrder(){
+
+    }
+
 }
