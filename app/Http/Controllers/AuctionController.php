@@ -333,6 +333,7 @@ class AuctionController extends Controller
                 break;
             }
             $auction = DB::table('auction_orders')->where('user_id',$user->id)->where('auction_id',$auction_id)->first();
+            var_dump($auction);
             if (!isset($auction)){
                 $result['message'] = 'Не найден аукцион';
                 break;
