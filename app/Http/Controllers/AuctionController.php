@@ -337,9 +337,7 @@ class AuctionController extends Controller
                 $result['message'] = 'Не найден аукцион';
                 break;
             }
-            $auction->delete();
-            $auction->save();
-
+            DB::table('auction_orders')->where('id',$auction->id)->delete();
             $result['success'] = true;
 
         }while(false);
