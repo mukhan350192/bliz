@@ -288,7 +288,7 @@ class AuctionController extends Controller
                 break;
             }
             $auction = DB::table('auction_orders')->where('user_id',$user->id)->first();
-            if ($auction){
+            if (isset($auction)){
                 $result['message'] = 'Вы уже отправили заявку';
                 break;
             }
