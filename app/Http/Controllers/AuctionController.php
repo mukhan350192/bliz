@@ -226,7 +226,7 @@ class AuctionController extends Controller
             $skip = ($page - 1) * 10;
         }
         $count = DB::table('auction')->count();
-        $data = AuctionMinDetails::collection(DB::table('auction')->skip($skip)->take($take)->get());
+        $data = AuctionMinDetails::collection(DB::table('auction')->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         $result['current_page'] = $page;
         $result['max_page'] = ceil($count / 10);
         $result['per_page'] = 10;

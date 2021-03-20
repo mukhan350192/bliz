@@ -444,7 +444,7 @@ class StorageController extends Controller
         $result['all'] = $count;
         $result['current_page'] = $page;
         $result['max_page'] = ceil($count / 10);
-        $result['data'] = StorageResource::collection(Storage::skip($skip)->take($take)->get());
+        $result['data'] = StorageResource::collection(Storage::skip($skip)->take($take)->orderByDesc('updated_at')->get());
 
 
         return response()->json($result);
