@@ -1089,8 +1089,12 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $data = PostMinResource::collection(Post::where('category_id', 1)->where('user_id',$user->id)->get());
-
+            $favourites = DB::table('favourites')->where('user_id',$user->id)->where('category_id',1)->get();
+            $s = [];
+            $data = [];
+            foreach ($favourites as $f){
+                $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('post_id',$f->post_id)->get());
+            }
 
             $result['success'] = true;
             $result['data'] = $data;

@@ -34,6 +34,7 @@ class AuctionDetails extends JsonResource
             $index++;
         }
 
+
         return [
             'id' => $this->id,
             'details' => AuctionProperties::collection(DB::table('auction_details')->where('auction_id',$this->id)->get()),
