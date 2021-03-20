@@ -287,7 +287,7 @@ class AuctionController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $auction = DB::table('auction_orders')->where('user_id',$user->id)->first();
+            $auction = DB::table('auction_orders')->where('user_id',$user->id)->where('auction_id',$auction_id)->first();
             if (isset($auction)){
                 $result['message'] = 'Вы уже отправили заявку';
                 break;
