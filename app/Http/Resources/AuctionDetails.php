@@ -24,17 +24,20 @@ class AuctionDetails extends JsonResource
             ->orderBy('price','asc')->get();
         $priceDetail = [];
         $index = 0;
+        $user_id = [];
         foreach ($price as $p){
             $priceDetail[$index]['user'] = UserForAuction::collection(User::where('id',$p->user_id)->get());
             $priceDetail[$index]['price'] = $p->price;
             $priceDetail[$index]['currency'] = $p->name;
             $priceDetail[$index]['created'] = date('d.m.Y H:i',strtotime($p->created_at));
+            $user_id[] = [$p->user_id];
             $index++;
         }
 
         return [
             'id' => $this->id,
             'details' => AuctionProperties::collection(DB::table('auction_details')->where('auction_id',$this->id)->get()),
+            'user_id' => $user_id,
             'price_details' => $priceDetail,
             'updated_at' => date('d.m.Y H:i:s',strtotime($this->updated_at)),
         ];
