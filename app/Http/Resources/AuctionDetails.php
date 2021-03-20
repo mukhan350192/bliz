@@ -36,7 +36,7 @@ class AuctionDetails extends JsonResource
             'id' => $this->id,
             'details' => AuctionProperties::collection(DB::table('auction_details')->where('auction_id',$this->id)->get()),
             'price_details' => $priceDetail,
-            'updated_at' => strtotime('d.m.Y',strtotime($this->updated_at)),
+            'updated_at' => date('d.m.Y',strtotime($this->updated_at)),
         ];
     }
 }
