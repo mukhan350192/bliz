@@ -1090,7 +1090,6 @@ class PostController extends Controller
                 break;
             }
             $favourites = DB::table('favourites')->where('user_id',$user->id)->where('category_id',1)->get();
-            $s = [];
             $data = [];
             foreach ($favourites as $f){
                 $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id',$f->post_id)->get());
@@ -1118,7 +1117,11 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $data = PostMinResource::collection(Post::where('category_id', 2)->where('user_id',$user->id)->get());
+            $favourites = DB::table('favourites')->where('user_id',$user->id)->where('category_id',2)->get();
+            $data = [];
+            foreach ($favourites as $f){
+                $data[] = PostMinResource::collection(Post::where('category_id', 2)->where('id',$f->post_id)->get());
+            }
 
 
             $result['success'] = true;
