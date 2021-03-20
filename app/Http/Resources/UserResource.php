@@ -33,6 +33,12 @@ class UserResource extends JsonResource
         if ($this->user_type == 2) {
             $array['companyDetails'] = CompanyResource::collection(DB::table('company_details')->where('user_id',$this->id)->get());
         }
+        $additional_phone = DB::table('user_phones')->where('user_id',$this->id)->get();
+        if (isset($additional_phone)){
+            foreach ($additional_phone as $add){
+                $array['additional_phones'] = $add->phone;
+            }
+        }
 
         /*return [
             'id' => $this->id,
