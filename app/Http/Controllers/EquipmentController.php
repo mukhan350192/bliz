@@ -199,6 +199,7 @@ class EquipmentController extends Controller
             $data = EquipmentMin::collection(DB::table('special_equipment')->get());
         }else{
             $count = DB::table('special_equipment')->where('category_id',$category_id)->count();
+            $data = EquipmentMin::collection(DB::table('special_equipment')->get());
         }
         $result['success'] = true;
         $result['current_page'] = $page;
