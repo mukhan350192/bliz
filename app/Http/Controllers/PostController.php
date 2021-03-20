@@ -23,6 +23,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function Symfony\Component\String\b;
 
 class PostController extends Controller
 {
@@ -1173,5 +1174,36 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function cancelOrder(Request $request){
+        $token = $request->input('token');
+        $order_id = $request->input('order_id');
+        $result['success'] = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$order_id){
+                $result['message'] = 'Не передан заказ айди';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $order = Order::find($order_id);
+            if (!$order){
+                $result['message'] = 'Не найден заказ';
+                break;
+            }
+            $order->status = 5;
+            $order->save();
+            $result['success'] = true;
+        }while(false);
+
+        return response()->json($result);
+    }
 
 }

@@ -125,3 +125,7 @@ Route::group(['middleware' => 'cors'],function (){
 
 Route::get('/getPositions',[UserController::class,'getPositions']);
 Route::get('/getEmployee',[UserController::class,'getEmployee']);
+
+
+//заказы
+Route::get('/cancelOrder',[PostController::class,'cancelOrder']);
