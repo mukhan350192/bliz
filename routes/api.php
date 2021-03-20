@@ -122,7 +122,7 @@ Route::group(['middleware' => 'cors'],function (){
     Route::get('/distance',[PostController::class,'getDistance']);
     Route::get('/currency',[PostController::class,'currency']);
 });
-
+Route::get('/addPhone',[UserController::class,'addPhone']);
 Route::get('/getPositions',[UserController::class,'getPositions']);
 Route::get('/getEmployee',[UserController::class,'getEmployee']);
 
