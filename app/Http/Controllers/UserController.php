@@ -800,6 +800,40 @@ class UserController extends Controller
         }while(false);
         return response()->json($result);
     }
+
+    public function addPhone(Request $request){
+        $token = $request->input('token');
+        $phone = $request->input('phone');
+        $result['success'] = false;
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$phone){
+                $result['message'] = 'Не передан телефон';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $phone_id = DB::table('user_phones')->insertGetId([
+               'phone' => $phone,
+               'user_id' => $user->id,
+               'created_at' => Carbon::now(),
+               'updated_at' => Carbon::now(),
+            ]);
+            if (!$phone_id){
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            $result['success'] = true;
+        }while(false);
+
+        return response()->json($result);
+    }
 }
 
 
