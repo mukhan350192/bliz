@@ -313,4 +313,39 @@ class AuctionController extends Controller
         return response()->json($result);
     }
 
+    public function cancelAuctionOrder(Request $request){
+        $token = $request->input('token');
+        $auction_id = $request->input('auction_id');
+        $result['success'] = false;
+
+        do{
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$auction_id) {
+                $result['message'] = 'Не передан аукцион айди';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $auction = DB::table('auction_orders')->where('user_id',$user->id)->where('auction_id',$auction_id)->first();
+            if (!isset($auction)){
+                $result['message'] = 'Не найден аукцион';
+                break;
+            }
+            $auction->delete();
+            $auction->save();
+
+            $result['success'] = true;
+
+        }while(false);
+
+        return response()->json($result);
+
+    }
+
 }
