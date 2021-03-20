@@ -17,7 +17,7 @@ class AuctionMinPrice extends JsonResource
     {
         $price = DB::table('auction_orders')->select('currency',DB::raw('MIN(price) as price'))->groupBy('currency')->get();
 
-        $count = DB::table('auction_orders')->count();
+        $count = DB::table('auction_orders')->where('auction_id',$this->auction_id)->count();
         $array = [];
 
         $price = json_decode($price);
