@@ -1093,7 +1093,7 @@ class PostController extends Controller
             $s = [];
             $data = [];
             foreach ($favourites as $f){
-                $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('post_id',$f->post_id)->get());
+                $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id',$f->post_id)->get());
             }
 
             $result['success'] = true;
