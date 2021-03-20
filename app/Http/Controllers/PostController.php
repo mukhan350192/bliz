@@ -691,9 +691,9 @@ class PostController extends Controller
             die('Не передан категория айди');
         }
         if (!$sub_id) {
-            $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->get());
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
-            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->get());
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
             $count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
         }
         $result['data'] = $data;
