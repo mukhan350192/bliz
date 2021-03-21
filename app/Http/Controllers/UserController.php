@@ -436,7 +436,11 @@ class UserController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $user = User::where('token', $token)->update(['image' => '']);
+            if (!$user->image){
+                $result['message'] = 'У вас нету аватар';
+                break;
+            }
+            User::where('token', $token)->update(['image' => '']);
             $result['success'] = true;
         } while (false);
         return response()->json($result);
