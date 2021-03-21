@@ -11,9 +11,11 @@ use App\Http\Resources\PostDocumentResource;
 use App\Http\Resources\PostLoadingResource;
 use App\Http\Resources\PostMinResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\StorageMinProperties;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Detail;
+use App\Models\Equipment;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\SpecialEquipment;
@@ -1304,6 +1306,36 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function getListStorageFavourites(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $storage_favourites = DB::table('storage_favourites')->where('user_id', $user->id)->get();
+            $data = [];
+            foreach ($storage_favourites as $af) {
+                $data[] = StorageMinProperties::collection(DB::table('storage')->where('id', $af->storage_id)->get());
+            }
+
+            $result['success'] = true;
+            $result['data'] = $data;
+        } while (false);
+
+        return response()->json($result);
+    }
+
     public function cancelOrder(Request $request)
     {
         $token = $request->input('token');
@@ -1716,6 +1748,130 @@ class PostController extends Controller
             $result['auction'] = $auction;
             $result['special'] = $special;
             $result['storage'] = $storage;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getMyPosts(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $data = PostMinResource::collection(Post::where('category_id',1)->where('user_id',$user->id)->whereInNot('status',[5,6])->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+    public function getMyCargo(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $data = PostMinResource::collection(Post::where('category_id',2)->where('user_id',$user->id)->whereInNot('status',[5,6])->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getMyAuction(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->whereInNot('status',[5,6])->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getMyStorage(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $data = StorageMinProperties::collection(Storage::where('user_id',$user->id)->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getMySpecial(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+
+            $data = EquipmentMin::collection(Equipment::where('user_id',$user->id)->get());
+
+            $result['success'] = true;
+            $result['data'] = $data;
 
         } while (false);
 

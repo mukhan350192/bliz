@@ -64,6 +64,7 @@ Route::get('/getListCargoFavourites',[PostController::class,'getListCargoFavouri
 Route::get('/getListPostFavourites',[PostController::class,'getListPostFavourites']);
 Route::get('/getListAuctionFavourites',[PostController::class,'getListAuctionFavourites']);
 Route::get('/getListSpecialFavourites',[PostController::class,'getListSpecialFavourites']);
+Route::get('/getListStorageFavourites',[PostController::class,'getListStorageFavourites']);
 
 Route::get('/cancelPostFavourites',[PostController::class,'cancelPostFavourites']);
 Route::get('/cancelAuctionFavourites',[PostController::class,'cancelAuctionFavourites']);
