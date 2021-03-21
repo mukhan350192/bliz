@@ -686,7 +686,6 @@ class PostController extends Controller
         }
         $count = Post::where('category_id', $category_id)->count();
 
-        $city = City::all();
         if (!$category_id) {
             die('Не передан категория айди');
         }
@@ -1343,7 +1342,8 @@ class PostController extends Controller
 
     }
 
-    public function editPost(Request $request){
+    public function editPost(Request $request)
+    {
         $token = $request->input('token');
         $post_id = $request->input('post_id');
         $title = $request->input('title');
@@ -1375,7 +1375,7 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$post_id){
+            if (!$post_id) {
                 $result['message'] = 'Не передан номер объявление';
                 break;
             }
@@ -1415,7 +1415,7 @@ class PostController extends Controller
             }
             DB::beginTransaction();
 
-            $detailsID = DB::table('details')->where('post_id',$post_id)->update([
+            $detailsID = DB::table('details')->where('post_id', $post_id)->update([
                 'title' => $title,
                 'from' => $from,
                 'to' => $to,
@@ -1481,7 +1481,7 @@ class PostController extends Controller
                 $add = ltrim($add, $add[0]);
             }
 
-            $postAdditional = DB::table('post_additional')->where('post_id',$post_id)->update([
+            $postAdditional = DB::table('post_additional')->where('post_id', $post_id)->update([
                 'documents' => $docs,
                 'loading' => $load,
                 'condition' => $con,
@@ -1492,7 +1492,7 @@ class PostController extends Controller
                 $result['message'] = 'Что то произошло не так';
                 break;
             }
-            $price = DB::table('post_price')->where('post_id',$post_id)->insertGetId([
+            $price = DB::table('post_price')->where('post_id', $post_id)->insertGetId([
                 'price' => $price,
                 'price_type' => $price_type,
                 'payment_type' => $payment_type,
@@ -1505,63 +1505,100 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function complaintPost (Request $request){
+    public function deletePost(Request $request)
+    {
+        $post_id = $request->input('post_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$post_id) {
+                $result['message'] = 'Не передан номер объявление';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+
+            $post = Post::find($post_id);
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+
+            $post->status = 7;
+            $post->save();
+            $result['success'] = true;
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function complaintPost(Request $request)
+    {
         $comment = $request->input('comment');
         $post_id = $request->input('post_id');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$comment){
+        do {
+            if (!$comment) {
                 $result['message'] = 'Не передан причина отказа';
                 break;
             }
-            if (!$post_id){
+            if (!$post_id) {
                 $result['message'] = 'Не передан айди объявление';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
                 break;
             }
             $complaintID = DB::table('post_complaint')->insertGetId([
-               'user_id' => $user->id,
+                'user_id' => $user->id,
                 'post_id' => $post_id,
                 'comment' => $comment,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function complaintAuction (Request $request){
+    public function complaintAuction(Request $request)
+    {
         $comment = $request->input('comment');
         $auction_id = $request->input('auction_id');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$comment){
+        do {
+            if (!$comment) {
                 $result['message'] = 'Не передан причина отказа';
                 break;
             }
-            if (!$auction_id){
+            if (!$auction_id) {
                 $result['message'] = 'Не передан айди объявление';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
                 break;
             }
@@ -1573,31 +1610,32 @@ class PostController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function complaintStorage (Request $request){
+    public function complaintStorage(Request $request)
+    {
         $comment = $request->input('comment');
         $storage_id = $request->input('storage_id');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$comment){
+        do {
+            if (!$comment) {
                 $result['message'] = 'Не передан причина отказа';
                 break;
             }
-            if (!$storage_id){
+            if (!$storage_id) {
                 $result['message'] = 'Не передан айди объявление';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
                 break;
             }
@@ -1609,31 +1647,32 @@ class PostController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function complaintSpecial (Request $request){
+    public function complaintSpecial(Request $request)
+    {
         $comment = $request->input('comment');
         $special_id = $request->input('special_id');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$comment){
+        do {
+            if (!$comment) {
                 $result['message'] = 'Не передан причина отказа';
                 break;
             }
-            if (!$special_id){
+            if (!$special_id) {
                 $result['message'] = 'Не передан айди объявление';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
                 break;
             }
@@ -1645,6 +1684,25 @@ class PostController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function myPosts(Request $request){
+        $token = $request->input('token');
+        $result['success']  = false;
+
+        do{
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $posts = Post::where('')
         }while(false);
         return response()->json($result);
     }

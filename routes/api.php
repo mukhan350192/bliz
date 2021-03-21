@@ -97,8 +97,8 @@ Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
 Route::get('/getPostByID/{id}',[PostController::class,'getPostByID']);
-Route::get('/editPostB',[PostController::class,'editPost']);
-
+Route::get('/editPost',[PostController::class,'editPost']);
+Route::get('/deletePost',[PostController::class,'deletePost']);
 //storage
 Route::post('/addStorage',[StorageController::class,'addStorage']);
 Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
@@ -143,3 +143,4 @@ Route::get('/complaintPost',[PostController::class,'complaintPost']);
 Route::get('/complaintAuction',[PostController::class,'complaintAuction']);
 Route::get('/complaintStorage',[PostController::class,'complaintStorage']);
 Route::get('/complaintSpecial',[PostController::class,'complaintSpecial']);
+
