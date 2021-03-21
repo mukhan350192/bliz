@@ -1173,7 +1173,8 @@ class PostController extends Controller
 
             $cargo = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 1)->count();
             $post = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 2)->count();
-            $auction = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 3)->count();
+
+            $auction = DB::table('auction_favourites')->where('user_id', $user->id)->count();
 
             $storage = DB::table('storage_favourites')->where('user_id', $user->id)->count();
 

@@ -151,3 +151,4 @@ Route::get('/getMyPosts',[PostController::class,'getMyPosts']);
 Route::get('/getMyCargo',[PostController::class,'getMyCargo']);
 Route::get('/getMyAuction',[PostController::class,'getMyAuction']);
 Route::get('/getMySpecial',[PostController::class,'getMySpecial']);
+Route::get('/getMyStorage',[PostController::class,'getMyStorage']);
