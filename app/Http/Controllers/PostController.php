@@ -1868,7 +1868,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = EquipmentMin::collection(Equipment::where('user_id',$user->id)->get());
+            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id',$user->id)->get());
 
             $result['success'] = true;
             $result['data'] = $data;
