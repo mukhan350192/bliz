@@ -1327,7 +1327,7 @@ class PostController extends Controller
             $storage_favourites = DB::table('storage_favourites')->where('user_id', $user->id)->get();
             $data = [];
             foreach ($storage_favourites as $af) {
-                $data[] = StorageMinProperties::collection(DB::table('storage')->where('id', $af->storage_id)->get());
+                $data[] = StorageMinProperties::collection(DB::table('storage_properties')->where('storage_id', $af->storage_id)->get());
             }
 
             $result['success'] = true;
