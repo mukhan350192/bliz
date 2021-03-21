@@ -1818,7 +1818,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->whereInNot('status',[5,6])->get());
+            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->whereNotIn('status',[5,6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
