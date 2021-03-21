@@ -1011,7 +1011,7 @@ class PostController extends Controller
                 $result['message'] = 'Не найден объявление';
                 break;
             }
-            DB::table('favourites')->where('id', $post->id)->delete();
+            DB::table('auction_favourites')->where('id', $post->id)->delete();
             $result['success'] = true;
         } while (false);
         return response()->json($result);
@@ -1127,11 +1127,23 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $post = Post::where('id', $auction_id)->where('category_id', $category_id)->get();
-            if (!$post) {
-                $result['message'] = 'Не найден объявление';
+            $auction = DB::table('auction_favourites')->where('auction_id',$auction_id)->where('user_id',$user->id)->first();
+            if ($auction) {
+                $result['message'] = 'Вы уже добавили аукцион';
                 break;
             }
+            DB::beginTransaction();
+            $new = DB::table('auction_favourites')->insertGetId([
+               'user_id' => $user->id,
+               'auction_id' => $auction_id,
+            ]);
+            if (!$new){
+                DB::rollBack();
+                $result['message'] = 'Попробуйте позже';
+                break;
+            }
+            DB::commit();
+            $result['success'] = true;
         } while (false);
         return response()->json($result);
 
@@ -1250,8 +1262,11 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-
-            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id', $user->id)->get());
+            $auction_favourites = DB::table('auction_favourites')->where('user_id',$user->id)->get();
+            $data = [];
+            foreach ($auction_favourites as $af){
+                $data[] = AuctionMinDetails::collection(DB::table('auction')->where('id',$af->auction_id)->get());
+            }
 
             $result['success'] = true;
             $result['data'] = $data;

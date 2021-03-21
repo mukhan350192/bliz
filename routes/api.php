@@ -57,11 +57,14 @@ Route::get('/getFavourites',[UserController::class,'getFavourites']);
 Route::get('/addPostFavourites',[PostController::class,'addPostFavourites']);
 Route::get('/addStorageFavourites',[PostController::class,'addStorageFavourites']);
 Route::get('/addSpecialFavourites',[PostController::class,'addSpecialFavourites']);
+Route::get('/addAuctionFavourites',[PostController::class,'addAuctionFavourites']);
+
 Route::get('/getAllFavourites',[PostController::class,'getAllFavourites']);
 Route::get('/getListCargoFavourites',[PostController::class,'getListCargoFavourites']);
 Route::get('/getListPostFavourites',[PostController::class,'getListPostFavourites']);
 Route::get('/getListAuctionFavourites',[PostController::class,'getListAuctionFavourites']);
 Route::get('/getListSpecialFavourites',[PostController::class,'getListSpecialFavourites']);
+
 Route::get('/cancelPostFavourites',[PostController::class,'cancelPostFavourites']);
 Route::get('/cancelAuctionFavourites',[PostController::class,'cancelAuctionFavourites']);
 Route::get('/cancelStorageFavourites',[PostController::class,'cancelStorageFavourites']);
