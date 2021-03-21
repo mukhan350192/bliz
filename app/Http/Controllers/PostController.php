@@ -1688,22 +1688,35 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function myPosts(Request $request){
+    public function myPosts(Request $request)
+    {
         $token = $request->input('token');
-        $result['success']  = false;
+        $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            //$posts = Post::where('')
-        }while(false);
-        return response()->json($result);
+
+            $posts = Post::where('user_id', $user->id)->where('category_id', 1)->whereNotIn('status', '!=', [5, 6])->count();
+            $cargo = Post::where('user_id', $user->id)->where('category_id', 2)->whereNotIn('status', '!=', [5, 6])->count();
+            $auction = DB::table('auction')->where('user_id', $user->id)->whereNotIn('status', '!=', [5, 6])->count();
+            $special = DB::table('special_equipment')->where('user_id', $user->id)->whereNotIn('status', '!=', [5, 6])->count();
+            $storage = DB::table('storage')->where('user_id', $user->id)->whereNotIn('status', [5, 6])->count();
+
+            $result['success'] = true;
+            $result['post'] = $posts;
+            $result['cargo'] = $cargo;
+            $result['auction'] = $auction;
+            $result['special'] = $special;
+            $result['storage'] = $storage;
+
+        } while (false);
     }
 }
