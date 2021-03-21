@@ -1702,7 +1702,7 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $posts = Post::where('')
+            //$posts = Post::where('')
         }while(false);
         return response()->json($result);
     }
