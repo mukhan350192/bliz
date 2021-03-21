@@ -1843,8 +1843,12 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
+            $sto = DB::table('storage')->where('user_id',$user->id)->get();
+            $data = [];
+            foreach ($sto as $s){
+                $data[] = StorageMinProperties::collection(DB::table('storage_properties')->where('storage_id',$s->id)->get());
+            }
 
-            $data = StorageMinProperties::collection(Storage::where('user_id',$user->id)->get());
 
             $result['success'] = true;
             $result['data'] = $data;
