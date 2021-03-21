@@ -1718,5 +1718,7 @@ class PostController extends Controller
             $result['storage'] = $storage;
 
         } while (false);
+
+        return response()->json($result);
     }
 }
