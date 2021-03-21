@@ -137,3 +137,9 @@ Route::get('/getEmployee',[UserController::class,'getEmployee']);
 
 //заказы
 Route::get('/cancelOrder',[PostController::class,'cancelOrder']);
+
+//Жалоба
+Route::get('/complaintPost',[PostController::class,'complaintPost']);
+Route::get('/complaintAuction',[PostController::class,'complaintAuction']);
+Route::get('/complaintStorage',[PostController::class,'complaintStorage']);
+Route::get('/complaintSpecial',[PostController::class,'complaintSpecial']);
