@@ -15,11 +15,16 @@ class PriceResource extends JsonResource
      */
     public function toArray($request)
     {
+        $array = [];
         $currency = DB::table('currency')->where('id',$this->price_type)->first();
-        $paymentType = DB::table('payment_type')->where('id',$this->payment_type)->first();
-        return [
-            'price' => $this->price . ' '. $currency->name,
-            'payment_type' => $paymentType->name,
-        ];
+        if (isset($currency)){
+            $paymentType = DB::table('payment_type')->where('id',$this->payment_type)->first();
+            $array = [
+                'price' => $this->price . ' '. $currency->name,
+                'payment_type' => $paymentType->name,
+            ];
+        }
+
+        return $array;
     }
 }

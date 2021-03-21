@@ -753,12 +753,12 @@ class PostController extends Controller
             }
             $count = DB::table('orders')
                 ->where('executor', $user->id)
-                ->whereIn('status', [2,3,4])
+                ->whereIn('status', [2, 3, 4])
                 ->count();
             $data = OrderMinExecutePosts::collection(
                 DB::table('orders')
                     ->where('executor', $user->id)
-                    ->whereIn('status', [2,3,4])
+                    ->whereIn('status', [2, 3, 4])
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
@@ -786,12 +786,12 @@ class PostController extends Controller
             }
             $count = DB::table('orders')
                 ->where('customer', $user->id)
-                ->whereIn('status', [2,3,4])
+                ->whereIn('status', [2, 3, 4])
                 ->count();
             $data = OrderMinExecutePosts::collection(
                 DB::table('orders')
                     ->where('customer', $user->id)
-                    ->whereIn('status', [2,3,4])
+                    ->whereIn('status', [2, 3, 4])
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
@@ -818,12 +818,12 @@ class PostController extends Controller
             }
             $count = DB::table('orders')
                 ->where('executor', $user->id)
-                ->whereIn('status', [1,5,6])
+                ->whereIn('status', [1, 5, 6])
                 ->count();
             $data = OrderMinExecutePosts::collection(
                 DB::table('orders')
                     ->where('executor', $user->id)
-                    ->whereIn('status', [1,5,6])
+                    ->whereIn('status', [1, 5, 6])
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
@@ -850,12 +850,12 @@ class PostController extends Controller
             }
             $count = DB::table('orders')
                 ->where('customer', $user->id)
-                ->whereIn('status', [1,5,6])
+                ->whereIn('status', [1, 5, 6])
                 ->count();
             $data = OrderMinExecutePosts::collection(
                 DB::table('orders')
                     ->where('customer', $user->id)
-                    ->whereIn('status', [1,5,6])
+                    ->whereIn('status', [1, 5, 6])
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
@@ -865,39 +865,41 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getDistance(Request $request){
+    public function getDistance(Request $request)
+    {
         $from = $request->input('from');
         $to = $request->input('to');
         $result['success'] = false;
         $key = 'AIzaSyAplKiP9AOLuUbWdH655ApFMl1nnfXwcwk';
-        do{
-            if (!$from){
+        do {
+            if (!$from) {
                 $result['message'] = 'Не передан откуда';
                 break;
             }
-            if (!$to){
+            if (!$to) {
                 $result['message'] = 'Не передан куда';
                 break;
             }
             $url = "https://maps.googleapis.com/maps/api/directions/json?language=ru-RU&origin=place_id:$from&destination=place_id:$to&key=$key";
             $s = file_get_contents($url);
-            $s = json_decode($s,true);
+            $s = json_decode($s, true);
             $distance = $s['routes'][0]['legs'][0]['distance']['text'];
             $duration = $s['routes'][0]['legs'][0]['duration']['text'];
-            $routes =$s['routes'][0]['legs'][0]['steps'];
+            $routes = $s['routes'][0]['legs'][0]['steps'];
             $result = [
                 'success' => true,
                 'distance' => $distance,
                 'duration' => $duration,
                 'routes' => $routes,
             ];
-        }while(false);
+        } while (false);
         return response()->json($result)
             ->header('Access-Control-Allow-Origin', '*')
             ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 
-    public function currency(Request $request){
+    public function currency(Request $request)
+    {
         $url = 'https://www.nationalbank.kz/rss/rates_all.xml';
         $s = file_get_contents($url);
         //$result['data'] = $s;
@@ -906,7 +908,8 @@ class PostController extends Controller
     }
 
 
-    public function addPostFavourites(Request $request){
+    public function addPostFavourites(Request $request)
+    {
         $token = $request->input('token');
         $post_id = $request->input('post_id');
         $category_id = $request->input('category_id');
@@ -927,7 +930,7 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $post = Post::where('id',$post_id)->where('category_id',1)->get();
+            $post = Post::where('id', $post_id)->where('category_id', $category_id)->get();
             if (!$post) {
                 $result['message'] = 'Не найден объявление';
                 break;
@@ -949,10 +952,11 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function cancelPostFavourites(Request $request){
+
+    public function cancelPostFavourites(Request $request)
+    {
         $token = $request->input('token');
         $post_id = $request->input('post_id');
-        $category_id = $request->input('category_id');
         $result['success'] = false;
 
         do {
@@ -970,18 +974,51 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $post = DB::table('favourites')->where('post_id',$post_id)->where('user_id',$user->id)->first();
+            $post = DB::table('favourites')->where('post_id', $post_id)->where('user_id', $user->id)->first();
             if (!$post) {
                 $result['message'] = 'Не найден объявление';
                 break;
             }
-            DB::table('favourites')->where('id',$post->id)->delete();
+            DB::table('favourites')->where('id', $post->id)->delete();
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function addStorageFavourites(Request $request){
+    public function cancelAuctionFavourites(Request $request)
+    {
+        $token = $request->input('token');
+        $auction_id = $request->input('auction_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$auction_id) {
+                $result['message'] = 'Не передан номер аукциона';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = DB::table('auction_favourites')->where('auction_id', $auction_id)->where('user_id', $user->id)->first();
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+            DB::table('favourites')->where('id', $post->id)->delete();
+            $result['success'] = true;
+        } while (false);
+        return response()->json($result);
+    }
+
+    public function addStorageFavourites(Request $request)
+    {
         $token = $request->input('token');
         $storage_id = $request->input('storage_id');
         $result['success'] = false;
@@ -1025,7 +1062,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function addSpecialFavourites(Request $request){
+    public function addSpecialFavourites(Request $request)
+    {
         $token = $request->input('token');
         $special_id = $request->input('special_id');
         $result['success'] = false;
@@ -1069,29 +1107,60 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getAllFavourites(Request $request){
+    public function addAuctionFavourites(Request $request)
+    {
+        $token = $request->input('token');
+        $auction_id = $request->input('auction_id');
+        $result['success'] = false;
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$auction_id) {
+                $result['message'] = 'Не передан номер аукциона';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = Post::where('id', $auction_id)->where('category_id', $category_id)->get();
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+        } while (false);
+        return response()->json($result);
+
+    }
+
+    public function getAllFavourites(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
 
-            $cargo = DB::table('favourites')->where('user_id',$user->id)->where('category_id',1)->count();
-            $post = DB::table('favourites')->where('user_id',$user->id)->where('category_id',2)->count();
-            $auction = DB::table('favourites')->where('user_id',$user->id)->where('category_id',3)->count();
+            $cargo = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 1)->count();
+            $post = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 2)->count();
+            $auction = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 3)->count();
 
-            $storage = DB::table('storage_favourites')->where('user_id',$user->id)->count();
+            $storage = DB::table('storage_favourites')->where('user_id', $user->id)->count();
 
-            $special = DB::table('special_favourites')->where('user_id',$user->id)->count();
+            $special = DB::table('special_favourites')->where('user_id', $user->id)->count();
             $result['success'] = true;
             $result['data'] = [
                 'cargo' => $cargo,
@@ -1100,152 +1169,158 @@ class PostController extends Controller
                 'storage' => $storage,
                 'special' => $special,
             ];
-        }while(false);
+        } while (false);
 
         return response()->json($result);
 
     }
 
-    public function getListCargoFavourites(Request $request){
+    public function getListCargoFavourites(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $favourites = DB::table('favourites')->where('user_id',$user->id)->where('category_id',1)->get();
+            $favourites = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 1)->get();
             $data = [];
-            foreach ($favourites as $f){
-                $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id',$f->post_id)->get());
+            foreach ($favourites as $f) {
+                $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id', $f->post_id)->get());
             }
 
             $result['success'] = true;
             $result['data'] = $data;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getListPostFavourites(Request $request){
+    public function getListPostFavourites(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $favourites = DB::table('favourites')->where('user_id',$user->id)->where('category_id',2)->get();
+            $favourites = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 2)->get();
             $data = [];
-            foreach ($favourites as $f){
-                $data[] = PostMinResource::collection(Post::where('category_id', 2)->where('id',$f->post_id)->get());
+            foreach ($favourites as $f) {
+                $data[] = PostMinResource::collection(Post::where('category_id', 2)->where('id', $f->post_id)->get());
             }
 
 
             $result['success'] = true;
             $result['data'] = $data;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getListAuctionFavourites(Request $request){
+    public function getListAuctionFavourites(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
 
-            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->get());
+            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id', $user->id)->get());
 
             $result['success'] = true;
             $result['data'] = $data;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function getListSpecialFavourites(Request $request){
+    public function getListSpecialFavourites(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
 
-            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id',$user->id)->get());
+            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id', $user->id)->get());
 
             $result['success'] = true;
             $result['data'] = $data;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function cancelOrder(Request $request){
+    public function cancelOrder(Request $request)
+    {
         $token = $request->input('token');
         $order_id = $request->input('order_id');
         $result['success'] = false;
 
-        do{
-            if (!$token){
+        do {
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$order_id){
+            if (!$order_id) {
                 $result['message'] = 'Не передан заказ айди';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $order = Order::where('id',$order_id)->where('customer',$user->id)->first();
-            if (!$order){
+            $order = Order::where('id', $order_id)->where('customer', $user->id)->first();
+            if (!$order) {
                 $result['message'] = 'Не найден заказ';
                 break;
             }
             $order->status = 5;
             $order->save();
             $result['success'] = true;
-        }while(false);
+        } while (false);
 
         return response()->json($result);
     }
 
-    public function acceptOrder(){
+    public function acceptOrder()
+    {
 
     }
 
