@@ -387,7 +387,9 @@ class UserController extends Controller
     {
         // $country = $request->input('country');
         $fullName = $request->input('fullName');
+        $country_id = $request->input('country_id');
         $city = $request->input('city');
+        $city_string = $request->input('city_string');
         $address = $request->input('address');
         $email = $request->input('email');
         $phone = $request->input('phone');
@@ -411,6 +413,8 @@ class UserController extends Controller
             $user->address = $address;
             $user->email = $email;
             $user->phone = $phone;
+            $user->country_id = $country_id;
+            $user->city_string = $city_string;
             $user->save();
             $result['success'] = true;
         } while (false);

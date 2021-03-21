@@ -1504,4 +1504,28 @@ class PostController extends Controller
 
         return response()->json($result);
     }
+
+    public function complaint (Request $request){
+        $comment = $request->input('comment');
+        $post_id = $request->input('post_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$comment){
+                $result['message'] = 'Не передан причина отказа';
+                break;
+            }
+            if (!$post_id){
+                $result['message'] = 'Не передан айди объявление';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
+                break;
+            }
+//            $user = User::where('')
+        }while(false);
+        return response()->json($result);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Country;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
@@ -21,8 +22,18 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
         ];
+        if ($this->country_id){
+            $country_name = Country::find($this->country_id);
+            $array['country_name'] = $country_name->name;
+            $array['country_id'] = $this->country_id;
+            $array['short_code'] = $country_name->short_code;
+        }
+
         if ($this->city){
             $array['city'] = $this->city;
+        }
+        if ($this->city_string){
+            $array['city_string'] = $this->city_string;
         }
         if ($this->address){
             $array['address'] = $this->address;

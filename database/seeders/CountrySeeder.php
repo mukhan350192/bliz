@@ -20,19 +20,60 @@ class CountrySeeder extends Seeder
         'Украина',
         'Армения',
         'Азербайджан',
-        'Армения',
         'Беларусь',
         'Кыргызстан',
         'Узбекистан'
     ];
+
     public function run()
     {
-        foreach (self::$countries as $country){
-            Country::create([
-                'name' => $country,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }
+        Country::create([
+            'name' => 'Казахстан',
+            'short_code' => 'KZ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Россия',
+            'short_code' => 'RU',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Украина',
+            'short_code' => 'UA',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Армения',
+            'short_code' => 'AM',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Азербайджан',
+            'short_code' => 'AZ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Беларусь',
+            'short_code' => 'BY',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Кыргызстан',
+            'short_code' => 'KG',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        Country::create([
+            'name' => 'Узбекистан',
+            'short_code' => 'UZ',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
     }
 }
