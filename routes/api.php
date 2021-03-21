@@ -97,6 +97,7 @@ Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
 Route::get('/getPostByID/{id}',[PostController::class,'getPostByID']);
+Route::get('/editPostB',[PostController::class,'editPost']);
 
 //storage
 Route::post('/addStorage',[StorageController::class,'addStorage']);

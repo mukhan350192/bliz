@@ -1343,4 +1343,165 @@ class PostController extends Controller
 
     }
 
+    public function editPost(Request $request){
+        $token = $request->input('token');
+        $post_id = $request->input('post_id');
+        $title = $request->input('title');
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $volume = $request->input('volume');
+        $net = $request->input('net');
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $quantity = $request->input('quantity');
+        $width = $request->input('width');
+        $height = $request->input('height');
+        $length = $request->input('length');
+        $documents = $request->input('documents');
+        $loading = $request->input('loading');
+        $condition = $request->input('condition');
+        $addition = $request->input('addition');
+        $price = $request->input('price');
+        $price_type = $request->input('price_type');
+        $payment_type = $request->input('payment_type');
+        $type_transport = $request->input('type_transport');
+        $distance = $request->input('distance');
+        $duration = $request->input('duration');
+        $from_string = $request->input('from_string');
+        $to_string = $request->input('to_string');
+        $result['success'] = false;
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$post_id){
+                $result['message'] = 'Не передан номер объявление';
+                break;
+            }
+            if (!$title) {
+                $result['message'] = 'Не передан содержание товара';
+                break;
+            }
+            if (!$from) {
+                $result['message'] = 'Не передан откуда увезти груз';
+                break;
+            }
+            if (!$to) {
+                $result['message'] = 'Не передан куда отвезти груз';
+                break;
+            }
+            if (!$price) {
+                $result['message'] = 'Не передан цена за доставку';
+                break;
+            }
+            if (!$price_type) {
+                $result['message'] = 'Не передан валюта';
+                break;
+            }
+            if (!$payment_type) {
+                $result['message'] = 'Не передан способ оплаты';
+                break;
+            }
+            if (!$type_transport) {
+                $result['message'] = 'Не передан тип транспорта';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            DB::beginTransaction();
+
+            $detailsID = DB::table('details')->where('post_id',$post_id)->update([
+                'title' => $title,
+                'from' => $from,
+                'to' => $to,
+                'volume' => $volume,
+                'net' => $net,
+                'type_transport' => $type_transport,
+                'distance' => $distance,
+                'duration' => $duration,
+                'from_string' => $from_string,
+                'to_string' => $to_string,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'quantity' => $quantity,
+                'width' => $width,
+                'height' => $height,
+                'length' => $length,
+                'updated_at' => Carbon::now(),
+            ]);
+
+
+            if (!$detailsID) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            $docs = '';
+            if (isset($documents)) {
+                foreach ($documents as $doc) {
+                    $docs .= ',' . $doc;
+                }
+            }
+
+            $load = '';
+            if (isset($loading)) {
+                foreach ($loading as $l) {
+                    $load .= ',' . $l;
+                }
+            }
+
+            $con = '';
+            if (isset($condition)) {
+                foreach ($condition as $c) {
+                    $con .= ',' . $con;
+                }
+            }
+
+            $add = '';
+            if (isset($addition)) {
+                foreach ($addition as $a) {
+                    $add .= ',' . $a;
+                }
+            }
+            if (!empty($docs)) {
+                $docs = ltrim($docs, $docs[0]);
+            }
+            if (!empty($load)) {
+                $load = ltrim($load, $load[0]);
+            }
+            if (!empty($con)) {
+                $con = ltrim($con, $con[0]);
+            }
+            if (!empty($add)) {
+                $add = ltrim($add, $add[0]);
+            }
+
+            $postAdditional = DB::table('post_additional')->where('post_id',$post_id)->update([
+                'documents' => $docs,
+                'loading' => $load,
+                'condition' => $con,
+                'addition' => $add,
+            ]);
+            if (!$postAdditional) {
+                DB::rollBack();
+                $result['message'] = 'Что то произошло не так';
+                break;
+            }
+            $price = DB::table('post_price')->where('post_id',$post_id)->insertGetId([
+                'price' => $price,
+                'price_type' => $price_type,
+                'payment_type' => $payment_type,
+            ]);
+
+            DB::commit();
+            $result['success'] = true;
+        } while (false);
+
+        return response()->json($result);
+    }
 }
