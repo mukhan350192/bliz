@@ -949,6 +949,38 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function cancelPostFavourites(Request $request){
+        $token = $request->input('token');
+        $post_id = $request->input('post_id');
+        $category_id = $request->input('category_id');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            if (!$post_id) {
+                $result['message'] = 'Не передан номер объявление';
+                break;
+            }
+
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = DB::table('favourites')->where('post_id',$post_id)->where('user_id',$user->id)->first();
+            if (!$post) {
+                $result['message'] = 'Не найден объявление';
+                break;
+            }
+            DB::table('favourites')->where('id',$post->id)->delete();
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
     public function addStorageFavourites(Request $request){
         $token = $request->input('token');
         $storage_id = $request->input('storage_id');
