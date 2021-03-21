@@ -1704,10 +1704,10 @@ class PostController extends Controller
                 break;
             }
 
-            $posts = Post::where('user_id', $user->id)->where('category_id', 1)->whereNotIn('status', '!=', [5, 6])->count();
-            $cargo = Post::where('user_id', $user->id)->where('category_id', 2)->whereNotIn('status', '!=', [5, 6])->count();
-            $auction = DB::table('auction')->where('user_id', $user->id)->whereNotIn('status', '!=', [5, 6])->count();
-            $special = DB::table('special_equipment')->where('user_id', $user->id)->whereNotIn('status', '!=', [5, 6])->count();
+            $posts = Post::where('user_id', $user->id)->where('category_id', 1)->whereNotIn('status', [5, 6])->count();
+            $cargo = Post::where('user_id', $user->id)->where('category_id', 2)->whereNotIn('status', [5, 6])->count();
+            $auction = DB::table('auction')->where('user_id', $user->id)->whereNotIn('status', [5, 6])->count();
+            $special = DB::table('special_equipment')->where('user_id', $user->id)->whereNotIn('status', [5, 6])->count();
             $storage = DB::table('storage')->where('user_id', $user->id)->whereNotIn('status', [5, 6])->count();
 
             $result['success'] = true;
