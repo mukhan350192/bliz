@@ -22,7 +22,7 @@ class UserForAuction extends JsonResource
         if (isset($this->user_type) && $this->user_type == 1){
             $array['fullName'] = $this->fullName;
             $array['type'] = 'Частное лицо';
-
+            $array['id'] = $this->id;
         }
         if (isset($this->user_type) && $this->user_type == 2){
             $data = DB::table('company_details')
