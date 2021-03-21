@@ -16,11 +16,13 @@ class StorageMinProperties extends JsonResource
     public function toArray($request)
     {
         $currency = DB::table('currency')->where('id',$this->currency)->first();
-        $price_type = DB::table('type_rent')->where('id',$this->price_type)->first();
+        if(isset($currency)){
+            $price_type = DB::table('type_rent')->where('id',$this->price_type)->first();
+            $array['price'] =  $this->price.' '.$currency->name. '/'.$price_type->name;
+        }
         $array =[
             'area' => $this->area,
             'total_area' => $this->total_area,
-            'price' => $this->price.' '.$currency->name. '/'.$price_type->name,
 
         ];
         if (isset($this->class)){
