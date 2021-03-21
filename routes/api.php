@@ -69,6 +69,7 @@ Route::get('/cancelPostFavourites',[PostController::class,'cancelPostFavourites'
 Route::get('/cancelAuctionFavourites',[PostController::class,'cancelAuctionFavourites']);
 Route::get('/cancelStorageFavourites',[PostController::class,'cancelStorageFavourites']);
 Route::get('/cancelSpecialFavourites',[PostController::class,'cancelSpecialFavourites']);
+
 // storage
 //Route::post('/addStorage',[StorageController::class,'createStorage']);
 Route::get('/editStorage',[StorageController::class,'updateStorage']);

@@ -21,12 +21,18 @@ class AuctionMinPrice extends JsonResource
         $array = [];
 
         $price = json_decode($price);
-
+        $min = 0;
         if (isset($this->price)){
             foreach ($price as $p){
+                $min = $p->price;
                 $array['price'] = $p->price;
                 $currency = DB::table('currency')->select('name')->where('id',$p->currency)->first();
                 $array['currency'] = $currency->name;
+                if ($p->price < $min){
+                    $array['price'] = $p->price;
+                    $currency = DB::table('currency')->select('name')->where('id',$p->currency)->first();
+                    $array['currency'] = $currency->name;
+                }
             }
             $array['count'] = $count;
         }
