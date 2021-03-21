@@ -144,3 +144,5 @@ Route::get('/complaintAuction',[PostController::class,'complaintAuction']);
 Route::get('/complaintStorage',[PostController::class,'complaintStorage']);
 Route::get('/complaintSpecial',[PostController::class,'complaintSpecial']);
 
+//объявление
+Route::get('/myPosts',[PostController::class,'myPosts']);
