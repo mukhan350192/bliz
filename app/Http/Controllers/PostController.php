@@ -1505,7 +1505,7 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function complaint (Request $request){
+    public function complaintPost (Request $request){
         $comment = $request->input('comment');
         $post_id = $request->input('post_id');
         $token = $request->input('token');
@@ -1524,7 +1524,127 @@ class PostController extends Controller
                 $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
                 break;
             }
-//            $user = User::where('')
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
+                break;
+            }
+            $complaintID = DB::table('post_complaint')->insertGetId([
+               'user_id' => $user->id,
+                'post_id' => $post_id,
+                'comment' => $comment,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function complaintAuction (Request $request){
+        $comment = $request->input('comment');
+        $auction_id = $request->input('auction_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$comment){
+                $result['message'] = 'Не передан причина отказа';
+                break;
+            }
+            if (!$auction_id){
+                $result['message'] = 'Не передан айди объявление';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
+                break;
+            }
+            $complaintID = DB::table('auction_complaint')->insertGetId([
+                'user_id' => $user->id,
+                'auction_id' => $auction_id,
+                'comment' => $comment,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function complaintStorage (Request $request){
+        $comment = $request->input('comment');
+        $storage_id = $request->input('storage_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$comment){
+                $result['message'] = 'Не передан причина отказа';
+                break;
+            }
+            if (!$storage_id){
+                $result['message'] = 'Не передан айди объявление';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
+                break;
+            }
+            $complaintID = DB::table('storage_complaint')->insertGetId([
+                'user_id' => $user->id,
+                'storage_id' => $storage_id,
+                'comment' => $comment,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function complaintSpecial (Request $request){
+        $comment = $request->input('comment');
+        $special_id = $request->input('special_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$comment){
+                $result['message'] = 'Не передан причина отказа';
+                break;
+            }
+            if (!$special_id){
+                $result['message'] = 'Не передан айди объявление';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Вам нужно авторизоваться чтобы отправить жалобу';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Чтобы отправить жалобу вам надо войти в систему';
+                break;
+            }
+            $complaintID = DB::table('special_complaint')->insertGetId([
+                'user_id' => $user->id,
+                'special_id' => $special_id,
+                'comment' => $comment,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+            $result['success'] = true;
         }while(false);
         return response()->json($result);
     }
