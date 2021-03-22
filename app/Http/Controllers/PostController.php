@@ -12,6 +12,7 @@ use App\Http\Resources\PostLoadingResource;
 use App\Http\Resources\PostMinResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\StorageMinProperties;
+use App\Http\Resources\StorageResource;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Detail;
@@ -1755,7 +1756,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getMyPosts(Request $request){
+    public function getMyPosts(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
@@ -1770,31 +1772,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = PostMinResource::collection(Post::where('category_id',1)->where('user_id',$user->id)->whereNotIn('status',[5,6])->get());
-
-            $result['success'] = true;
-            $result['data'] = $data;
-
-        } while (false);
-
-        return response()->json($result);
-    }
-    public function getMyCargo(Request $request){
-        $token = $request->input('token');
-        $result['success'] = false;
-
-        do {
-            if (!$token) {
-                $result['message'] = 'Не передан токен';
-                break;
-            }
-            $user = User::where('token', $token)->first();
-            if (!$user) {
-                $result['message'] = 'Не передан токен';
-                break;
-            }
-
-            $data = PostMinResource::collection(Post::where('category_id',2)->where('user_id',$user->id)->whereNotIn('status',[5,6])->get());
+            $data = PostMinResource::collection(Post::where('category_id', 1)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
@@ -1804,7 +1782,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getMyAuction(Request $request){
+    public function getMyCargo(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
@@ -1819,7 +1798,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id',$user->id)->whereNotIn('status',[5,6])->get());
+            $data = PostMinResource::collection(Post::where('category_id', 2)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
@@ -1829,7 +1808,8 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getMyStorage(Request $request){
+    public function getMyAuction(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
@@ -1843,12 +1823,8 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $sto = DB::table('storage')->where('user_id',$user->id)->get();
-            $data = [];
-            foreach ($sto as $s){
-                $data[] = StorageMinProperties::collection(DB::table('storage_properties')->where('storage_id',$s->id)->get());
-            }
 
+            $data = AuctionMinDetails::collection(DB::table('auction')->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
@@ -1858,7 +1834,39 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function getMySpecial(Request $request){
+    public function getMyStorage(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            //$sto = DB::table('storage')->where('user_id',$user->id)->get();
+            //$data = [];
+            //foreach ($sto as $s){
+            $result['success'] = true;
+            $result['data'] = StorageResource::collection(Storage::where('user_id', $user->id)->get());
+            //   $data[] = StorageMinProperties::collection(DB::table('storage_properties')->where('storage_id',$s->id)->get());
+            // }
+
+
+            //$result['data'] = $data;
+
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getMySpecial(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
 
@@ -1873,7 +1881,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id',$user->id)->get());
+            $data = EquipmentMin::collection(DB::table('special_equipment')->where('user_id', $user->id)->get());
 
             $result['success'] = true;
             $result['data'] = $data;
