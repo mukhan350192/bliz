@@ -1181,6 +1181,7 @@ class PostController extends Controller
                 ->where('favourites.user_id', $user->id)
                 ->where('posts.category_id', 1)
                 ->get();
+            var_dump($post);
             /*$data = [];
             foreach ($favourites as $f) {
                 $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id', $f->post_id)->get());
