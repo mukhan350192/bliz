@@ -1493,7 +1493,7 @@ class PostController extends Controller
                 $result['message'] = 'Что то произошло не так';
                 break;
             }
-            $price = DB::table('post_price')->where('post_id', $post_id)->insertGetId([
+            $price = DB::table('post_price')->where('post_id', $post_id)->update([
                 'price' => $price,
                 'price_type' => $price_type,
                 'payment_type' => $payment_type,
