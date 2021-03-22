@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SpecialEquipmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
@@ -152,3 +153,6 @@ Route::get('/getMyCargo',[PostController::class,'getMyCargo']);
 Route::get('/getMyAuction',[PostController::class,'getMyAuction']);
 Route::get('/getMySpecial',[PostController::class,'getMySpecial']);
 Route::get('/getMyStorage',[PostController::class,'getMyStorage']);
+
+
+Route::get('/selectDriver',[OrderController::class,'selectDriver']);

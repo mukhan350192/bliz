@@ -24,7 +24,10 @@ class DetailsMinResource extends JsonResource
         }
         if (isset($price_type)){
             $currency = DB::table('currency')->where('id',$price_type)->first();
-            $price = $priceValue.' '.$currency->name;
+            $price = $priceValue;
+            if (isset($currency)){
+                $price = $priceValue.' '.$currency->name;
+            }
         }
 
         $array = [
