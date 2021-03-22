@@ -127,12 +127,13 @@ Route::get('/customerOrdersInWork',[PostController::class,'customerOrdersInWork'
 Route::get('/executorOrdersInWork',[PostController::class,'executorOrdersInWork']);
 Route::get('/customerOrdersInHold',[PostController::class,'customerOrdersInHold']);
 Route::get('/executorOrdersInHold',[PostController::class,'executorOrdersInHold']);
-Route::post('/addEmployee',[UserController::class,'addEmployee']);
 Route::group(['middleware' => 'cors'],function (){
     Route::get('/distance',[PostController::class,'getDistance']);
     Route::get('/currency',[PostController::class,'currency']);
 });
 Route::get('/addPhone',[UserController::class,'addPhone']);
+
+Route::post('/addEmployee',[UserController::class,'addEmployee']);
 Route::get('/getPositions',[UserController::class,'getPositions']);
 Route::get('/getEmployee',[UserController::class,'getEmployee']);
 

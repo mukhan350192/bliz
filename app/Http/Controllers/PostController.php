@@ -1436,10 +1436,9 @@ class PostController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-
             if (!$detailsID) {
                 DB::rollBack();
-                $result['message'] = 'Что то произошло не так';
+                $result['message'] = 'Что то произошло не так 1';
                 break;
             }
             $docs = '';
@@ -1481,18 +1480,22 @@ class PostController extends Controller
             if (!empty($add)) {
                 $add = ltrim($add, $add[0]);
             }
-
-            $postAdditional = DB::table('post_additional')->where('post_id', $post_id)->update([
-                'documents' => $docs,
-                'loading' => $load,
-                'condition' => $con,
-                'addition' => $add,
-            ]);
-            if (!$postAdditional) {
-                DB::rollBack();
-                $result['message'] = 'Что то произошло не так';
-                break;
+            if (!empty($docs) && !empty($load) && !empty($con) && !empty($add)){
+                $postAdditional = DB::table('post_additional')->where('post_id', $post_id)->update([
+                    'documents' => $docs,
+                    'loading' => $load,
+                    'condition' => $con,
+                    'addition' => $add,
+                ]);
+                if (!$postAdditional) {
+                    DB::rollBack();
+                    $result['message'] = 'Что то произошло не так 2';
+                    break;
+                }
             }
+
+
+
             $price = DB::table('post_price')->where('post_id', $post_id)->update([
                 'price' => $price,
                 'price_type' => $price_type,
