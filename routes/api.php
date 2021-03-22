@@ -163,3 +163,5 @@ Route::get('/acceptPost',[OrderController::class,'acceptPost']);
 
 //фильтр
 Route::get('/filterPost',[PostController::class,'filterPost']);
+Route::get('/filterCargo',[PostController::class,'filterCargo']);
+Route::get('/filterAuction',[PostController::class,'filterAuction']);

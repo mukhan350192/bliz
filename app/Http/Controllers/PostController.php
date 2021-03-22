@@ -1938,8 +1938,171 @@ class PostController extends Controller
         }
         $results = DB::select($sql);
         $data = PostMinResource::collection($results);
-        $results['success'] = true;
+        $result['success'] = true;
         $result['data'] = $data;
-        return response()->json($data);
+        return response()->json($result);
+    }
+
+    public function filterCargo(Request $request)
+    {
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $volume_start = $request->input('volume_start');
+        $volume_end = $request->input('volume_start');
+        $net_start = $request->input('net_start');
+        $net_end = $request->input('net_end');
+        $start = $request->input('start');
+        $end = $request->input('end');
+        $quantity_start = $request->input('quantity_start');
+        $quantity_end = $request->input('quantity_end');
+        $width_start = $request->input('width_start');
+        $width_end = $request->input('width_end');
+        $length_start = $request->input('length_start');
+        $length_end = $request->input('length_end');
+        $height_start = $request->input('height_start');
+        $height_end = $request->input('height_end');
+        $type_transport = $request->input('type_transport');
+
+        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
+        if (isset($from)){
+            $sql .= " AND d.from=$from";
+        }
+        if (isset($to)){
+            $sql .= " AND d.to=$to";
+        }
+        if (isset($volume_start)){
+            $sql .= " AND d.volume >= $volume_start";
+        }
+        if (isset($volume_end)){
+            $sql .= " AND d.volume <= $volume_end";
+        }
+        if (isset($net_start)){
+            $sql .= " AND d.net >= $net_start";
+        }
+        if (isset($net_end)){
+            $sql .= " AND d.net >= $net_end";
+        }
+        if (isset($start)){
+            $sql .= " AND d.start_date >= '$start'";
+        }
+        if (isset($end)){
+            $sql .= " AND d.end_date >= '$end'";
+        }
+        if (isset($quantity_start)){
+            $sql .= " AND d.quantity >= $quantity_start";
+        }
+        if (isset($quantity_end)){
+            $sql .= " AND d.quantity <= $quantity_end";
+        }
+        if (isset($width_start)){
+            $sql .= " AND d.width >= $width_start";
+        }
+        if (isset($width_end)){
+            $sql .= " AND d.width <= $width_end";
+        }
+        if (isset($height_start)){
+            $sql .= " AND d.height >= $height_start";
+        }
+        if (isset($height_end)){
+            $sql .= " AND d.height <= $height_end";
+        }
+        if (isset($length_start)){
+            $sql .= " AND d.length >= $length_start";
+        }
+        if (isset($length_end)){
+            $sql .= " AND d.length <= $length_end";
+        }
+        if (isset($type_transport)){
+            $sql .= " AND d.type_transport = $type_transport";
+        }
+        $results = DB::select($sql);
+        $data = PostMinResource::collection($results);
+        $result['success'] = true;
+        $result['data'] = $data;
+        return response()->json($result);
+    }
+
+    public function filterAuction(Request $request)
+    {
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $volume_start = $request->input('volume_start');
+        $volume_end = $request->input('volume_start');
+        $net_start = $request->input('net_start');
+        $net_end = $request->input('net_end');
+        $start = $request->input('start');
+        $end = $request->input('end');
+        $quantity_start = $request->input('quantity_start');
+        $quantity_end = $request->input('quantity_end');
+        $width_start = $request->input('width_start');
+        $width_end = $request->input('width_end');
+        $length_start = $request->input('length_start');
+        $length_end = $request->input('length_end');
+        $height_start = $request->input('height_start');
+        $height_end = $request->input('height_end');
+        $type_transport = $request->input('type_transport');
+        $end_auction = $request->input('end_auction');
+
+        $sql = "SELECT p.id,p.user_id,p.status,p.created_at,p.updated_at FROM auction_details as d JOIN auction as p ON d.auction_id=p.id WHERE p.status = 1";
+        if (isset($from)){
+            $sql .= " AND d.from_city=$from";
+        }
+        if (isset($to)){
+            $sql .= " AND d.to_city=$to";
+        }
+        if (isset($volume_start)){
+            $sql .= " AND d.volume >= $volume_start";
+        }
+        if (isset($volume_end)){
+            $sql .= " AND d.volume <= $volume_end";
+        }
+        if (isset($net_start)){
+            $sql .= " AND d.net >= $net_start";
+        }
+        if (isset($net_end)){
+            $sql .= " AND d.net >= $net_end";
+        }
+        if (isset($start)){
+            $sql .= " AND d.start_date >= '$start'";
+        }
+        if (isset($end)){
+            $sql .= " AND d.end_date >= '$end'";
+        }
+        if (isset($quantity_start)){
+            $sql .= " AND d.quantity >= $quantity_start";
+        }
+        if (isset($quantity_end)){
+            $sql .= " AND d.quantity <= $quantity_end";
+        }
+        if (isset($width_start)){
+            $sql .= " AND d.width >= $width_start";
+        }
+        if (isset($width_end)){
+            $sql .= " AND d.width <= $width_end";
+        }
+        if (isset($height_start)){
+            $sql .= " AND d.height >= $height_start";
+        }
+        if (isset($height_end)){
+            $sql .= " AND d.height <= $height_end";
+        }
+        if (isset($length_start)){
+            $sql .= " AND d.length >= $length_start";
+        }
+        if (isset($length_end)){
+            $sql .= " AND d.length <= $length_end";
+        }
+        if (isset($type_transport)){
+            $sql .= " AND d.type_transport = $type_transport";
+        }
+        if (isset($end_auction)){
+            $sql .= " AND d.date_finish <= '$end_auction'";
+        }
+        $results = DB::select($sql);
+        $data = AuctionMinDetails::collection($results);
+//        $data = PostMinResource::collection($results);
+        $result['success'] = true;
+        $result['data'] = $data;
+        return response()->json($result);
     }
 }
