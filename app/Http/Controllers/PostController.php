@@ -375,7 +375,6 @@ class PostController extends Controller
     }
 
 
-
     public function getPerformerOrders(Request $request)
     {
         $token = $request->input('token');
@@ -1177,7 +1176,7 @@ class PostController extends Controller
             }
 
             $post = DB::table('favourites')
-                ->join('posts','favourites.post_id','=','posts.id')
+                ->join('posts', 'favourites.post_id', '=', 'posts.id')
                 ->where('favourites.user_id', $user->id)
                 ->where('favourites.category_id', 1)
                 ->get();
@@ -1480,7 +1479,7 @@ class PostController extends Controller
             if (!empty($add)) {
                 $add = ltrim($add, $add[0]);
             }
-            if (!empty($docs) && !empty($load) && !empty($con) && !empty($add)){
+            if (!empty($docs) && !empty($load) && !empty($con) && !empty($add)) {
                 $postAdditional = DB::table('post_additional')->where('post_id', $post_id)->update([
                     'documents' => $docs,
                     'loading' => $load,
@@ -1493,7 +1492,6 @@ class PostController extends Controller
                     break;
                 }
             }
-
 
 
             $price = DB::table('post_price')->where('post_id', $post_id)->update([
@@ -1538,10 +1536,10 @@ class PostController extends Controller
 
             Post::find($post_id)->delete();
 
-            DB::table('details')->where('post_id',$post_id)->delete();
-            DB::table('post_additional')->where('post_id',$post_id)->delete();
-            DB::table('post_price')->where('post_id',$post_id)->delete();
-            DB::table('orders')->where('post_id',$post_id)->delete();
+            DB::table('details')->where('post_id', $post_id)->delete();
+            DB::table('post_additional')->where('post_id', $post_id)->delete();
+            DB::table('post_price')->where('post_id', $post_id)->delete();
+            DB::table('orders')->where('post_id', $post_id)->delete();
 
             $result['success'] = true;
         } while (false);
@@ -1864,5 +1862,84 @@ class PostController extends Controller
         } while (false);
 
         return response()->json($result);
+    }
+
+    public function filterPost(Request $request)
+    {
+        $from = $request->input('from');
+        $to = $request->input('to');
+        $volume_start = $request->input('volume_start');
+        $volume_end = $request->input('volume_start');
+        $net_start = $request->input('net_start');
+        $net_end = $request->input('net_end');
+        $start = $request->input('start');
+        $end = $request->input('end');
+        $quantity_start = $request->input('quantity_start');
+        $quantity_end = $request->input('quantity_end');
+        $width_start = $request->input('width_start');
+        $width_end = $request->input('width_end');
+        $length_start = $request->input('length_start');
+        $length_end = $request->input('length_end');
+        $height_start = $request->input('height_start');
+        $height_end = $request->input('height_end');
+        $type_transport = $request->input('type_transport');
+
+        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
+        if (isset($from)){
+            $sql .= " AND d.from=$from";
+        }
+        if (isset($to)){
+            $sql .= " AND d.to=$to";
+        }
+        if (isset($volume_start)){
+            $sql .= " AND d.volume >= $volume_start";
+        }
+        if (isset($volume_end)){
+            $sql .= " AND d.volume <= $volume_end";
+        }
+        if (isset($net_start)){
+            $sql .= " AND d.net >= $net_start";
+        }
+        if (isset($net_end)){
+            $sql .= " AND d.net >= $net_end";
+        }
+        if (isset($start)){
+            $sql .= " AND d.start_date >= '$start'";
+        }
+        if (isset($end)){
+            $sql .= " AND d.end_date >= '$end'";
+        }
+        if (isset($quantity_start)){
+            $sql .= " AND d.quantity >= $quantity_start";
+        }
+        if (isset($quantity_end)){
+            $sql .= " AND d.quantity <= $quantity_end";
+        }
+        if (isset($width_start)){
+            $sql .= " AND d.width >= $width_start";
+        }
+        if (isset($width_end)){
+            $sql .= " AND d.width <= $width_end";
+        }
+        if (isset($height_start)){
+            $sql .= " AND d.height >= $height_start";
+        }
+        if (isset($height_end)){
+            $sql .= " AND d.height <= $height_end";
+        }
+        if (isset($length_start)){
+            $sql .= " AND d.length >= $length_start";
+        }
+        if (isset($length_end)){
+            $sql .= " AND d.length <= $length_end";
+        }
+        if (isset($type_transport)){
+            $sql .= " AND d.type_transport = $type_transport";
+        }
+        $results = DB::select($sql);
+        $data = PostMinResource::collection($results);
+        $results['success'] = true;
+        $result['data'] = $data;
+        return response()->json($data);
     }
 }

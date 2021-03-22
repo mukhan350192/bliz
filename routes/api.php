@@ -160,3 +160,6 @@ Route::get('/selectDriver',[OrderController::class,'selectDriver']);
 
 //orders
 Route::get('/acceptPost',[OrderController::class,'acceptPost']);
+
+//фильтр
+Route::get('/filterPost',[PostController::class,'filterPost']);
