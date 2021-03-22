@@ -1176,11 +1176,16 @@ class PostController extends Controller
                 break;
             }
             $favourites = DB::table('favourites')->where('user_id', $user->id)->where('category_id', 1)->get();
-            $data = [];
+            $post = DB::table('favourites')
+                ->join('posts','favourites.post_id','=','posts.id')
+                ->where('favourites.user_id', $user->id)
+                ->where('posts.category_id', 1)
+                ->get();
+            /*$data = [];
             foreach ($favourites as $f) {
                 $data[] = PostMinResource::collection(Post::where('category_id', 1)->where('id', $f->post_id)->get());
-            }
-
+            }*/
+            $data = PostMinResource::collection($post);
             $result['success'] = true;
             $result['data'] = $data;
         } while (false);
