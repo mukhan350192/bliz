@@ -81,7 +81,7 @@ Route::post('/addImageToStorage',[StorageController::class,'addImageToStorage'])
 
 //lk orders
 Route::get('/getPerformerOrders',[PostController::class,'getPerformerOrders']);
-Route::get('/acceptPost',[PostController::class,'acceptPost']);
+
 
 
 //adding special equipment
@@ -156,3 +156,6 @@ Route::get('/getMyStorage',[PostController::class,'getMyStorage']);
 
 
 Route::get('/selectDriver',[OrderController::class,'selectDriver']);
+
+//orders
+Route::get('/acceptPost',[OrderController::class,'acceptPost']);

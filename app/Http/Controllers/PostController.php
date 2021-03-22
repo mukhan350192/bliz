@@ -374,42 +374,7 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function acceptPost(Request $request)
-    {
-        $token = $request->input('token');
-        $orderID = $request->input('order_id');
-        $result['success'] = true;
 
-        do {
-            if (!$token) {
-                $result['message'] = 'Не передан токен';
-                break;
-            }
-            if (!$orderID) {
-                $result['message'] = 'Не передан номер заказа';
-                break;
-            }
-            $user = User::where('token', $token)->first();
-            if (!$user) {
-                $result['message'] = 'Не найден пользователь';
-                break;
-            }
-            $order = Order::find($orderID);
-            if (!$order) {
-                $result['message'] = 'Не найден заказ';
-                break;
-            }
-            $order->status = 2;
-            $order->save();
-            $post = Post::find($order->post_id);
-            $post->status = 2;
-            $post->save();
-            $result['success'] = true;
-
-
-        } while (false);
-        return response()->json($result);
-    }
 
     public function getPerformerOrders(Request $request)
     {
