@@ -1531,8 +1531,13 @@ class PostController extends Controller
                 break;
             }
 
-            $post->status = 7;
-            $post->save();
+            Post::find($post_id)->delete();
+
+            DB::table('details')->where('post_id',$post_id)->delete();
+            DB::table('post_additional')->where('post_id',$post_id)->delete();
+            DB::table('post_price')->where('post_id',$post_id)->delete();
+            DB::table('orders')->where('post_id',$post_id)->delete();
+
             $result['success'] = true;
         } while (false);
 
