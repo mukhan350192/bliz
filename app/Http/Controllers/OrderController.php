@@ -44,6 +44,7 @@ class OrderController extends Controller
             $data = [];
             foreach ($driver as $d) {
                 $data[] = [
+                    'employee_id' => $d->id,
                     'fio' => $d->fio,
                     'phone' => $d->phone,
                 ];
