@@ -667,7 +667,7 @@ class PostController extends Controller
             foreach ($s as $ss){
                 array_push($arr,$ss->post_id);
             }
-            $t = Post::whereIn('id',[$arr])->where('category_id',1)->get();
+            $t = Post::whereIn('id',$arr)->where('category_id',1)->get();
             $data = PostMinResource::collection($t);
             $count = DB::table('posts')
                 ->join('details','posts.id','=','details.post_id')
