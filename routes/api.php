@@ -127,6 +127,9 @@ Route::get('/customerOrdersInWork',[PostController::class,'customerOrdersInWork'
 Route::get('/executorOrdersInWork',[PostController::class,'executorOrdersInWork']);
 Route::get('/customerOrdersInHold',[PostController::class,'customerOrdersInHold']);
 Route::get('/executorOrdersInHold',[PostController::class,'executorOrdersInHold']);
+
+
+
 Route::group(['middleware' => 'cors'],function (){
     Route::get('/distance',[PostController::class,'getDistance']);
     Route::get('/currency',[PostController::class,'currency']);

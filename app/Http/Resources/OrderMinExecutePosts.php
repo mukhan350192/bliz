@@ -18,12 +18,14 @@ class OrderMinExecutePosts extends JsonResource
     public function toArray($request)
     {
         $status = DB::table('order_status')->where('id',$this->status)->first();
-
+        $count = DB::table('orders')
+            ->where('customer',$this->customer)
+            ->count();
         $array = [
             'user' => UserForAuction::collection(User::where('id',$this->customer)->get()),
             'details' => PostMinResource::collection(Post::where('id',$this->post_id)->get()),
             'status' => $status->name,
-            'executor' => UserForAuction::collection(User::where('id',$this->executor)->get()),
+            'count' => $count,
             'price' => [
                 'price' => $this->price,
                 'currency' => $this->currency,
