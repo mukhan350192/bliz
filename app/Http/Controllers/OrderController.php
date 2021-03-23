@@ -174,9 +174,9 @@ class OrderController extends Controller
             $arr = [];
             $price = [];
             foreach ($s as $t){
-                array_push($arr,$t->executor);
+                array_push($arr,$t->id);
             }
-            $data = UserForDetailOffer::collection(Order::whereIn('executor',$arr)->where('status',1)->get());
+            $data = UserForDetailOffer::collection(Order::whereIn('id',$arr)->where('status',1)->get());
             $result['order_id'] = $order_id;
             $result['success'] = true;
             $result['data'] = $data;
