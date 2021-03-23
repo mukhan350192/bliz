@@ -23,6 +23,7 @@ class OrderMinExecutePosts extends JsonResource
             'user' => UserForAuction::collection(User::where('id',$this->customer)->get()),
             'details' => PostMinResource::collection(Post::where('id',$this->post_id)->get()),
             'status' => $status->name,
+            'executor' => UserForAuction::collection(User::where('id',$this->executor)->get()),
         ];
         return $array;
     }
