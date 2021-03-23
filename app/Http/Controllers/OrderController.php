@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserForAuction;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\User;
@@ -144,6 +145,40 @@ class OrderController extends Controller
 
 
         } while (false);
+
+        return response()->json($result);
+    }
+
+    public function detailOffer(Request $request){
+        $order_id = $request->input('order_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+
+        do{
+            if (!$order_id){
+                $result['message'] = 'Не передан айди заказа';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Не передан айди заказа';
+                break;
+            }
+
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $s = DB::table('orders')->where('customer',$user->id)->where('status',1);
+            $arr = [];
+            foreach ($s as $t){
+                array_push($arr,$t->executor);
+            }
+            $data = UserForAuction::collection(User::whereIn('id',$arr));
+            $result['order_id'] = $order_id;
+            $result['success'] = true;
+            $result['data'] = $data;
+        }while(false);
 
         return response()->json($result);
     }
