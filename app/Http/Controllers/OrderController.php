@@ -139,7 +139,7 @@ class OrderController extends Controller
             $post = Post::find($order->post_id);
             $post->status = 2;
             $post->save();
-            DB::table('orders')->where('post_id',$order->post_id)->update(['status' => 5]);
+            DB::table('orders')->where('post_id',$order->post_id)->where('id','!=',$orderID)->update(['status' => 5]);
             $result['success'] = true;
 
 
