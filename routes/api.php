@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SpecialEquipmentController;
@@ -169,3 +170,9 @@ Route::get('/giveOrderForDriver',[OrderController::class,'giveOrderForDriver']);
 Route::get('/filterPost',[PostController::class,'filterPost']);
 Route::get('/filterCargo',[PostController::class,'filterCargo']);
 Route::get('/filterAuction',[PostController::class,'filterAuction']);
+
+
+//driver
+Route::post('/loginDriver',[DriverController::class,'loginDriver']);
+Route::get('/getDriverOrders',[DriverController::class,'getDriverOrders']);
+Route::get('/completeOrder',[DriverController::class,'completeOrder']);
