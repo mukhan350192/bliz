@@ -1345,8 +1345,8 @@ class PostController extends Controller
                 $result['message'] = 'Не найден заказ';
                 break;
             }
-            $order->status = 5;
-            $order->save();
+            Order::find($order_id)->delete();
+//            $order->save();
             $result['success'] = true;
         } while (false);
 
