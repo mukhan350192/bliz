@@ -1309,11 +1309,12 @@ class PostController extends Controller
             foreach ($storage_favourites as $af) {
                array_push($data,$af->storage_id);
             }
-            $result['data'] = StorageResource::collection(Storage::whereIn('id',$data)->get());
+
+            $result['data'] = StorageResource::collection(Storage::whereIn('id', $data)->get());
 
 
             $result['success'] = true;
-            $result['data'] = $data;
+        //    $result['data'] = $data;
         } while (false);
 
         return response()->json($result);
