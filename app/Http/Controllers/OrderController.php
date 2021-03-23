@@ -69,7 +69,7 @@ class OrderController extends Controller
     public function giveOrderForDriver(Request $request)
     {
         $employee_id = $request->input('employee_id');
-        $post_id = $request->input('post_id');
+        $order_id = $request->input('order_id');
         $token = $request->input('token');
         $result['success'] = false;
 
@@ -78,7 +78,7 @@ class OrderController extends Controller
                 $result['message'] = 'Не передан айди водителя';
                 break;
             }
-            if (!$post_id) {
+            if (!$order_id) {
                 $result['message'] = 'Не передан айди заказа';
                 break;
             }
@@ -91,12 +91,12 @@ class OrderController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $orders = Order::where('post_id', $post_id)->where('executor', $user->id)->first();
+            $orders = Order::where('id', $order_id)->where('executor', $user->id)->first();
             if (!$orders) {
                 $result['message'] = 'Не найден заказ';
                 break;
             }
-            Order::where('post_id', $post_id)->where('executor', $user->id)->update([
+            Order::where('id', $order_id)->update([
                 'status' => 3,
                 'employee_id' => $employee_id,
                 'updated_at' => Carbon::now(),
