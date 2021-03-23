@@ -98,8 +98,11 @@ class OrderController extends Controller
             }
             Order::where('post_id', $post_id)->where('executor', $user->id)->update([
                 'status' => 3,
+                'employee_id' => $employee_id,
                 'updated_at' => Carbon::now(),
             ]);
+
+
             $result['success'] = true;
         } while (false);
         return response()->json($result);
