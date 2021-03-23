@@ -174,7 +174,7 @@ class OrderController extends Controller
             foreach ($s as $t){
                 array_push($arr,$t->executor);
             }
-            $data = UserForAuction::collection(User::whereIn('id',$arr));
+            $data = UserForAuction::collection(User::whereIn('id',$arr)->get());
             $result['order_id'] = $order_id;
             $result['success'] = true;
             $result['data'] = $data;
