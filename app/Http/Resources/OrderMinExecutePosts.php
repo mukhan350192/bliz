@@ -24,6 +24,7 @@ class OrderMinExecutePosts extends JsonResource
             ->where('status',1)
             ->count();
         $array = [
+            'order_id' => $this->id,
             'user' => UserForAuction::collection(User::where('id',$this->customer)->get()),
             'details' => PostMinResource::collection(Post::where('id',$this->post_id)->get()),
             'status' => $status->name,
