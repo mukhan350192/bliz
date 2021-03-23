@@ -659,8 +659,20 @@ class PostController extends Controller
         if (!$sub_id) {
             $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
-            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
-            $count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
+            $post = DB::table('posts')->join('details','posts.id','=','details.post_id')
+                ->where('posts.category_id','=',$category_id)
+                ->where('details.type_transport','=',$sub_id)
+                ->skip($skip)
+                ->take($take)
+                ->orderByDesc('posts.updated_at')
+                ->get();
+            //Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get()
+            $data = PostMinResource::collection($post);
+            //$count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
+            $count = DB::table('posts')->join('details','posts.id','=','details.post_id')
+                ->where('posts.category_id','=',$category_id)
+                ->where('details.type_transport','=',$sub_id)
+                ->count();
         }
         $result['data'] = $data;
         $result['pagination'] = [
