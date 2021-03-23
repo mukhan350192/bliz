@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Models\User;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
+
+class UserForDetailOffer extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        $array['price'] = $this->price;
+        $array['currency'] = $this->currency;
+        $user = User::find($this->executor);
+        if ($user->user_type == 1){
+            $array['fullName'] = $this->fullName;
+            $array['type'] = 'Частное лицо';
+            $array['id'] = $this->id;
+        }
+        if ($user->user_type == 2){
+            $data = DB::table('company_details')
+                ->join('company_types','company_details.types','=','company_types.id')
+                ->select('company_details.name','company_types.name as companyName')
+                ->where('company_details.user_id','=',$this->id)
+                ->get();
+
+            $array = [
+                'fullName' => $data[0]->companyName. ' '. $data[0]->name,
+                'id' => $this->id,
+            ];
+        }
+
+        return $array;
+    }
+}

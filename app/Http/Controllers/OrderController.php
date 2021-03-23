@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserForAuction;
+use App\Http\Resources\UserForDetailOffer;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\User;
@@ -171,10 +172,11 @@ class OrderController extends Controller
             }
             $s = DB::table('orders')->where('customer',$user->id)->where('status',1)->get();
             $arr = [];
+            $price = [];
             foreach ($s as $t){
                 array_push($arr,$t->executor);
             }
-            $data = UserForAuction::collection(User::whereIn('id',$arr)->get());
+            $data = UserForDetailOffer::collection(Order::whereIn('executor',$arr)->where('status',1)->get());
             $result['order_id'] = $order_id;
             $result['success'] = true;
             $result['data'] = $data;
