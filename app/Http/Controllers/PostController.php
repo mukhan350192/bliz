@@ -835,6 +835,7 @@ class PostController extends Controller
                 DB::table('orders')
                     ->where('customer', $user->id)
                     ->whereIn('status', [1, 5, 6])
+                    ->limit(1)
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
