@@ -169,7 +169,7 @@ class OrderController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $s = DB::table('orders')->where('customer',$user->id)->where('status',1);
+            $s = DB::table('orders')->where('customer',$user->id)->where('status',1)->get();
             $arr = [];
             foreach ($s as $t){
                 array_push($arr,$t->executor);
