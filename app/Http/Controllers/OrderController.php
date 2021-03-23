@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DetailsResource;
 use App\Http\Resources\UserForAuction;
 use App\Http\Resources\UserForDetailOffer;
 use App\Models\Order;
@@ -185,6 +186,7 @@ class OrderController extends Controller
             $result['order_id'] = $order_id;
             $result['success'] = true;
             $result['data'] = $data;
+            $result['details'] = DetailsResource::collection(DB::table('details')->where('post_id',$order->post_id)->get());
         }while(false);
 
         return response()->json($result);
