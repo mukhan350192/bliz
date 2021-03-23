@@ -16,10 +16,11 @@ class UserForDetailOffer extends JsonResource
      */
     public function toArray($request)
     {
-        $array['price'] = $this->price;
-        $array['currency'] = $this->currency;
+
         $user = User::find($this->executor);
         if ($user->user_type == 1){
+            $array['price'] = $this->price;
+            $array['currency'] = $this->currency;
             $array['fullName'] = $user->fullName;
             $array['type'] = 'Частное лицо';
             $array['user_id'] = $user->id;
@@ -29,9 +30,10 @@ class UserForDetailOffer extends JsonResource
                 ->join('company_types','company_details.types','=','company_types.id')
                 ->select('company_details.name','company_types.name as companyName')
                 ->where('company_details.user_id','=',$user->id)
-                ->get();
-
+                ->get();;
             $array = [
+                'price' => $this->price,
+                'currency' => $this->currency,
                 'fullName' => $data[0]->companyName. ' '. $data[0]->name,
                 'user_id' => $user->id,
             ];
