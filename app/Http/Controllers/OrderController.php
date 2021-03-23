@@ -116,6 +116,7 @@ class OrderController extends Controller
     {
         $token = $request->input('token');
         $user_id = $request->input('user_id');
+        $order_id = $request->input('order_id');
         $result['success'] = false;
 
         do {
@@ -132,7 +133,7 @@ class OrderController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $order = Order::where('customer',$user->id)->where('executor',$user_id)->first();
+            $order = Order::where('id',$order_id)->first();
             if (!$order) {
                 $result['message'] = 'Не найден заказ';
                 break;
