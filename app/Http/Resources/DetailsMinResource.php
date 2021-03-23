@@ -16,7 +16,9 @@ class DetailsMinResource extends JsonResource
     public function toArray($request)
     {
         $type = DB::table('type_transport')->where('id',$this->type_transport)->first();
-        $type = $type->name;
+        if (isset($type)){
+            $type = $type->name;
+        }
         $price = DB::table('post_price')->where('post_id',$this->id)->get();
         foreach ($price as $p){
             $price_type =  $p->price_type;

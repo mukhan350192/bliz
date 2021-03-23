@@ -659,17 +659,18 @@ class PostController extends Controller
         if (!$sub_id) {
             $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
-            $post = DB::table('posts')->join('details','posts.id','=','details.post_id')
-                ->where('posts.category_id','=',$category_id)
-                ->where('details.type_transport','=',$sub_id)
-                ->skip($skip)
-                ->take($take)
-                ->orderByDesc('posts.updated_at')
+            $s = DB::table('details')
+                ->where('type_transport','=',$sub_id)
+                ->select('post_id')
                 ->get();
-            //Post::where('category_id', $category_id)->where('sub_id', $sub_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get()
-            $data = PostMinResource::collection($post);
-            //$count = Post::where('category_id', $category_id)->where('sub_id', $sub_id)->count();
-            $count = DB::table('posts')->join('details','posts.id','=','details.post_id')
+            $arr = [];
+            foreach ($s as $ss){
+                array_push($arr,$ss->post_id);
+            }
+            $t = Post::whereIn('id',[$arr])->where('category_id',1)->get();
+            $data = PostMinResource::collection($t);
+            $count = DB::table('posts')
+                ->join('details','posts.id','=','details.post_id')
                 ->where('posts.category_id','=',$category_id)
                 ->where('details.type_transport','=',$sub_id)
                 ->count();
