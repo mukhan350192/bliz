@@ -20,20 +20,20 @@ class UserForDetailOffer extends JsonResource
         $array['currency'] = $this->currency;
         $user = User::find($this->executor);
         if ($user->user_type == 1){
-            $array['fullName'] = $this->fullName;
+            $array['fullName'] = $user->fullName;
             $array['type'] = 'Частное лицо';
-            $array['id'] = $this->id;
+            $array['user_id'] = $user->id;
         }
         if ($user->user_type == 2){
             $data = DB::table('company_details')
                 ->join('company_types','company_details.types','=','company_types.id')
                 ->select('company_details.name','company_types.name as companyName')
-                ->where('company_details.user_id','=',$this->id)
+                ->where('company_details.user_id','=',$user->id)
                 ->get();
 
             $array = [
                 'fullName' => $data[0]->companyName. ' '. $data[0]->name,
-                'id' => $this->id,
+                'user_id' => $user->id,
             ];
         }
 
