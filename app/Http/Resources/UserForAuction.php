@@ -23,6 +23,8 @@ class UserForAuction extends JsonResource
             $array['fullName'] = $this->fullName;
             $array['type'] = 'Частное лицо';
             $array['id'] = $this->id;
+            $array['phone'] = $this->phone;
+            $array['email'] = $this->email;
         }
         if (isset($this->user_type) && $this->user_type == 2){
             $data = DB::table('company_details')
@@ -34,6 +36,10 @@ class UserForAuction extends JsonResource
             $array = [
                 'fullName' => $data[0]->companyName. ' '. $data[0]->name,
                 'id' => $this->id,
+                'type' => 'Юр лицо',
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
             ];
         }
         return $array;
