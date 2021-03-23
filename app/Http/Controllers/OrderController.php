@@ -115,7 +115,7 @@ class OrderController extends Controller
     public function acceptPost(Request $request)
     {
         $token = $request->input('token');
-        $orderID = $request->input('order_id');
+        $user_id = $request->input('user_id');
         $result['success'] = false;
 
         do {
@@ -123,8 +123,8 @@ class OrderController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            if (!$orderID) {
-                $result['message'] = 'Не передан номер заказа';
+            if (!$user_id) {
+                $result['message'] = 'Не передан айди исполнителя';
                 break;
             }
             $user = User::where('token', $token)->first();
@@ -132,7 +132,7 @@ class OrderController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $order = Order::find($orderID);
+            $order = Order::where('customer',$user->id)->where('executor',$user_id)->first();
             if (!$order) {
                 $result['message'] = 'Не найден заказ';
                 break;
@@ -142,52 +142,52 @@ class OrderController extends Controller
             $post = Post::find($order->post_id);
             $post->status = 2;
             $post->save();
-            DB::table('orders')->where('post_id',$order->post_id)->where('id','!=',$orderID)->update(['status' => 5]);
+            DB::table('orders')->where('post_id', $order->post_id)->where('id', '!=', $order->id)->update(['status' => 5]);
             $result['success'] = true;
-
 
         } while (false);
 
         return response()->json($result);
     }
 
-    public function detailOffer(Request $request){
+    public function detailOffer(Request $request)
+    {
         $order_id = $request->input('order_id');
         $token = $request->input('token');
         $result['success'] = false;
 
-        do{
-            if (!$order_id){
+        do {
+            if (!$order_id) {
                 $result['message'] = 'Не передан айди заказа';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан айди заказа';
                 break;
             }
 
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
             $order = Order::find($order_id);
-            if (!$order){
+            if (!$order) {
                 $result['message'] = 'Не найден заказ';
                 break;
             }
-            $s = DB::table('orders')->where('customer',$user->id)->where('post_id',$order->post_id)->where('status',1)->get();
+            $s = DB::table('orders')->where('customer', $user->id)->where('post_id', $order->post_id)->where('status', 1)->get();
             $arr = [];
             $price = [];
-            foreach ($s as $t){
-                array_push($arr,$t->id);
+            foreach ($s as $t) {
+                array_push($arr, $t->id);
             }
-            $data = UserForDetailOffer::collection(Order::whereIn('id',$arr)->where('status',1)->get());
+            $data = UserForDetailOffer::collection(Order::whereIn('id', $arr)->where('status', 1)->get());
             $result['order_id'] = $order_id;
             $result['success'] = true;
             $result['data'] = $data;
-            $result['details'] = DetailsResource::collection(DB::table('details')->where('post_id',$order->post_id)->get());
-        }while(false);
+            $result['details'] = DetailsResource::collection(DB::table('details')->where('post_id', $order->post_id)->get());
+        } while (false);
 
         return response()->json($result);
     }
