@@ -796,6 +796,7 @@ class UserController extends Controller
                 $emp = DB::table('employee')->where('id',$em->employee_id)->first();
                 $position = DB::table('positions')->where('id',$emp->position)->first();
                 $data[] = [
+                    'id' => $em->employee_id,
                     'fio' => $emp->fio,
                     'phone' => $emp->phone,
                     'email' => $emp->email,
