@@ -1964,7 +1964,7 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " AND LIMIT $take OFFSET $skip";
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
         $data = PostMinResource::collection($results);
@@ -2060,7 +2060,7 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " AND LIMIT $take OFFSET $skip";
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
         $data = PostMinResource::collection($results);
@@ -2160,7 +2160,7 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " AND LIMIT $take OFFSET $skip";
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
         $data = AuctionMinDetails::collection($results);
