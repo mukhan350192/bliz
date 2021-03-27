@@ -1904,10 +1904,10 @@ class PostController extends Controller
 
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
         if (isset($from)){
-            $sql .= " AND d.from=$from";
+            $sql .= " AND d.from='$from'";
         }
         if (isset($to)){
-            $sql .= " AND d.to=$to";
+            $sql .= " AND d.to='$to'";
         }
         if (isset($volume_start)){
             $sql .= " AND d.volume >= $volume_start";
@@ -2001,10 +2001,10 @@ class PostController extends Controller
         $page = $request->input('page');
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
         if (isset($from)){
-            $sql .= " AND d.from=$from";
+            $sql .= " AND d.from='$from'";
         }
         if (isset($to)){
-            $sql .= " AND d.to=$to";
+            $sql .= " AND d.to='$to'";
         }
         if (isset($volume_start)){
             $sql .= " AND d.volume >= $volume_start";
@@ -2099,10 +2099,10 @@ class PostController extends Controller
         $page = $request->input('page');
         $sql = "SELECT p.id,p.user_id,p.status,p.created_at,p.updated_at FROM auction_details as d JOIN auction as p ON d.auction_id=p.id WHERE p.status = 1";
         if (isset($from)){
-            $sql .= " AND d.from_city=$from";
+            $sql .= " AND d.from_city='$from'";
         }
         if (isset($to)){
-            $sql .= " AND d.to_city=$to";
+            $sql .= " AND d.to_city='$to'";
         }
         if (isset($volume_start)){
             $sql .= " AND d.volume >= $volume_start";
