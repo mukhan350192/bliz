@@ -1900,6 +1900,7 @@ class PostController extends Controller
         $height_start = $request->input('height_start');
         $height_end = $request->input('height_end');
         $type_transport = $request->input('type_transport');
+        $page = $request->input('page');
 
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
         if (isset($from)){
@@ -1953,10 +1954,27 @@ class PostController extends Controller
         if (isset($type_transport)){
             $sql .= " AND d.type_transport = $type_transport";
         }
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $sql .= " AND LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
+        $count = count($results);
         $data = PostMinResource::collection($results);
-        $result['success'] = true;
         $result['data'] = $data;
+        $result['pagination'] = [
+            'total' => $count,
+            'page' => $page,
+            'max_page' => ceil($count / 10),
+        ];
+        $result['success'] = true;
         return response()->json($result);
     }
 
@@ -1979,7 +1997,7 @@ class PostController extends Controller
         $height_start = $request->input('height_start');
         $height_end = $request->input('height_end');
         $type_transport = $request->input('type_transport');
-
+        $page = $request->input('page');
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
         if (isset($from)){
             $sql .= " AND d.from=$from";
@@ -2032,10 +2050,27 @@ class PostController extends Controller
         if (isset($type_transport)){
             $sql .= " AND d.type_transport = $type_transport";
         }
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $sql .= " AND LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
+        $count = count($results);
         $data = PostMinResource::collection($results);
-        $result['success'] = true;
         $result['data'] = $data;
+        $result['pagination'] = [
+            'total' => $count,
+            'page' => $page,
+            'max_page' => ceil($count / 10),
+        ];
+        $result['success'] = true;
         return response()->json($result);
     }
 
@@ -2059,7 +2094,7 @@ class PostController extends Controller
         $height_end = $request->input('height_end');
         $type_transport = $request->input('type_transport');
         $end_auction = $request->input('end_auction');
-
+        $page = $request->input('page');
         $sql = "SELECT p.id,p.user_id,p.status,p.created_at,p.updated_at FROM auction_details as d JOIN auction as p ON d.auction_id=p.id WHERE p.status = 1";
         if (isset($from)){
             $sql .= " AND d.from_city=$from";
@@ -2115,11 +2150,27 @@ class PostController extends Controller
         if (isset($end_auction)){
             $sql .= " AND d.date_finish <= '$end_auction'";
         }
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $sql .= " AND LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
+        $count = count($results);
         $data = AuctionMinDetails::collection($results);
-//        $data = PostMinResource::collection($results);
-        $result['success'] = true;
         $result['data'] = $data;
+        $result['pagination'] = [
+            'total' => $count,
+            'page' => $page,
+            'max_page' => ceil($count / 10),
+        ];
+        $result['success'] = true;
         return response()->json($result);
     }
 }
