@@ -1964,9 +1964,10 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
+        $results = DB::select($sql);
         $data = PostMinResource::collection($results);
         $result['data'] = $data;
         $result['pagination'] = [
@@ -2060,9 +2061,10 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
+        $results = DB::select($sql);
         $data = PostMinResource::collection($results);
         $result['data'] = $data;
         $result['pagination'] = [
@@ -2160,9 +2162,10 @@ class PostController extends Controller
             $skip = ($page - 1) * 10;
             $take = ($page - 1) * 10;
         }
-        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
         $results = DB::select($sql);
         $count = count($results);
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
+        $results = DB::select($sql);
         $data = AuctionMinDetails::collection($results);
         $result['data'] = $data;
         $result['pagination'] = [
