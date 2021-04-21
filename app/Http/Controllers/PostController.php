@@ -2222,6 +2222,8 @@ class PostController extends Controller
                'amount' => 5000,
                'type' => 'Поднятие поста в ТОП',
                 'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
         }while(false);
