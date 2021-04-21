@@ -661,7 +661,7 @@ class PostController extends Controller
             die('Не передан категория айди');
         }
         if (!$sub_id) {
-            $new = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',2)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+            $new = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',2)->orderByDesc('updated_at')->get());
             $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',1)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
             $s = DB::table('details')
@@ -694,6 +694,7 @@ class PostController extends Controller
                 ->where('details.type_transport','=',$sub_id)
                 ->count();
         }
+        var_dump($new);
         $result['data'] = $data;
         $result['top'] = $new;
         $result['pagination'] = [
