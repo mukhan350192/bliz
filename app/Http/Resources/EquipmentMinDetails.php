@@ -25,7 +25,7 @@ class EquipmentMinDetails extends JsonResource
             'city' => $this->city_id,
             'address' => $this->address,
             'net' => $this->net,
-            'power' => $this->power,
+      //      'power' => $this->power,
         ];
     }
 }
