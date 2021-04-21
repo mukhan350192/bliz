@@ -694,10 +694,8 @@ class PostController extends Controller
                 ->where('details.type_transport','=',$sub_id)
                 ->count();
         }
-        $new = (array)$new;
-        $data = (array)$data;
-        $sk = (object)array_merge($new,$data);
-        $result['data'] = $sk;
+        $result['data'] = $data;
+        $result['top'] = $new;
         $result['pagination'] = [
             'total' => $count,
             'page' => $page,
