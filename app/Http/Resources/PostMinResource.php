@@ -15,10 +15,14 @@ class PostMinResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $array = [
             'id' => $this->id,
             'updated_at' =>  $this->updated_at,
             'details' => DetailsMinResource::collection(DB::table('details')->where('post_id',$this->id)->get()),
         ];
+        if ($this->priority == 2){
+            $array['top'] = true;
+        }
+        return $array;
     }
 }

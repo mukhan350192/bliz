@@ -661,25 +661,41 @@ class PostController extends Controller
             die('Не передан категория айди');
         }
         if (!$sub_id) {
-            $data = PostMinResource::collection(Post::where('category_id', $category_id)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+            $new = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',2)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',1)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
             $s = DB::table('details')
                 ->where('type_transport','=',$sub_id)
+                ->where('priority',1)
                 ->select('post_id')
                 ->get();
+            $ss =DB::table('details')
+                ->where('type_transport','=',$sub_id)
+                ->where('priority',2)
+                ->select('post_id')
+                ->get();
+            $arr2 = [];
             $arr = [];
             foreach ($s as $ss){
                 array_push($arr,$ss->post_id);
             }
+            foreach ($ss as $sss){
+                array_push($arr2,$sss->post_id);
+            }
             $t = Post::whereIn('id',$arr)->where('category_id',1)->get();
+            $tt = Post::whereIn('id',$arr2)->where('category_id',1)->get();
+
+            $new = PostMinResource::collection($tt);
             $data = PostMinResource::collection($t);
+
             $count = DB::table('posts')
                 ->join('details','posts.id','=','details.post_id')
                 ->where('posts.category_id','=',$category_id)
                 ->where('details.type_transport','=',$sub_id)
                 ->count();
         }
-        $result['data'] = $data;
+        $sk = array_merge($new,$data);
+        $result['data'] = $sk;
         $result['pagination'] = [
             'total' => $count,
             'page' => $page,
@@ -2226,6 +2242,26 @@ class PostController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
+        }while(false);
+        return response()->json($result);
+    }
+
+    public function paymentHistory(Request $request){
+        $token = $request->input('token');
+        $result['success'] = false;
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $data = DB::table('balance_history')->select('id','type','amount')->where('user_id',$user->id)->get();
+            $result['success'] = true;
+            $result['data'] = $data;
         }while(false);
         return response()->json($result);
     }

@@ -172,6 +172,7 @@ Route::get('/filterCargo',[PostController::class,'filterCargo']);
 Route::get('/filterAuction',[PostController::class,'filterAuction']);
 
 Route::get('/topPost',[PostController::class,'topPost']);
+Route::get('/paymentHistory',[PostController::class,'paymentHistory']);
 //driver
 Route::post('/loginDriver',[DriverController::class,'loginDriver']);
 Route::get('/getDriverOrders',[DriverController::class,'getDriverOrders']);
