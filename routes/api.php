@@ -171,7 +171,7 @@ Route::get('/filterPost',[PostController::class,'filterPost']);
 Route::get('/filterCargo',[PostController::class,'filterCargo']);
 Route::get('/filterAuction',[PostController::class,'filterAuction']);
 
-
+Route::get('/topPost',[PostController::class,'topPost']);
 //driver
 Route::post('/loginDriver',[DriverController::class,'loginDriver']);
 Route::get('/getDriverOrders',[DriverController::class,'getDriverOrders']);
