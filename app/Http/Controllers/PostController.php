@@ -478,6 +478,7 @@ class PostController extends Controller
         $duration = $request->input('duration');
         $from_string = $request->input('from_string');
         $to_string = $request->input('to_string');
+        $priority = $request->input('priority');
         $result['success'] = false;
         do {
             if (!$token) {
@@ -520,7 +521,10 @@ class PostController extends Controller
                 $result['message'] = 'Не передан тип транспорта';
                 break;
             }
-
+            $priority = 1;
+            if (isset($priority)){
+                $priority = 2;
+            }
             $user = User::where('token', $token)->first();
             if (!$user) {
                 $result['message'] = 'Не передан токен';
@@ -530,7 +534,7 @@ class PostController extends Controller
             $postID = Post::insertGetId([
                 'sub_id' => $sub_id,
                 'category_id' => $category_id,
-                'priority' => 1,
+                'priority' => $priority,
                 'user_id' => $user->id,
                 'status' => 1,
                 'created_at' => Carbon::now(),
@@ -2174,6 +2178,53 @@ class PostController extends Controller
             'max_page' => ceil($count / 10),
         ];
         $result['success'] = true;
+        return response()->json($result);
+    }
+
+    public function topPost(Request $request){
+        $post_id = $request->input('post_id');
+        $token = $request->input('token');
+        $result['success'] = false;
+        do{
+            if (!$post_id){
+                $result['message'] = 'Не передан пост айди';
+                break;
+            }
+            if (!$token){
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token',$token)->first();
+            if (!$user){
+                $result['message'] = 'Не найден пользователь';
+                break;
+            }
+            $post = Post::where('id',$post_id)->where('user_id',$user->id)->first();
+            $post->priority = 2;
+            $post->save();
+            if (!$post){
+                $result['message'] = 'Данная объявление не ваша';
+                break;
+            }
+            $balance = DB::table('balance')->where('user_id',$user->id)->first();
+            if (!$balance){
+                $result['message'] = 'Недостаточно баланса';
+                break;
+            }
+            if ($balance->amount < 5000){
+                $result['message'] = 'Недостаточно баланса';
+                break;
+            }
+            DB::table('balance')->where('user_id',$user->id)->update([
+                'amount' => $balance->amount-5000,
+            ]);
+            DB::table('balance_history')->insertGetId([
+               'amount' => 5000,
+               'type' => 'Поднятие поста в ТОП',
+                'user_id' => $user->id,
+            ]);
+            $result['success'] = true;
+        }while(false);
         return response()->json($result);
     }
 }
