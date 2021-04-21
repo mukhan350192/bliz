@@ -694,7 +694,6 @@ class PostController extends Controller
                 ->where('details.type_transport','=',$sub_id)
                 ->count();
         }
-        var_dump($new);
         $result['data'] = $data;
         $result['top'] = $new;
         $result['pagination'] = [
