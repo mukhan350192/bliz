@@ -696,7 +696,7 @@ class PostController extends Controller
         }
         $new = (array)$new;
         $data = (array)$data;
-        $sk = array_merge($new,$data);
+        $sk = (object)array_merge($new,$data);
         $result['data'] = $sk;
         $result['pagination'] = [
             'total' => $count,
