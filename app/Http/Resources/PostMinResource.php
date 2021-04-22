@@ -20,7 +20,7 @@ class PostMinResource extends JsonResource
             'updated_at' =>  $this->updated_at,
             'details' => DetailsMinResource::collection(DB::table('details')->where('post_id',$this->id)->get()),
         ];
-        if ($this->priority == 2){
+        if (isset($this->priority) && $this->priority == 2){
             $array['top'] = true;
         }
         return $array;
