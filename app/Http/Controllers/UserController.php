@@ -794,14 +794,18 @@ class UserController extends Controller
             $data = [];
             foreach ($employeeID as $em){
                 $emp = DB::table('employee')->where('id',$em->employee_id)->first();
-                $position = DB::table('positions')->where('id',$emp->position)->first();
-                $data[] = [
-                    'id' => $em->employee_id,
-                    'fio' => $emp->fio,
-                    'phone' => $emp->phone,
-                    'email' => $emp->email,
-                    'position' => $position->name,
-                ];
+                if (isset($emp)){
+                    $position = DB::table('positions')->where('id',$emp->position)->first();
+                    if (isset($position)){
+                        $data[] = [
+                            'id' => $em->employee_id,
+                            'fio' => $emp->fio,
+                            'phone' => $emp->phone,
+                            'email' => $emp->email,
+                            'position' => $position->name,
+                        ];
+                    }
+                }
             }
             $result['success'] = true;
             $result['data'] = $data;
