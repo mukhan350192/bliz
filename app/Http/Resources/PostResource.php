@@ -25,6 +25,9 @@ class PostResource extends JsonResource
             'price' => PriceResource::collection(DB::table('post_price')->where('post_id',$this->id)->get()),
             'updated_at' => $this->updated_at,
         ];
+        if (isset($this->priority) && $this->priority == 2){
+            $array['top'] = true;
+        }
 
         return $array;
     }
