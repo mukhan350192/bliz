@@ -522,7 +522,7 @@ class PostController extends Controller
                 break;
             }
             $priority = 1;
-            if (isset($priority)){
+            if (isset($priority)) {
                 $priority = 2;
             }
             $user = User::where('token', $token)->first();
@@ -530,6 +530,17 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
+            $balance = DB::table('balance')->where('user_id', $user->id)->first();
+
+            if (!$balance) {
+                $result['message'] = 'У вас не хватает баланса';
+                break;
+            }
+            if (isset($balance) && $balance->amount < 1000) {
+                $result['message'] = 'У вас не хватает баланса';
+                break;
+            }
+
             DB::beginTransaction();
             $postID = Post::insertGetId([
                 'sub_id' => $sub_id,
@@ -631,7 +642,15 @@ class PostController extends Controller
                 'price_type' => $price_type,
                 'payment_type' => $payment_type,
             ]);
-
+            $balance->amount = $balance->amount - 1000;
+            $balance->save();
+            DB::table('balance_history')->insertGetId([
+                'user_id' => $user->id,
+                'type' => 'Подписка',
+                'amount' => 1000,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
             DB::commit();
             $result['success'] = true;
         } while (false);
@@ -661,37 +680,37 @@ class PostController extends Controller
             die('Не передан категория айди');
         }
         if (!$sub_id) {
-            $new = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',2)->orderByDesc('updated_at')->get());
-            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority',1)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+            $new = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority', 2)->orderByDesc('updated_at')->get());
+            $data = PostMinResource::collection(Post::where('category_id', $category_id)->where('priority', 1)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         } else {
             $s = DB::table('details')
-                ->where('type_transport','=',$sub_id)
-                ->where('priority',1)
+                ->where('type_transport', '=', $sub_id)
+                ->where('priority', 1)
                 ->select('post_id')
                 ->get();
-            $ss =DB::table('details')
-                ->where('type_transport','=',$sub_id)
-                ->where('priority',2)
+            $ss = DB::table('details')
+                ->where('type_transport', '=', $sub_id)
+                ->where('priority', 2)
                 ->select('post_id')
                 ->get();
             $arr2 = [];
             $arr = [];
-            foreach ($s as $ss){
-                array_push($arr,$ss->post_id);
+            foreach ($s as $ss) {
+                array_push($arr, $ss->post_id);
             }
-            foreach ($ss as $sss){
-                array_push($arr2,$sss->post_id);
+            foreach ($ss as $sss) {
+                array_push($arr2, $sss->post_id);
             }
-            $t = Post::whereIn('id',$arr)->where('category_id',1)->get();
-            $tt = Post::whereIn('id',$arr2)->where('category_id',1)->get();
+            $t = Post::whereIn('id', $arr)->where('category_id', 1)->get();
+            $tt = Post::whereIn('id', $arr2)->where('category_id', 1)->get();
 
             $new = PostMinResource::collection($tt);
             $data = PostMinResource::collection($t);
 
             $count = DB::table('posts')
-                ->join('details','posts.id','=','details.post_id')
-                ->where('posts.category_id','=',$category_id)
-                ->where('details.type_transport','=',$sub_id)
+                ->join('details', 'posts.id', '=', 'details.post_id')
+                ->where('posts.category_id', '=', $category_id)
+                ->where('details.type_transport', '=', $sub_id)
                 ->count();
         }
         $result['data'] = $data;
@@ -1328,14 +1347,14 @@ class PostController extends Controller
             $storage_favourites = DB::table('storage_favourites')->where('user_id', $user->id)->get();
             $data = [];
             foreach ($storage_favourites as $af) {
-               array_push($data,$af->storage_id);
+                array_push($data, $af->storage_id);
             }
 
             $result['data'] = StorageResource::collection(Storage::whereIn('id', $data)->get());
 
 
             $result['success'] = true;
-        //    $result['data'] = $data;
+            //    $result['data'] = $data;
         } while (false);
 
         return response()->json($result);
@@ -1923,55 +1942,55 @@ class PostController extends Controller
         $page = $request->input('page');
 
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
-        if (isset($from)){
+        if (isset($from)) {
             $sql .= " AND d.from='$from'";
         }
-        if (isset($to)){
+        if (isset($to)) {
             $sql .= " AND d.to='$to'";
         }
-        if (isset($volume_start)){
+        if (isset($volume_start)) {
             $sql .= " AND d.volume >= $volume_start";
         }
-        if (isset($volume_end)){
+        if (isset($volume_end)) {
             $sql .= " AND d.volume <= $volume_end";
         }
-        if (isset($net_start)){
+        if (isset($net_start)) {
             $sql .= " AND d.net >= $net_start";
         }
-        if (isset($net_end)){
+        if (isset($net_end)) {
             $sql .= " AND d.net >= $net_end";
         }
-        if (isset($start)){
+        if (isset($start)) {
             $sql .= " AND d.start_date >= '$start'";
         }
-        if (isset($end)){
+        if (isset($end)) {
             $sql .= " AND d.end_date >= '$end'";
         }
-        if (isset($quantity_start)){
+        if (isset($quantity_start)) {
             $sql .= " AND d.quantity >= $quantity_start";
         }
-        if (isset($quantity_end)){
+        if (isset($quantity_end)) {
             $sql .= " AND d.quantity <= $quantity_end";
         }
-        if (isset($width_start)){
+        if (isset($width_start)) {
             $sql .= " AND d.width >= $width_start";
         }
-        if (isset($width_end)){
+        if (isset($width_end)) {
             $sql .= " AND d.width <= $width_end";
         }
-        if (isset($height_start)){
+        if (isset($height_start)) {
             $sql .= " AND d.height >= $height_start";
         }
-        if (isset($height_end)){
+        if (isset($height_end)) {
             $sql .= " AND d.height <= $height_end";
         }
-        if (isset($length_start)){
+        if (isset($length_start)) {
             $sql .= " AND d.length >= $length_start";
         }
-        if (isset($length_end)){
+        if (isset($length_end)) {
             $sql .= " AND d.length <= $length_end";
         }
-        if (isset($type_transport)){
+        if (isset($type_transport)) {
             $sql .= " AND d.type_transport = $type_transport";
         }
         $skip = 0;
@@ -2020,55 +2039,55 @@ class PostController extends Controller
         $type_transport = $request->input('type_transport');
         $page = $request->input('page');
         $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
-        if (isset($from)){
+        if (isset($from)) {
             $sql .= " AND d.from='$from'";
         }
-        if (isset($to)){
+        if (isset($to)) {
             $sql .= " AND d.to='$to'";
         }
-        if (isset($volume_start)){
+        if (isset($volume_start)) {
             $sql .= " AND d.volume >= $volume_start";
         }
-        if (isset($volume_end)){
+        if (isset($volume_end)) {
             $sql .= " AND d.volume <= $volume_end";
         }
-        if (isset($net_start)){
+        if (isset($net_start)) {
             $sql .= " AND d.net >= $net_start";
         }
-        if (isset($net_end)){
+        if (isset($net_end)) {
             $sql .= " AND d.net >= $net_end";
         }
-        if (isset($start)){
+        if (isset($start)) {
             $sql .= " AND d.start_date >= '$start'";
         }
-        if (isset($end)){
+        if (isset($end)) {
             $sql .= " AND d.end_date >= '$end'";
         }
-        if (isset($quantity_start)){
+        if (isset($quantity_start)) {
             $sql .= " AND d.quantity >= $quantity_start";
         }
-        if (isset($quantity_end)){
+        if (isset($quantity_end)) {
             $sql .= " AND d.quantity <= $quantity_end";
         }
-        if (isset($width_start)){
+        if (isset($width_start)) {
             $sql .= " AND d.width >= $width_start";
         }
-        if (isset($width_end)){
+        if (isset($width_end)) {
             $sql .= " AND d.width <= $width_end";
         }
-        if (isset($height_start)){
+        if (isset($height_start)) {
             $sql .= " AND d.height >= $height_start";
         }
-        if (isset($height_end)){
+        if (isset($height_end)) {
             $sql .= " AND d.height <= $height_end";
         }
-        if (isset($length_start)){
+        if (isset($length_start)) {
             $sql .= " AND d.length >= $length_start";
         }
-        if (isset($length_end)){
+        if (isset($length_end)) {
             $sql .= " AND d.length <= $length_end";
         }
-        if (isset($type_transport)){
+        if (isset($type_transport)) {
             $sql .= " AND d.type_transport = $type_transport";
         }
         $skip = 0;
@@ -2118,58 +2137,58 @@ class PostController extends Controller
         $end_auction = $request->input('end_auction');
         $page = $request->input('page');
         $sql = "SELECT p.id,p.user_id,p.status,p.created_at,p.updated_at FROM auction_details as d JOIN auction as p ON d.auction_id=p.id WHERE p.status = 1";
-        if (isset($from)){
+        if (isset($from)) {
             $sql .= " AND d.from_city='$from'";
         }
-        if (isset($to)){
+        if (isset($to)) {
             $sql .= " AND d.to_city='$to'";
         }
-        if (isset($volume_start)){
+        if (isset($volume_start)) {
             $sql .= " AND d.volume >= $volume_start";
         }
-        if (isset($volume_end)){
+        if (isset($volume_end)) {
             $sql .= " AND d.volume <= $volume_end";
         }
-        if (isset($net_start)){
+        if (isset($net_start)) {
             $sql .= " AND d.net >= $net_start";
         }
-        if (isset($net_end)){
+        if (isset($net_end)) {
             $sql .= " AND d.net >= $net_end";
         }
-        if (isset($start)){
+        if (isset($start)) {
             $sql .= " AND d.start_date >= '$start'";
         }
-        if (isset($end)){
+        if (isset($end)) {
             $sql .= " AND d.end_date >= '$end'";
         }
-        if (isset($quantity_start)){
+        if (isset($quantity_start)) {
             $sql .= " AND d.quantity >= $quantity_start";
         }
-        if (isset($quantity_end)){
+        if (isset($quantity_end)) {
             $sql .= " AND d.quantity <= $quantity_end";
         }
-        if (isset($width_start)){
+        if (isset($width_start)) {
             $sql .= " AND d.width >= $width_start";
         }
-        if (isset($width_end)){
+        if (isset($width_end)) {
             $sql .= " AND d.width <= $width_end";
         }
-        if (isset($height_start)){
+        if (isset($height_start)) {
             $sql .= " AND d.height >= $height_start";
         }
-        if (isset($height_end)){
+        if (isset($height_end)) {
             $sql .= " AND d.height <= $height_end";
         }
-        if (isset($length_start)){
+        if (isset($length_start)) {
             $sql .= " AND d.length >= $length_start";
         }
-        if (isset($length_end)){
+        if (isset($length_end)) {
             $sql .= " AND d.length <= $length_end";
         }
-        if (isset($type_transport)){
+        if (isset($type_transport)) {
             $sql .= " AND d.type_transport = $type_transport";
         }
-        if (isset($end_auction)){
+        if (isset($end_auction)) {
             $sql .= " AND d.date_finish <= '$end_auction'";
         }
         $skip = 0;
@@ -2197,56 +2216,58 @@ class PostController extends Controller
         return response()->json($result);
     }
 
-    public function topPost(Request $request){
+    public function topPost(Request $request)
+    {
         $post_id = $request->input('post_id');
         $token = $request->input('token');
         $result['success'] = false;
-        do{
-            if (!$post_id){
+        do {
+            if (!$post_id) {
                 $result['message'] = 'Не передан пост айди';
                 break;
             }
-            if (!$token){
+            if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $user = User::where('token',$token)->first();
-            if (!$user){
+            $user = User::where('token', $token)->first();
+            if (!$user) {
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $post = Post::where('id',$post_id)->where('user_id',$user->id)->first();
+            $post = Post::where('id', $post_id)->where('user_id', $user->id)->first();
             $post->priority = 2;
             $post->save();
-            if (!$post){
+            if (!$post) {
                 $result['message'] = 'Данная объявление не ваша';
                 break;
             }
-            $balance = DB::table('balance')->where('user_id',$user->id)->first();
-            if (!$balance){
+            $balance = DB::table('balance')->where('user_id', $user->id)->first();
+            if (!$balance) {
                 $result['message'] = 'Недостаточно баланса';
                 break;
             }
-            if ($balance->amount < 5000){
+            if ($balance->amount < 5000) {
                 $result['message'] = 'Недостаточно баланса';
                 break;
             }
-            DB::table('balance')->where('user_id',$user->id)->update([
-                'amount' => $balance->amount-5000,
+            DB::table('balance')->where('user_id', $user->id)->update([
+                'amount' => $balance->amount - 5000,
             ]);
             DB::table('balance_history')->insertGetId([
-               'amount' => 5000,
-               'type' => 'Поднятие поста в ТОП',
+                'amount' => 5000,
+                'type' => 'Поднятие поста в ТОП',
                 'user_id' => $user->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
             $result['success'] = true;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 
-    public function paymentHistory(Request $request){
+    public function paymentHistory(Request $request)
+    {
         $token = $request->input('token');
         $result['success'] = false;
         do {
@@ -2259,10 +2280,10 @@ class PostController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
-            $data = DB::table('balance_history')->select('id','type','amount')->where('user_id',$user->id)->get();
+            $data = DB::table('balance_history')->select('id', 'type', 'amount')->where('user_id', $user->id)->get();
             $result['success'] = true;
             $result['data'] = $data;
-        }while(false);
+        } while (false);
         return response()->json($result);
     }
 }
