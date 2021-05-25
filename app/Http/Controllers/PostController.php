@@ -642,8 +642,7 @@ class PostController extends Controller
                 'price_type' => $price_type,
                 'payment_type' => $payment_type,
             ]);
-            $balance->amount = $balance->amount - 1000;
-            $balance->save();
+            DB::table('balance')->where('user_id',$user->id)->update(['balance' => $balance->amount-1000]);
             DB::table('balance_history')->insertGetId([
                 'user_id' => $user->id,
                 'type' => 'Подписка',
