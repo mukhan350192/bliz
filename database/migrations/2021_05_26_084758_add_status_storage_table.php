@@ -14,7 +14,7 @@ class AddStatusStorageTable extends Migration
     public function up()
     {
         Schema::table('storage', function (Blueprint $table) {
-            //
+            $table->integer('status');
         });
     }
 
