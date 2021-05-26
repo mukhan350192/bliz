@@ -530,14 +530,19 @@ class PostController extends Controller
                 $result['message'] = 'Не передан токен';
                 break;
             }
-            $balance = DB::table('balance')->where('user_id', $user->id)->first();
 
-            if (!$balance) {
-                $result['message'] = 'У вас не хватает баланса';
+            $subscription = DB::table('subscription')->where('user_id', $user->id)->first();
+            if (!$subscription) {
+                $result['message'] = 'У вас нету подписок для создание объявление';
+                $result['code'] = 1;
                 break;
             }
-            if (isset($balance) && $balance->amount < 1000) {
-                $result['message'] = 'У вас не хватает баланса';
+
+            $today = date('Y-m-d');
+            $end = $subscription->end;
+            if (strtotime($today) > strtotime($end)) {
+                $result['message'] = 'Ваша подписка истек';
+                $result['code'] = 2;
                 break;
             }
 
@@ -551,6 +556,7 @@ class PostController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
+
             if (!$postID) {
                 DB::rollBack();
                 $result['message'] = 'Что то произошло не так';
@@ -642,18 +648,56 @@ class PostController extends Controller
                 'price_type' => $price_type,
                 'payment_type' => $payment_type,
             ]);
-            DB::table('balance')->where('user_id',$user->id)->update(['amount' => $balance->amount-1000]);
-            DB::table('balance_history')->insertGetId([
-                'user_id' => $user->id,
-                'type' => 'Подписка',
-                'amount' => 1000,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+
             DB::commit();
+
             $result['success'] = true;
         } while (false);
 
+        return response()->json($result);
+    }
+
+    public function buySubscription(Request $request)
+    {
+        $token = $request->input('token');
+        $result['success'] = false;
+        do {
+            if (!$token) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $user = User::where('token', $token)->first();
+            if (!$user) {
+                $result['message'] = 'Не передан токен';
+                break;
+            }
+            $balance = DB::table('balance')->where('user_id', $user->id)->first();
+            if (!$balance) {
+                $result['message'] = 'У вас не хватает баланс';
+                break;
+            }
+            $sub = DB::table('subscription')->where('user_id', $user->id)->first();
+            if (!$sub) {
+                DB::table('subscription')->insertGetId([
+                    'user_id' => $user->id,
+                    'start' => date('Y-m-d'),
+                    'end' => date('Y-m-d', strtotime("+30 days")),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+                $result['success'] = true;
+                break;
+            } else {
+                DB::table('subscription')->where('user_id', $user->id)->update([
+                    'start' => date('Y-m-d'),
+                    'end' => date('Y-m-d', strtotime("+30 days")),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+                $result['success'] = true;
+                break;
+            }
+        } while (false);
         return response()->json($result);
     }
 

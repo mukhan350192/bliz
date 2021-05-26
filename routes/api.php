@@ -177,3 +177,5 @@ Route::get('/paymentHistory',[PostController::class,'paymentHistory']);
 Route::post('/loginDriver',[DriverController::class,'loginDriver']);
 Route::get('/getDriverOrders',[DriverController::class,'getDriverOrders']);
 Route::get('/completeOrder',[DriverController::class,'completeOrder']);
+
+Route::get('/buySubscription',[PostController::class,'buySubscription']);
