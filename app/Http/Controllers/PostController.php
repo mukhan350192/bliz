@@ -678,6 +678,10 @@ class PostController extends Controller
             }
             $sub = DB::table('subscription')->where('user_id', $user->id)->first();
             if (!$sub) {
+                DB::table('balance')->where('user_id',$user->id)->update([
+                   'balance' => $balance->amount,
+                ]);
+
                 DB::table('subscription')->insertGetId([
                     'user_id' => $user->id,
                     'start' => date('Y-m-d'),
@@ -687,7 +691,12 @@ class PostController extends Controller
                 ]);
                 $result['success'] = true;
                 break;
+
             } else {
+                DB::table('balance')->where('user_id',$user->id)->update([
+                    'balance' => $balance->amount,
+                ]);
+
                 DB::table('subscription')->where('user_id', $user->id)->update([
                     'start' => date('Y-m-d'),
                     'end' => date('Y-m-d', strtotime("+30 days")),
@@ -697,6 +706,7 @@ class PostController extends Controller
                 $result['success'] = true;
                 break;
             }
+
         } while (false);
         return response()->json($result);
     }
@@ -731,11 +741,13 @@ class PostController extends Controller
                 ->where('priority', 1)
                 ->select('post_id')
                 ->get();
+
             $ss = DB::table('details')
                 ->where('type_transport', '=', $sub_id)
                 ->where('priority', 2)
                 ->select('post_id')
                 ->get();
+
             $arr2 = [];
             $arr = [];
             foreach ($s as $ss) {

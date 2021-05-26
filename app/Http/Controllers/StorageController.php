@@ -308,6 +308,11 @@ class StorageController extends Controller
                 $result['message'] = 'Не найден пользователь';
                 break;
             }
+            $balance = DB::table('balance')->where('user_id', $user->id)->first();
+            if (!$balance) {
+                $result['message'] = 'Не хватает баланса для создание склада';
+                break;
+            }
 
             DB::beginTransaction();
 
@@ -385,7 +390,7 @@ class StorageController extends Controller
                 break;
             }
 
-            if (isset($image)){
+            if (isset($image)) {
                 $allowedfileExtension = ['jpeg', 'jpg', 'png'];
                 foreach ($request->file('image') as $file) {
 
@@ -420,6 +425,17 @@ class StorageController extends Controller
 
 
             }
+            DB::table('balance')->where('user_id', $user->id)->update([
+                'amount' => $balance->amount - 1000,
+                'updated_at' => Carbon::now(),
+            ]);
+            DB::table('balance_history')->where('user_id', $user->id)->update([
+                'user_id' => $user->id,
+                'type' => 'Создание склада',
+                'amount' => 1000,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
             DB::commit();
             $result['success'] = true;
         } while (false);
