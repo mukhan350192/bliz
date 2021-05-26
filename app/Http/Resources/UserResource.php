@@ -50,7 +50,11 @@ class UserResource extends JsonResource
                 $array['additional_phones'] = $add->phone;
             }
         }
-
+        $sub = DB::table('subscription')->where('user_id',$this->id)->first();
+        if (isset($sub)){
+            $array['subscription'] = true;
+            $array['end_subscription_date'] = date('d.m.Y',strtotime($sub->end));
+        }
         /*return [
             'id' => $this->id,
             'fullName' => $this->fullName,
