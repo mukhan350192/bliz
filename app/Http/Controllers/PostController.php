@@ -679,7 +679,7 @@ class PostController extends Controller
             $sub = DB::table('subscription')->where('user_id', $user->id)->first();
             if (!$sub) {
                 DB::table('balance')->where('user_id',$user->id)->update([
-                   'balance' => $balance->amount,
+                   'amount' => $balance->amount,
                 ]);
 
                 DB::table('subscription')->insertGetId([
@@ -694,7 +694,7 @@ class PostController extends Controller
 
             } else {
                 DB::table('balance')->where('user_id',$user->id)->update([
-                    'balance' => $balance->amount,
+                    'amount' => $balance->amount,
                 ]);
 
                 DB::table('subscription')->where('user_id', $user->id)->update([
