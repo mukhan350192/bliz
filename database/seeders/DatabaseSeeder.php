@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
         $this->call(EquipmentRentSeeder::class);
         $this->call(TransportSeeder::class);
         $this->call(TypeEquipmentSeeder::class);
+        $this->call(TransportSubSeeder::class);
+        $this->call(UserTypesSeeder::class);
         //$this->call(SubCategorySeeder::class);
     }
 }
