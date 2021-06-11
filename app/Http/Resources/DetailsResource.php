@@ -10,56 +10,56 @@ class DetailsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
-        $from = CityResource::collection(City::where('id',$this->from)->get());
-        $to = CityResource::collection(City::where('id',$this->to)->get());
+        $from = CityResource::collection(City::where('id', $this->from)->get());
+        $to = CityResource::collection(City::where('id', $this->to)->get());
         $array = [
-            'from' =>$this->from,
+            'from' => $this->from,
             'to' => $this->to,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
         ];
-        if (isset($this->volume)){
+        if (isset($this->volume)) {
             $array['volume'] = $this->volume;
         }
-        if (isset($this->net)){
+        if (isset($this->net)) {
             $array['net'] = $this->net;
         }
-        if (isset($this->middle)){
+        if (isset($this->middle)) {
             $array['middle'] = $this->middle;
         }
-        if (isset($this->distance)){
+        if (isset($this->distance)) {
             $array['distance'] = $this->distance;
         }
-        if (isset($this->duration)){
+        if (isset($this->duration)) {
             $array['duration'] = $this->duration;
         }
-        if (isset($this->from_string)){
+        if (isset($this->from_string)) {
             $array['from_string'] = $this->from_string;
         }
-        if (isset($this->to_string)){
+        if (isset($this->to_string)) {
             $array['to_string'] = $this->to_string;
         }
-        if (isset($this->title)){
+        if (isset($this->title)) {
             $array['title'] = $this->title;
         }
         $list_transport = [
-          1 => 'Авто',
-          2 => 'Ж/Д',
-          3 => 'Авиа',
-          4 => 'Морской',
-          5 => 'Мультимодальные',
+            1 => 'Авто',
+            2 => 'Ж/Д',
+            3 => 'Авиа',
+            4 => 'Морской',
+            5 => 'Мультимодальные',
         ];
-        if (isset($this->type_transport)){
+        if (isset($this->type_transport)) {
             $array['type_transport'] = $list_transport[$this->type_transport];
         }
         $list_sub_transport = [
-          1 => 'Тент',
-          2 => 'Изотерм',
+            1 => 'Тент',
+            2 => 'Изотерм',
             3 => 'Цельномет.',
             4 => 'Рефрижератор',
             5 => 'Автобус грузопас.',
@@ -96,10 +96,11 @@ class DetailsResource extends JsonResource
             36 => 'Ро-ро перевозки',
             37 => 'Перевозки «дверь-дверь»',
         ];
-        if (isset($this->type_sub_transport)){
-            $arr = explode(',',$this->type_sub_transport);
+        if (isset($this->type_sub_transport)) {
+            $arr = explode(',', $this->type_sub_transport);
+            var_dump($arr);
             $ctt = '';
-            foreach ($arr as $a){
+            foreach ($arr as $a) {
                 $ctt .= $list_sub_transport[$a];
             }
             $array['type_sub_transport'] = $ctt;
