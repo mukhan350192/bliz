@@ -98,9 +98,9 @@ class DetailsResource extends JsonResource
         ];
         if (isset($this->type_sub_transport)) {
             $arr = explode(',', $this->type_sub_transport);
-            var_dump($arr);
+            $s = array_filter($arr,'strlen');
             $ctt = '';
-            foreach ($arr as $a) {
+            foreach ($s as $a) {
                 $ctt .= $list_sub_transport[$a];
             }
             $array['type_sub_transport'] = $ctt;
