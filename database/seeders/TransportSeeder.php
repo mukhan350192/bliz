@@ -17,9 +17,11 @@ class TransportSeeder extends Seeder
      */
 
     static $transport = [
-        'Ж/Д Рефрижератор',
-        'Авто Тент',
-        'Авто Другое'
+        'Авто',
+        'Ж/Д',
+        'Авиа',
+        'Морской',
+        'Мультимодальные'
     ];
     public function run()
     {

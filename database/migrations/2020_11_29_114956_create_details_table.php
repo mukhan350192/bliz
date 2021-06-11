@@ -23,6 +23,7 @@ class CreateDetailsTable extends Migration
             $table->string('from_string');
             $table->string('to_string');
             $table->integer('type_transport');
+            $table->integer('type_sub_transport')->nullable();
             $table->string('distance')->nullable();
             $table->string('duration')->nullable();
             $table->float('volume')->nullable();
