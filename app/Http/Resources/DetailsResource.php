@@ -101,8 +101,9 @@ class DetailsResource extends JsonResource
             $s = array_filter($arr,'strlen');
             $ctt = '';
             foreach ($s as $a) {
-                $ctt .= $list_sub_transport[$a];
+                $ctt .= $list_sub_transport[$a].",";
             }
+            substr($ctt, 0, -1);
             $array['type_sub_transport'] = $ctt;
         }
         return $array;
