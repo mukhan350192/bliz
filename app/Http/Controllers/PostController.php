@@ -2355,4 +2355,15 @@ class PostController extends Controller
         } while (false);
         return response()->json($result);
     }
+
+    public function getTypeTransport(){
+        $data = DB::table('type_transport')->select('id','name')->get();
+        return response()->json($data);
+    }
+
+    public function getTypeSubTransport(Request $request){
+        $category_id = $request->input('category_id');
+        $data = DB::table('type_sub_transport')->select('id','name')->where('category_id',$category_id)->get();
+        return response()->json($data);
+    }
 }
