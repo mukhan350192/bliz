@@ -38,7 +38,7 @@ class PayboxController extends Controller
         $user_id = $request->input('user_id');
         $success_url = 'bliz.kz';
         $failure_url = 'bliz.kz';
-        $merchant_id = 19237;
+        $merchant_id = 517822;
 
         $description = 'Погашение займа';
 
@@ -46,7 +46,7 @@ class PayboxController extends Controller
 
         $data = [
             'extra_user_id' => $user_id,
-            'pg_merchant_id' => 19237,//our id in Paybox, will be gived on contract
+            'pg_merchant_id' => $merchant_id,//our id in Paybox, will be gived on contract
             'pg_amount' => $amount, //amount of payment
             'pg_salt' => "Salt", //amount of payment
             'pg_order_id' => $user_id, //id of purchase, strictly unique
