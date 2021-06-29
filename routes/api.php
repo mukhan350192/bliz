@@ -4,6 +4,7 @@ use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayboxController;
 use App\Http\Controllers\SpecialEquipmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
@@ -182,3 +183,7 @@ Route::get('/buySubscription',[PostController::class,'buySubscription']);
 
 Route::get('/getTypeTransport',[PostController::class,'getTypeTransport']);
 Route::get('/getTypeSubTransport',[PostController::class,'getTypeSubTransport']);
+
+
+Route::post('/makePayment',[PayboxController::class,'makePayment']);
+Route::post('/paymentResult',[PayboxController::class,'paymentResult']);
