@@ -38,9 +38,9 @@ class PayboxController extends Controller
         $user_id = $request->input('user_id');
         $success_url = 'bliz.kz';
         $failure_url = 'bliz.kz';
-        $merchant_id = 517822;
+        $merchant_id = 520402;
 
-        $description = 'Погашение займа';
+        $description = 'Пополнение баланса';
 
         $url = 'https://api.paybox.money/payment.php';
 
