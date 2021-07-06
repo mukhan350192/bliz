@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\OrderController;
@@ -187,3 +188,4 @@ Route::get('/getTypeSubTransport',[PostController::class,'getTypeSubTransport'])
 
 Route::post('/makePayment',[PayboxController::class,'makePayment']);
 Route::post('/paymentResult',[PayboxController::class,'paymentResult'])->name('payment-result');
+Route::get('/getBalance',[BalanceController::class,'getBalance']);
