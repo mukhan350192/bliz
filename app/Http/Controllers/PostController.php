@@ -479,7 +479,7 @@ class PostController extends Controller
         $duration = $request->input('duration');
         $from_string = $request->input('from_string');
         $to_string = $request->input('to_string');
-        $priority = $request->input('priority');
+     //   $priority = $request->input('priority');
         $result['success'] = false;
         do {
             if (!$token) {
@@ -522,10 +522,10 @@ class PostController extends Controller
                 $result['message'] = 'Не передан тип транспорта';
                 break;
             }
-            $priority = 1;
+            /*$priority = 1;
             if (isset($priority)) {
                 $priority = 2;
-            }
+            }*/
             $user = User::where('token', $token)->first();
             if (!$user) {
                 $result['message'] = 'Не передан токен';
@@ -551,7 +551,7 @@ class PostController extends Controller
             $postID = Post::insertGetId([
                 'sub_id' => $sub_id,
                 'category_id' => $category_id,
-                'priority' => $priority,
+                'priority' => 1,
                 'user_id' => $user->id,
                 'status' => 1,
                 'created_at' => Carbon::now(),
