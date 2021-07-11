@@ -172,6 +172,8 @@ Route::get('/giveOrderForDriver',[OrderController::class,'giveOrderForDriver']);
 Route::get('/filterPost',[PostController::class,'filterPost']);
 Route::get('/filterCargo',[PostController::class,'filterCargo']);
 Route::get('/filterAuction',[PostController::class,'filterAuction']);
+Route::get('/filterStorage',[StorageController::class,'filterStorage']);
+
 
 Route::get('/topPost',[PostController::class,'topPost']);
 Route::get('/paymentHistory',[PostController::class,'paymentHistory']);

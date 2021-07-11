@@ -500,4 +500,55 @@ class StorageController extends Controller
         $data = DB::table('storage_ventilation')->select('id', 'name')->get();
         return response()->json($data);
     }
+
+    public function filterStorage(Request $request){
+        $area_start = $request->input('area_start');
+        $area_end = $request->input('area_end');
+        $price_start = $request->input('price_start');
+        $price_end = $request->input('price_end');
+        $city_id = $request->input('city_id');
+        $page = $request->input('page');
+        $sql = "SELECT * FROM storage as s JOIN storage_properties as sp ON s.id=sp.storage_id WHERE s.id>1";
+        if (isset($area_start)){
+            $sql .= " AND sp.area>=$area_start";
+        }
+        if (isset($area_end)){
+            $sql .= " AND sp.area<=$area_end";
+        }
+        if (isset($price_start)){
+            $sql .= " AND sp.price>=$price_start";
+        }
+        if (isset($price_end)){
+            $sql .= " AND sp.price<=$price_end";
+        }
+        if (isset($city_id)){
+            $sql .= " AND sp.city_id='$city_id'";
+        }
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $results = DB::select($sql);
+        $count = count($results);
+        $sql .= " ORDER BY p.created_at DESC LIMIT $take OFFSET $skip";
+        $ids = [];
+        foreach ($results as $r){
+            array_push($ids,$r->storage_id);
+        }
+        $ids = implode(",",$ids);
+        $result['data'] = StorageResource::collection(Storage::whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+        $result['pagination'] = [
+            'total' => $count,
+            'page' => $page,
+            'max_page' => ceil($count / 10),
+        ];
+        $result['success'] = true;
+        return response()->json($result);
+    }
 }
