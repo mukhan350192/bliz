@@ -508,7 +508,7 @@ class StorageController extends Controller
         $price_end = $request->input('price_end');
         $city_id = $request->input('city_id');
         $page = $request->input('page');
-        $sql = "SELECT * FROM storage as s JOIN storage_properties as sp ON s.id=sp.storage_id WHERE s.id>1";
+        $sql = "SELECT * FROM storage as s JOIN storage_properties as sp ON s.id=sp.storage_id WHERE s.id>0";
         if (isset($area_start)){
             $sql .= " AND sp.area>=$area_start";
         }
