@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EquipmentMin;
+use App\Models\Equipment;
 use App\Models\SpecialEquipment;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,6 +15,73 @@ class SpecialEquipmentController extends Controller
     public function getEquipmentCategory(){
         $equipment = DB::table('equipment_category')->select('id','name')->get();
         return response()->json($equipment);
+    }
+
+    public function filterEquipment(Request $request){
+        $category_id = $request->input('category_id');
+        $city_id = $request->input('city_id');
+        $net_start = $request->input('net_start');
+        $net_end = $request->input('net_end');
+        $year_start = $request->input('year_start');
+        $year_end = $request->input('year_end');
+        $price_start = $request->input('price_start');
+        $price_end = $request->input('price_end');
+        $page = $request->input('page');
+
+
+
+        $sql = "SELECT * FROM special_equipment AS s JOIN equipment_details AS ed ON s.id = ed.equipment_id WHERE s.id>0";
+        if (isset($category_id)){
+            $sql .= " AND s.category_id = $category_id";
+        }
+        if (isset($city_id)){
+            $sql .= " AND ed.city_id = '$city_id'";
+        }
+        if (isset($net_start)){
+            $sql .= " AND ed.net>=$net_start";
+        }
+        if (isset($net_end)){
+            $sql .= " AND ed.net <=$net_end";
+        }
+        if (isset($price_start)){
+            $sql .= " AND ed.price>=$price_start";
+        }
+        if (isset($price_end)){
+            $sql .= " AND ed.price <=$price_end";
+        }
+        if (isset($year_start)){
+            $sql .= " AND ed.year>=$year_start";
+        }
+        if (isset($year_end)){
+            $sql .= " AND ed.year <=$year_end";
+        }
+        $skip = 0;
+        $take = 0;
+        if (!$page || $page == 1) {
+            $page = 1;
+            $skip = 0;
+            $take = 10;
+        } else {
+            $skip = ($page - 1) * 10;
+            $take = ($page - 1) * 10;
+        }
+        $results = DB::select($sql);
+        $count = count($results);
+        $ids = [];
+        foreach ($results as $r){
+            array_push($ids,$r->equipment_id);
+        }
+        $ids = implode(",",$ids);
+        $data = EquipmentMin::collection(Equipment::whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+        $result = [
+            'success' => true,
+            'count' => $count,
+            'data' => $data,
+            'page' => $page,
+            'max_page' => ceil($count/10),
+        ];
+
+        return response()->json($result);
     }
 
     public function addEquipment(Request $request){

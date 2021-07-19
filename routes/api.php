@@ -173,7 +173,7 @@ Route::get('/filterPost',[PostController::class,'filterPost']);
 Route::get('/filterCargo',[PostController::class,'filterCargo']);
 Route::get('/filterAuction',[PostController::class,'filterAuction']);
 Route::get('/filterStorage',[StorageController::class,'filterStorage']);
-
+Route::get('/filterEquipment',[SpecialEquipmentController::class,'filterEquipment']);
 
 Route::get('/topPost',[PostController::class,'topPost']);
 Route::get('/paymentHistory',[PostController::class,'paymentHistory']);
