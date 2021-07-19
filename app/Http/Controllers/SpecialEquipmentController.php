@@ -72,7 +72,7 @@ class SpecialEquipmentController extends Controller
             array_push($ids,$r->equipment_id);
         }
         $ids = implode(",",$ids);
-        $data = EquipmentMin::collection(Equipment::whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+        $data = EquipmentMin::collection(DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         $result = [
             'success' => true,
             'count' => $count,
