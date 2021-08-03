@@ -71,7 +71,7 @@ class SpecialEquipmentController extends Controller
         }
         $ids = implode(",",$ids);
         var_dump($ids);
-        $sql = "SELECT * FROM special_equipment WHERE id IN ($ids) LIMIT $take ORDER BY updated_at DESC";
+        $sql = "SELECT * FROM special_equipment WHERE id IN ($ids) LIMIT $take";
         $res = DB::select($sql);
         var_dump($res);
         $ss = DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get();
