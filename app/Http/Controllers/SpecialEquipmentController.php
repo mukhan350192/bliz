@@ -71,11 +71,11 @@ class SpecialEquipmentController extends Controller
         }
         //$ids = implode(",",$ids);
         var_dump($ids);
-        $sql = "SELECT * FROM special_equipment WHERE id IN ($ids) LIMIT $take";
+        /*$sql = "SELECT * FROM special_equipment WHERE id IN ($ids) LIMIT $take";
         $res = DB::select($sql);
         var_dump($res);
         $ss = DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get();
-        var_dump($ss);
+        var_dump($ss);*/
         $data = EquipmentMin::collection(DB::table('special_equipment')->whereIn('id',$ids)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         $result = [
             'success' => true,
