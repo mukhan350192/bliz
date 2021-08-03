@@ -56,14 +56,12 @@ class SpecialEquipmentController extends Controller
             $sql .= " AND ed.year <=$year_end";
         }
         $skip = 0;
-        $take = 0;
+        $take = 10;
         if (!$page || $page == 1) {
             $page = 1;
             $skip = 0;
-            $take = 10;
         } else {
             $skip = ($page - 1) * 10;
-            $take = 10;
         }
         $results = DB::select($sql);
         $count = count($results);
@@ -72,6 +70,7 @@ class SpecialEquipmentController extends Controller
             array_push($ids,$r->equipment_id);
         }
         $ids = implode(",",$ids);
+        var_dump($ids);
         $data = EquipmentMin::collection(DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         $result = [
             'success' => true,
