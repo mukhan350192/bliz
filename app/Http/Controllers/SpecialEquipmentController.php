@@ -63,7 +63,7 @@ class SpecialEquipmentController extends Controller
             $take = 10;
         } else {
             $skip = ($page - 1) * 10;
-            $take = ($page - 1) * 10;
+            $take = 10;
         }
         $results = DB::select($sql);
         $count = count($results);
