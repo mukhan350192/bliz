@@ -69,7 +69,7 @@ class SpecialEquipmentController extends Controller
         foreach ($results as $r){
             array_push($ids,$r->equipment_id);
         }
-        $ids = implode(",",$ids);
+        //$ids = implode(",",$ids);
         var_dump($ids);
         $sql = "SELECT * FROM special_equipment WHERE id IN ($ids) LIMIT $take";
         $res = DB::select($sql);
