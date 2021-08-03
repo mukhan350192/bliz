@@ -76,7 +76,7 @@ class SpecialEquipmentController extends Controller
         var_dump($res);
         $ss = DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get();
         var_dump($ss);
-        $data = EquipmentMin::collection(DB::table('special_equipment')->whereIn('id',[$ids])->skip($skip)->take($take)->orderByDesc('updated_at')->get());
+        $data = EquipmentMin::collection(DB::table('special_equipment')->whereIn('id',$ids)->skip($skip)->take($take)->orderByDesc('updated_at')->get());
         $result = [
             'success' => true,
             'count' => $count,
