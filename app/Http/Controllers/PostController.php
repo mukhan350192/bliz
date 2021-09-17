@@ -2010,7 +2010,7 @@ class PostController extends Controller
         $type_transport = $request->input('type_transport');
         $page = $request->input('page');
 
-        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
+        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
         if (isset($from)) {
             $sql .= " AND d.from='$from'";
         }
@@ -2107,7 +2107,7 @@ class PostController extends Controller
         $height_end = $request->input('height_end');
         $type_transport = $request->input('type_transport');
         $page = $request->input('page');
-        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=2";
+        $sql = "SELECT p.id,p.sub_id,p.category_id,p.user_id,p.status,p.created_at,p.updated_at FROM details as d JOIN posts as p ON d.post_id=p.id WHERE p.category_id=1";
         if (isset($from)) {
             $sql .= " AND d.from='$from'";
         }
