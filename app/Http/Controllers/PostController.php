@@ -958,7 +958,7 @@ class PostController extends Controller
         $from = $request->input('from');
         $to = $request->input('to');
         $result['success'] = false;
-        $key = 'AIzaSyDwgq_3mUoJkLm7aTUbH2Z44y6RVm92DV0';
+        $key = 'AIzaSyD-kk951XgVXsv3b0yqJntwbxDslSP2Oxo';
         do {
             if (!$from) {
                 $result['message'] = 'Не передан откуда';
