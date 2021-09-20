@@ -191,3 +191,4 @@ Route::get('/getTypeSubTransport',[PostController::class,'getTypeSubTransport'])
 Route::post('/makePayment',[PayboxController::class,'makePayment']);
 Route::post('/paymentResult',[PayboxController::class,'paymentResult'])->name('payment-result');
 Route::get('/getBalance',[BalanceController::class,'getBalance']);
+Route::get('/addSub',[BalanceController::class,'addSub']);
