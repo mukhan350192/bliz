@@ -547,6 +547,14 @@ class PostController extends Controller
                 break;
             }
 
+            if (!$distance && !$duration){
+                $url = "https://test.money-men.kz/api/distance?from=$from&to=$to";
+                $rr = file_get_contents($url);
+                $rr = json_decode($rr,true);
+                $distance = $rr['distance'];
+                $duration = $rr['duration'];
+            }
+
             DB::beginTransaction();
             $postID = Post::insertGetId([
                 'sub_id' => $sub_id,
@@ -943,7 +951,6 @@ class PostController extends Controller
                 DB::table('orders')
                     ->where('customer', $user->id)
                     ->whereIn('status', [1, 5, 6])
-                    ->limit(1)
                     ->get());
             $result['count'] = $count;
             $result['data'] = $data;
@@ -1870,7 +1877,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = PostMinResource::collection(Post::where('category_id', 1)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
+            $data = PostMinResource::collection(Post::where('category_id', 2)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
@@ -1896,7 +1903,7 @@ class PostController extends Controller
                 break;
             }
 
-            $data = PostMinResource::collection(Post::where('category_id', 2)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
+            $data = PostMinResource::collection(Post::where('category_id', 1)->where('user_id', $user->id)->whereNotIn('status', [5, 6])->get());
 
             $result['success'] = true;
             $result['data'] = $data;
