@@ -50,6 +50,7 @@ Route::post('/getOwnPosts',[PostController::class,'getOwnPosts']);
 Route::post('/getAllPostsByCategory',[PostController::class,'getAllPostsByCategory']);
 Route::get('/getCategory',[PostController::class,'getCategory']);
 Route::get('/getProfile',[UserController::class,'getProfile']);
+Route::get('/getProfileByUserID',[UserController::class,'getProfileByUserID']);
 Route::get('/updateProfile',[UserController::class,'updateProfile']);
 Route::get('/deleteAvatar',[UserController::class,'deleteAvatar']);
 Route::get('/addFavourites',[UserController::class,'addFavourites']);

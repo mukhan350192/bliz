@@ -343,40 +343,28 @@ class UserController extends Controller
                 break;
             }
             $result['data'] = UserResource::collection($user);
-            /*
-            $result['fullName'] = $user->fullName;
-            $result['email'] = $user->email;
-            $result['phone'] = $user->phone;
-            if (isset($user->city)){
-                $cityName = City::find($user->city);
+            $result['success'] = true;
+        } while (false);
+
+        return response()->json($result);
+    }
+
+    public function getProfileByUserID(Request $request){
+        $user_id = $request->input('user_id');
+        $result['success'] = false;
+
+        do {
+            if (!$user_id) {
+                $result['message'] = 'Не передан токен';
+                break;
             }
 
-            if (isset($cityName)){
-                $result['cityId'] = $cityName->id;
-                $result['cityName'] = $cityName->name;
-                $country = Country::find($cityName->country_id);
-                $result['country'] = $country->name;
-                $result['address'] = $user->address;
+            $user = User::where('id', $user_id)->get();
+            if (!$user) {
+                $result['message'] = 'Не найден пользователь';
+                break;
             }
-
-            if (isset($user->image)) {
-                $result['image'] = 'http://test.money-men.kz/images/avatars/' . $user->image;
-            }
-            if($user->user_type == 2){
-                $companyDetails = DB::table('company_details')->where('user_id',$user->id)->first();
-                $result['companyName'] = $companyDetails->name;
-                if (isset($companyDetails->bin)){
-                    $result['bin'] = $companyDetails->bin;
-                }
-                if (isset($companyDetails->license)){
-                    $result['license'] = "https://test.money-men.kz/images/company/$companyDetails->license";
-                }
-                if (isset($companyDetails->registration)){
-                    $result['registration'] = "https://test.money-men.kz/images/company/$companyDetails->registration";
-                }
-                $type = DB::table('company_types')->where('id',$companyDetails->types)->first();
-                $result['companyType'] = $type->name;
-            }*/
+            $result['data'] = UserResource::collection($user);
             $result['success'] = true;
         } while (false);
 

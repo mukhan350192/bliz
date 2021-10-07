@@ -55,17 +55,6 @@ class UserResource extends JsonResource
             $array['subscription'] = true;
             $array['end_subscription_date'] = date('d.m.Y',strtotime($sub->end));
         }
-        /*return [
-            'id' => $this->id,
-            'fullName' => $this->fullName,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'user_type' => $this->user_type,
-          //  'city' => CityResource::collection($this->city),
-            'address' => $this->address,
-            'image' => $this->image,
-            'token' => $this->token,
-        ];*/
         return $array;
     }
 }
