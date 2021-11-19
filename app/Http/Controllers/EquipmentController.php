@@ -18,6 +18,13 @@ class EquipmentController extends Controller
         return response()->json($data);
     }
 
+    // получить суб категории спецтехники
+    public function  getSubEquipmentCategory(Request $request){
+        $category_id = $request->input('category_id');
+        $data = DB::table('equipment_sub_category')->select('id','name')->where('category_id', $category_id)->get();
+        return response()->json($data);
+    }
+
     // получить тип аренды спецтехники
     public function getEquipmentRent(){
         $data = DB::table('equipment_rent')->select('id','name')->get();
@@ -31,6 +38,7 @@ class EquipmentController extends Controller
     }
     public function addEquipment(Request $request){
         $category_id = $request->input('category_id');
+        $sub_category_id = $request->input('sub_category_id');
         $type_equipment = $request->input('type_equipment');
         $name = $request->input('name');
         $city_id = $request->input('city_id');
@@ -45,20 +53,7 @@ class EquipmentController extends Controller
         $currency = $request->input('currency');
         $params = $request->input('params');
         $description = $request->input('description');
-      /*
-       *
-         $type_blade = $request->input('type_blade');
-        $power = $request->input('power');
-        $height = $request->input('height');
-        $width = $request->input('width');
-        $rise = $request->input('rise');
-        $deep = $request->input('deep');
-        $description = $request->input('description');
 
-
-
-
-      */
         $result['success'] = false;
 
         do{
@@ -69,6 +64,11 @@ class EquipmentController extends Controller
 
             if (!$category_id){
                 $result['message'] = 'Не передан категория айди';
+                break;
+            }
+
+            if (!$sub_category_id){
+                $result['message'] = 'Не передан суб категория айди';
                 break;
             }
 
@@ -118,6 +118,7 @@ class EquipmentController extends Controller
             $equipmentID = DB::table('special_equipment')->insertGetId([
                 'user_id' => $user->id,
                 'category_id' => $category_id,
+                'sub_category_id' => $sub_category_id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);

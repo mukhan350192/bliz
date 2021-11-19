@@ -11,6 +11,7 @@ use App\Http\Resources\PostDocumentResource;
 use App\Http\Resources\PostLoadingResource;
 use App\Http\Resources\PostMinResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\PostWithoutSubscription;
 use App\Http\Resources\StorageMinProperties;
 use App\Http\Resources\StorageResource;
 use App\Models\Category;
@@ -682,23 +683,34 @@ class PostController extends Controller
     public function buySubscription(Request $request)
     {
         $token = $request->input('token');
+        $type = $request->input('type');
         $result['success'] = false;
         do {
             if (!$token) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
+            if (!$type){
+                $result['message'] = 'Не передан тип';
+                break;
+            }
+
             $user = User::where('token', $token)->first();
+
             if (!$user) {
                 $result['message'] = 'Не передан токен';
                 break;
             }
+
             $balance = DB::table('balance')->where('user_id', $user->id)->first();
+
             if (!$balance) {
                 $result['message'] = 'У вас не хватает баланс';
                 break;
             }
+
             $sub = DB::table('subscription')->where('user_id', $user->id)->first();
+
             if (!$sub) {
                 DB::table('balance')->where('user_id',$user->id)->update([
                    'amount' => $balance->amount,
@@ -813,15 +825,71 @@ class PostController extends Controller
         return response()->json($payment);
     }
 
-    public function getPostByID($id)
+    public function getPostByID(Request $request)
     {
         //$post_id = $request->input('post_id');
+        $token = $request->input('token');
+        $id = $request->input('id');
         $result['success'] = false;
         do {
             if (!$id) {
                 $result['message'] = 'Не передан пост айди';
                 break;
             }
+            if (!$token){
+                $post = Post::where('id',$id)->get();
+                $data = PostWithoutSubscription::collection($post);
+                $result['data'] = $data;
+                $result['success'] = true;
+                break;
+            }
+            $user = User::where('token',$token)->select('id')->first();
+            if (!$user){
+                $post = Post::where('id',$id)->get();
+                $data = PostWithoutSubscription::collection($post);
+                $result['data'] = $data;
+                $result['success'] = true;
+                break;
+            }
+            $sub_type = DB::table('subscription')->where('user_id',$user->id)->first();
+            if (!$sub_type){
+                $post = Post::where('id',$id)->get();
+                $data = PostWithoutSubscription::collection($post);
+                $result['data'] = $data;
+                $result['success'] = true;
+                break;
+            }
+
+            $end_date = strtotime($sub_type->end);
+            $today = time();
+            if ($end_date < $today){
+                $post = Post::where('id',$id)->get();
+                $data = PostWithoutSubscription::collection($post);
+                $result['data'] = $data;
+                $result['success'] = true;
+                break;
+            }
+            $details = DB::table('details')->select('from_string')->where('post_id',$id)->first();
+            $region = explode(',',$details->from_string);
+            if (isset($region)){
+                $region = $region[1];
+            }
+            if ($sub_type->type == 1){
+                if ($region == 'KZ'){
+                    $post = Post::where('id', $id)->get();
+                    $data = PostResource::collection($post);
+                    $result['data'] = $data;
+                    $result['success'] = true;
+                    break;
+                }else{
+                    $post = Post::where('id',$id)->get();
+                    $data = PostWithoutSubscription::collection($post);
+                    $result['data'] = $data;
+                    $result['success'] = true;
+                }
+                break;
+            }
+
             $post = Post::where('id', $id)->get();
             $data = PostResource::collection($post);
             $result['data'] = $data;

@@ -23,9 +23,15 @@ class StorageProperties extends JsonResource
             'area' => $this->area,
             'total_area' => $this->total_area,
             'price' => $this->price . ' ' . $currency->name . '/' . $price_type->name,
-
         ];
-
+        if (isset($this->class)){
+            $class = DB::table('storage_class')->where('id',$this->class)->first();
+            $array['class'] = $class->name;
+        }
+        if (isset($this->type)){
+            $type = DB::table('storage_type')->where('id',$this->type)->first();
+            $array['type'] = $type->name;
+        }
         if (isset($this->year)) {
             $array['year'] = $this->year;
         }

@@ -102,7 +102,7 @@ Route::get('/newAddPost',[PostController::class,'newAddPost']);
 Route::get('/newGetPost',[PostController::class,'newGetPost']);
 Route::get('/getCurrency',[PostController::class,'getCurrency']);
 Route::get('/getPaymentType',[PostController::class,'getPaymentType']);
-Route::get('/getPostByID/{id}',[PostController::class,'getPostByID']);
+Route::get('/getPostByID',[PostController::class,'getPostByID']);
 Route::get('/editPost',[PostController::class,'editPost']);
 Route::get('/deletePost',[PostController::class,'deletePost']);
 //storage
@@ -111,9 +111,11 @@ Route::get('/getAllStorage',[StorageController::class,'getAllStorage']);
 Route::get('/getStorageById',[StorageController::class,'getStorageById']);
 Route::get('/getFireSystem',[StorageController::class,'getFireSystem']);
 Route::get('/getVentilation',[StorageController::class,'getVentilation']);
-
+Route::get('/getClassStorage',[StorageController::class,'getClassStorage']);
+Route::get('/getTypeStorage',[StorageController::class,'getTypeStorage']);
 //equipment
 Route::get('/getEquipmentCategory',[EquipmentController::class,'getEquipmentCategory']);
+Route::get('/getSubEquipmentCategory',[EquipmentController::class,'getSubEquipmentCategory']);
 Route::get('/getEquipmentRent',[EquipmentController::class,'getEquipmentRent']);
 Route::get('/getEquipmentType',[EquipmentController::class,'getEquipmentType']);
 Route::post('/addEquipment',[EquipmentController::class,'addEquipment']);

@@ -16,13 +16,37 @@ class EquipmentSeeder extends Seeder
     public function run()
     {
         DB::table('equipment_category')->insertGetId([
-            'name' => 'Землеройная',
+            'name' => 'Подъемная техника',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
         DB::table('equipment_category')->insertGetId([
-            'name' => 'Строительная',
+            'name' => 'Автомобили',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        DB::table('equipment_category')->insertGetId([
+            'name' => 'Дорожная техника',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        DB::table('equipment_category')->insertGetId([
+            'name' => 'Коммунальная техника',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        DB::table('equipment_category')->insertGetId([
+            'name' => 'Землеройная техника',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        DB::table('equipment_category')->insertGetId([
+            'name' => 'Строительное оборудование',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -34,19 +58,7 @@ class EquipmentSeeder extends Seeder
         ]);
 
         DB::table('equipment_category')->insertGetId([
-            'name' => 'Грузоперевозки',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
-
-        DB::table('equipment_category')->insertGetId([
-            'name' => 'Коммунальная',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
-
-        DB::table('equipment_category')->insertGetId([
-            'name' => 'Прочее',
+            'name' => 'Другое',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
