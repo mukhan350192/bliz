@@ -186,6 +186,7 @@ Route::get('/getDriverOrders',[DriverController::class,'getDriverOrders']);
 Route::get('/completeOrder',[DriverController::class,'completeOrder']);
 
 Route::get('/buySubscription',[PostController::class,'buySubscription']);
+Route::get('/getSubscriptionType', [PostController::class,'getSubscriptionType']);
 
 Route::get('/getTypeTransport',[PostController::class,'getTypeTransport']);
 Route::get('/getTypeSubTransport',[PostController::class,'getTypeSubTransport']);

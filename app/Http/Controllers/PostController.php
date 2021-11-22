@@ -745,6 +745,11 @@ class PostController extends Controller
         return response()->json($result);
     }
 
+    public function getSubscriptionType(){
+        $data = DB::table('subscription_type')->select('id','name')->get();
+        return response()->json($data);
+    }
+
     public function newGetPost(Request $request)
     {
         $page = intval($request->input('page'));
