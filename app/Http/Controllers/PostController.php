@@ -746,7 +746,7 @@ class PostController extends Controller
     }
 
     public function getSubscriptionType(){
-        $data = DB::table('subscription_type')->select('id','name')->get();
+        $data = DB::table('subscription_types')->select('id','name')->get();
         return response()->json($data);
     }
 
