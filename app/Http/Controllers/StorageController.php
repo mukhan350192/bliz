@@ -551,4 +551,14 @@ class StorageController extends Controller
         $result['success'] = true;
         return response()->json($result);
     }
+
+    public function getClassStorage(){
+        $data = DB::table('storage_class')->select('id','name')->get();
+        return response()->json($data);
+    }
+
+    public function getTypeStorage(){
+        $data = DB::table('storage_type')->select('id','name')->get();
+        return response()->json($data);
+    }
 }
