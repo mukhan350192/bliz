@@ -718,6 +718,7 @@ class PostController extends Controller
 
                 DB::table('subscription')->insertGetId([
                     'user_id' => $user->id,
+                    'type' => $type,
                     'start' => date('Y-m-d'),
                     'end' => date('Y-m-d', strtotime("+30 days")),
                     'created_at' => Carbon::now(),
@@ -733,6 +734,7 @@ class PostController extends Controller
 
                 DB::table('subscription')->where('user_id', $user->id)->update([
                     'start' => date('Y-m-d'),
+                    'type' => $type,
                     'end' => date('Y-m-d', strtotime("+30 days")),
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
