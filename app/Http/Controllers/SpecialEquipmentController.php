@@ -26,7 +26,12 @@ class SpecialEquipmentController extends Controller
         $year_end = $request->input('year_end');
         $price_start = $request->input('price_start');
         $price_end = $request->input('price_end');
+        $sub_category = $request->input('sub_category');
+        $name = $request->input('name');
+        $price_type = $request->input('price_type');
+
         $page = $request->input('page');
+
 
 
 
@@ -54,6 +59,15 @@ class SpecialEquipmentController extends Controller
         }
         if (isset($year_end)){
             $sql .= " AND ed.year <=$year_end";
+        }
+        if (isset($sub_category)){
+            $sql .= " AND s.sub_category_id = $sub_category";
+        }
+        if (isset($name)){
+            $sql .= " AND ed.name LIKE '%$name'";
+        }
+        if (isset($price_type)){
+            $sql .= " AND ed.price_type=$price_type";
         }
         $skip = 0;
         $take = 10;
