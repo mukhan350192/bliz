@@ -21,7 +21,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/facade/flare-client-php" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/facade/ignition" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/facade/ignition-contracts" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/fakerphp/faker" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fideloper/proxy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/filp/whoops" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fruitcake/laravel-cors" />
@@ -114,6 +113,16 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/intervention/image" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/larapack/doctrine-support" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/ui" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/dbal" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/deprecations" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/event-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/tcg/voyager" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/arrilot/laravel-widgets" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

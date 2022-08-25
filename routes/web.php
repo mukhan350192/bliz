@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+use TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,3 +29,8 @@ Route::get('/test', function(){
 });
 
 
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
